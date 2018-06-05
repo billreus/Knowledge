@@ -42,3 +42,8 @@ $ git add name.txt
 $ git commit -m "it show your speak"
 ```
 
+## Github推送
+
+按照github绑定，绑定后提交只需要`git push origin master`
+
+* 常出现fatal: remote origin already exists.只需输入`git remote rm origin`
