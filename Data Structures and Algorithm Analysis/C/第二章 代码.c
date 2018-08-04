@@ -67,7 +67,7 @@ void
 Insert(ElementType X, List L, Position P)
 {
     Position TmpCell;
-
+    
     /* 分配新单元地址 */
     TmpCell = malloc( sizeof( struct Node ) );
     if( TmpCell == NULL )
