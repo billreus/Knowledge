@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <Part 2.h>
+#include <Part2_List.h>
+
 /* 测试一个链表是否为空表 */
 
 int
@@ -16,7 +17,7 @@ IsLast(Position P, List L)
     return P->Next == NULL;
 }
 
-/* 返回某个元素在表中的位置(Element指位置对应元素)) */
+/* 返回某个元素在表中的位置(Element指位置对应元素A)) */
 
 Position
 Find( ElementType X, List L)
@@ -51,11 +52,11 @@ Delete(ElementType X, List L)
 {
     Position P, TmpCell;
 
-    P = FindPrevious(X, L); 
+    P = FindPrevious(X, L); //X的前驱元为P
 
     if(!IsLast(P, L))
     {
-        TmpCell = P->Next;
+        TmpCell = P->Next; //P->Next->Element = X 
         P->Next = TmpCell->Next;
         free(TmpCell);
     }
@@ -76,4 +77,34 @@ Insert(ElementType X, List L, Position P)
     TmpCell->Element = X;
     TmpCell->Next = P->Next;
     P->Next = TmpCell;
+}
+
+
+/*-----多项式ADT-----*/
+
+/*多项式初始化w为0*/
+void
+ZeroPolynomial( Polynomial Poly )
+{
+    int i;
+
+    for( i = 0; i <= MaxDegree; i++ )
+        Poly->CoeffArray[i] = 0;
+    Poly->HighPower = 0;
+}
+
+/*两多项式相加*/
+void
+AddPolynomial( const Polynomial Poly1, const 
+            Polynomial Poly2, Polynomial PolySum )
+{
+    int i;
+
+    ZeroPolynomial( PolySum );
+    PolySum->HighPower = Max( Poly1->HighPower,
+                              Poly2->HighPower);//多项式的最高幂次
+    
+    for(i = PolySum->HighPower; i >= 0; i--)
+        PolySum->CoeffArray[i] = Poly1->CoeffArray[i]
+                                    + Poly2->CoeffArray[i]; //coeffarray多项式系数数组
 }

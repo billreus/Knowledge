@@ -22,5 +22,14 @@ ElementType Retrieve(Position P);
 struct Node
 {
     ElementType Element;
-    Position Next;
+    Position Next; // 等价于struct Node *Next
 };
+
+/*-----多项式ADT-----*/
+#define MaxDegree 10
+
+typedef struct
+{
+    int CoeffArray[ MaxDegree + 1 ];
+    int HighPower;
+}*Polynomial;
