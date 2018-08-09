@@ -1,9 +1,24 @@
-typedef struct TreeNode *PtrToNode;
+/*-----二叉树-----*/
+#ifndef _Tree_H
+
+struct TreeNode;
+typedef struct TreeNode *Position;
+typedef struct TreeNode *SearchTree;
 typedef int ElementType;
+
+SearchTree MakeEmpty(SearchTree T);
+Position Find(ElementType X, SearchTree T);
+Position FindMin(SearchTree T);
+Position FindMax(SearchTree T);
+SearchTree Insert(ElementType X, SearchTree T);
+SearchTree Delete(ElementType X, SearchTree T);
+ElementType Retrieve(Position P);
+
+#endif
 
 struct TreeNode
 {
     ElementType Element;
-    PtrToNode FirstChild;
-    PtrToNode NextSibling;
-}
+    SearchTree Left;
+    SearchTree Right;
+};
