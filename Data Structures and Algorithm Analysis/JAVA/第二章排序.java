@@ -42,8 +42,8 @@ public class Selection
         {
             int min = i;
             for (int j = i+1; j < N; j++)
-                if (less(a[j], a[min])) min = j;
-            exch(a, i, min);
+                if (less(a[j], a[min])) min = j; //less 比较大小，前者小返回True
+            exch(a, i, min);  //把min的值赋值给i，等价于选取了排序的数放到该位置
         }
     }
 }
