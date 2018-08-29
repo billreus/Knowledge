@@ -47,3 +47,17 @@ public class Selection
         }
     }
 }
+
+//算法2.2 插入排序
+public class Insertion
+{
+    public static void sort(Comparable[] a)
+    {
+        int N = a.length;
+        for (int i =1; i < N; i++) //从a[1]开始比较
+        {   // 如果a[i]比左边小，交换，然后继续和左边比较，比较到比左边大就停止，开始i+1的索引
+            for (int j = i; j > 0 && less(a[j], a[j-1]); j--)
+                exch(a, j, j-1);
+        }
+    }
+}
