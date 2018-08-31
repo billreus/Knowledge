@@ -61,3 +61,61 @@ public class Insertion
         }
     }
 }
+
+//算法2.3 希尔排序
+public class Shell
+{
+    public static void sort(Comparable[] a)
+    {
+        int N = a.length;
+        int h = 1;
+        while (h < N/3) h = 3*h + 1; //给h的间隔赋值，在吃采用1,4,13,40....h从高到底运算
+        while (h >= 1) 
+        {
+            for (int i = h; i < N; i++) //一个h间隔的排序
+            {//从h往右索引，与j-h,j-2h....对比
+                for (int j = i; j >= h && less(a[j], a[j-h]); j -= h)
+                    exch(a, j, j-h);
+            }    
+            h = h/3;
+        }
+    }
+}
+
+//原地归并的抽象方法
+public static void merge(Comparable[] a, int lo, int mid, int hi)
+{//将a[lo..mid]和a[mid+1..hi]归并
+    //k为原始数组a的序列，i和j为复制序列aux的左右半边序列
+    int i = lo, j = mid+1;
+
+    //a数组复制到aux
+    for (int k = lo; k<= hi; k++)
+        aux[k] = a[k];
+
+    for (int k = lo; k <= hi; k++)
+        if (i > mid)                    a[k] = aux[j++]; //左半边用尽，取右边
+        else if (j > hi)                a[k] = aux[i++]; //右半边用尽，取左边
+        else if (less(aux[j], aux[i]))  a[k] = aux[j++]; //右半边当前值小于左边，取右边
+        else                            a[k] = aux[i++]; //右半边当前值大于左边，取左边
+}
+
+//算法2.4 自顶向下的排序
+public class Merge
+{
+    private static Comparable[] aux;
+
+    public static void sort(Comparable[] a)
+    {
+        aux = new Comparable[a.length];
+        sort(a, 0, a.length-1);
+    }
+
+    private static void sort(Comparable[] a, int lo, int hi)
+    {
+        if(hi <= lo) return;
+        int mid = lo + (hi - lo)/2;
+        sort(a, lo, mid);  //排序左半边
+        sort(a, mid+1, hi); //排序右半边
+        merge(a, lo, mid, hi); //合并排序
+    }
+}
