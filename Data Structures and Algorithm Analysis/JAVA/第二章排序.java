@@ -114,8 +114,24 @@ public class Merge
     {
         if(hi <= lo) return;
         int mid = lo + (hi - lo)/2;
-        sort(a, lo, mid);  //排序左半边
+        sort(a, lo, mid);  //排序左半边，不断重复调用切分到(a,0,1)
         sort(a, mid+1, hi); //排序右半边
         merge(a, lo, mid, hi); //合并排序
+    }
+}
+
+//算法2.5 自底向上的排序
+public class MergeBU
+{
+    private static Comparable[] aux;
+
+    public static void sort(Comparable[] a)
+    {
+        int N = a.length;
+
+        aux = new Comparable[N];
+        for (int sz = 1; sz < N; sz = sz + sz)
+            for (int lo = 0; lo < N-sz; lo += sz + sz)
+                merge(a, lo, lo+sz-1, Math.min(lo+sz+sz-1, N-1));
     }
 }
