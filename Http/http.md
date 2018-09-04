@@ -69,3 +69,53 @@ Response，即响应，由服务端返回给客户端。Response 可以划分为
 ### 1.6.3.Respose Body
 即响应体，最重要的当属响应体内容了，响应的正文数据都是在响应体中，如请求一个网页，它的响应体就是网页的 HTML 代码，请求一张图片，它的响应体就是图片的二进制数据。所以最主要的数据都包含在响应体中了，我们做爬虫请求网页后要解析的内容就是解析响应体。
 
+# 2.Web基础
+## 2.1.网页的组成
+
+网页可以分为三个部分，HTML、CSS、JavaScript.
+
+HTML相当于骨架，通过各种标签来表示，如图片用img，段落用p，它们之间的布局通过布局标签div嵌套组合。
+
+css为层叠样式表，层叠指HTML中引用数个样式文件翻身冲突时，浏览器能依据层叠处理。样式指网页中的文字大小、颜色、间距、排列等。
+
+```css
+#head_wrapper.s-ps-islite .s-p-top {
+    position: absolute;
+    bottom: 40px;
+    width: 100%;
+    height: 181px;
+}
+```
+
+在大括号前面是一个CSS选择器，此选择器的意思是选中 id 为 head_wrapper 且class为s-ps-islite内部的s-p-top 的元素。
+
+## 2.2.网页结构
+
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>This is a Demo</title>
+    </head>
+    <body>
+        <div id="container">
+            <div class="wrapper">
+                <h2 class="title">Hello World</h2>
+                <p class="text">Hello, this is a paragraph.</p>
+            </div>
+        </div>
+    </body>
+</html>
+```
+开头是 DOCTYPE 定义了文档类型，其次最外层是 html 标签，最后还有对应的结尾代表标签闭合，其内部是 head 标签和 body 标签，分别代表网页头和网页体，它们也分别需要尾标签表示闭合。
+
+title定义了网页标题，body显示网页内容，div 定义网页中的区块。
+
+区块中id名称唯一，我们可以通过id读取这个区块，区块内有个class为weapper，可与css配合设定样式。h2表示一个二级标题，p表示一个段落。
+
+## 2.3.选择器
+
+网页由一个个节点组成，css选择器根据不同节点设置不同样式规则。
+
+例如上例中有个div的结点的id为container，我们可以用#container来表示。
