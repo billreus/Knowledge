@@ -120,7 +120,7 @@ public class Merge
     }
 }
 
-//算法2.5 自底向上的排序
+//自底向上的排序
 public class MergeBU
 {
     private static Comparable[] aux;
@@ -130,8 +130,43 @@ public class MergeBU
         int N = a.length;
 
         aux = new Comparable[N];
-        for (int sz = 1; sz < N; sz = sz + sz)
-            for (int lo = 0; lo < N-sz; lo += sz + sz)
+        for (int sz = 1; sz < N; sz = sz + sz)//sz子数组大小1,2,4,8....
+            for (int lo = 0; lo < N-sz; lo += sz + sz)//子数组索引
                 merge(a, lo, lo+sz-1, Math.min(lo+sz+sz-1, N-1));
+    }
+}
+
+//快速排序的切分
+private static int partition 
+{
+    int i = lo, j = hi + 1;
+    Comparable v = a[lo];
+    while(ture)
+    {
+        while(less(a[++i], v)) if(i == hi) break;
+        while(less(v, a[--j])) if(j == lo) break;
+        if(i >= j) break;
+        exch(a, i, j);
+    }    
+    exch(a, lo, j);
+    return j;
+}
+
+
+//算法2.5 快速排序
+public class Quick
+{
+    public static void sort(Comparable[] a)
+    {
+        StdRandom.shuffle(a);// 消除对输入的依赖
+        sort(a, 0, a.length - 1); 
+    }
+
+    private static void sort(Comparable[] a, int lo, int hi)
+    {
+        if(hi <= lo) return;
+        int j = partition(a, lo, hi);
+        sort(a, lo, j-1);
+        sort(a, j+1, hi);
     }
 }
