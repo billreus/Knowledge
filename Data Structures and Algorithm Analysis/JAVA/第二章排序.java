@@ -158,15 +158,35 @@ public class Quick
 {
     public static void sort(Comparable[] a)
     {
-        StdRandom.shuffle(a);// 消除对输入的依赖
+        StdRandom.shuffle(a);// 消除对输入的依赖（打乱数据）
         sort(a, 0, a.length - 1); 
     }
 
     private static void sort(Comparable[] a, int lo, int hi)
     {
         if(hi <= lo) return;
-        int j = partition(a, lo, hi);
-        sort(a, lo, j-1);
-        sort(a, j+1, hi);
+        int j = partition(a, lo, hi); //切分，本质是把每个数放到对应的位置
+        sort(a, lo, j-1);//左半边
+        sort(a, j+1, hi);//右半边
+    }
+}
+
+//三向排序
+public class Quick3way
+{
+    private static void sort(Comparable[] a, int lo, int hi)
+    {
+        if(hi <= lo) return;
+        int lt = lo, i = lo+1, gt = hi;
+        Comparable v = a[lo];
+        while(i <= gt)
+        {
+            int cmp = a[i].compareTo(v); //a[i]与v比较，a[i]小返回1,大返回0；
+            if(cmp < 0) exch(a, lt++, i++);
+            else if (cmp > 0) exch(a, i, gt--);
+            else i++;            
+        }
+        sort(a, lo, lt - 1);
+        sort(a, gt+1, hi);
     }
 }
