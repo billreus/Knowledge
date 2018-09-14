@@ -11,4 +11,4 @@
 
 ## 数据库 :floppy_disk:
 
-[http基础](https://github.com/billreus/Konwledge/tree/master/MySQL)
+[数据库](https://github.com/billreus/Konwledge/tree/master/MySQL)
