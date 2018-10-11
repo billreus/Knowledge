@@ -1,14 +1,157 @@
-# JAVA基础
+<!-- TOC -->
 
-## 1 集合类框架
+- [JAVA API](#java-api)
+    - [1 语言包java.lang](#1-语言包javalang)
+        - [1.1 数据类型包装类](#11-数据类型包装类)
+        - [1.2 字符处理类](#12-字符处理类)
+        - [1.3 Math类](#13-math类)
+        - [1.4 Object类](#14-object类)
+        - [1.5 异常类](#15-异常类)
+            - [1.5.1 自定义异常](#151-自定义异常)
+            - [1.5.2 捕获异常](#152-捕获异常)
+    - [2 实用包java.util](#2-实用包javautil)
+        - [2.1 Calendar类](#21-calendar类)
+        - [2.2 Random类](#22-random类)
+        - [2.3 数据结构类](#23-数据结构类)
+            - [2.3.1 Collection接口](#231-collection接口)
+            - [2.3.2 Map接口](#232-map接口)
+    - [3 输入输出java.io](#3-输入输出javaio)
+        - [3.1 基类InputStream和OutputStream](#31-基类inputstream和outputstream)
+        - [3.2 文件流](#32-文件流)
+            - [3.2.1 读写一个文件](#321-读写一个文件)
+        - [3.3 缓冲流](#33-缓冲流)
+        - [3.4 数据流](#34-数据流)
+        - [3.5 字符流](#35-字符流)
+    - [4 枚举和泛型](#4-枚举和泛型)
+        - [4.1 枚举](#41-枚举)
+        - [4.2 泛型](#42-泛型)
+    - [5 窗口工具javax.swing](#5-窗口工具javaxswing)
+        - [5.1 JFrame](#51-jframe)
+        - [5.2 JLabel](#52-jlabel)
 
-### 1.1 Java.util
+<!-- /TOC -->
 
-Java.util中的集合类包含Java中最常用的类。常用的接口是List和Map。
+# JAVA API
 
-List包括ArrayList和Vector。他们是可变大小的列表。
+核心API主要有：语言包java.lang，实用包java.util，输入输出java.io，抽象窗口工具包java.awt，轻量级窗口工具javax.swing，网络java.net
 
-#### 1.1.1 ArrayList
+## 1 语言包java.lang
+
+语言包主要包括：Object类，数据类型包装类，字符处理，线程类，错误异常值处理类，数学类，过程类，系统和运行类，操作类
+
+### 1.1 数据类型包装类
+
+java本身的基本数据类型不是面向对象的，如果想处理基本类型数据可以使用数据包装类。
+
+例如Integer类，构造方法可以使用`Inerger(int value)`或者`Interger(String s)`
+
+常用一些方法例如：
+
+1. byteValue() 以byte类型返回该Integer
+2. CompareTo(Integer anotherInteger) 比较数值是否相等。
+3. intValue() 以int型返回此Integer对象 /short/long/float/double
+4. toString() 返回一个表示该Integer值的String对象
+
+### 1.2 字符处理类
+
+常用为String类，用来定义一个字符串。
+
+常用方法：
+
+1. length() 返回字符串长度
+2. equals() 字符串比较
+3. concat() 字符串连接
+4. charAt(a) 按照索引值a提取字符串中的字符
+
+### 1.3 Math类
+
+主要是一些数学的计算方法。
+
+### 1.4 Object类
+
+Object类是所有类的父类。存放最基本的方法。
+
+### 1.5 异常类
+
+异常都是从`Throwable`类派生出来的。异常常分成四类：
+
+* Error:系统内部错误，无需捕获
+* Exception:可以处理的异常
+* RuntimeException:可以捕获也可以不捕获的异常
+* 继承Exception的其它类:必须捕获的异常
+
+#### 1.5.1 自定义异常
+
+自定义异常只需要让它继承Exception或其子类即可。
+
+#### 1.5.2 捕获异常
+
+常使用`try`和`catch`来捕获异常。
+
+```java
+package bill;
+
+public class CatchException {
+    public static void main(String[] args) {
+        try {
+            // 下面定义了一个try语句块
+
+            System.out.println("I am try block.");
+
+            Class<?> tempClass = Class.forName("");
+            // 声明一个空的Class对象用于引发“类未发现异常”
+            System.out.println("Bye! Try block.");
+
+        } catch (ClassNotFoundException e) {
+            // 下面定义了一个catch语句块
+            System.out.println("I am catch block.");
+
+            e.printStackTrace();
+            //printStackTrace()的意义在于在命令行打印异常信息在程序中出错的位置及原因
+
+            System.out.println("Goodbye! Catch block.");
+
+        } finally {
+            // 下面定义了一个finally语句块
+            System.out.println("I am finally block.");
+        }
+    }
+}
+```
+
+## 2 实用包java.util
+
+主要包装了一些实用方法和数据结构。如日历类Calendar，随机类Random和堆栈Stack、向量Vector、位集合Bitset以及哈希表Hashtable等数据结构
+
+### 2.1 Calendar类
+
+用于表示日期和时间
+
+方法：
+
+1. GregorianCalendar() 指定时区
+2. GregorianCalendar(TimeZone zone) 
+3. GregorianCalendar(Locale aLocale)
+4. GregorianCalendar(TimeZone zone, Locale aLocale)
+
+### 2.2 Random类
+
+可以产生各种类型的随机数，与math类中不同的是，math中的只产生double类型随机数。
+
+构造方法：
+
+1. Random() 产生随机数，用时间作为seed
+2. Random(long seed) 单个long种子创建一个新的随机生成器
+
+### 2.3 数据结构类
+
+#### 2.3.1 Collection接口
+
+因为很多功能类似，Collection接口是一个java集合框架的根接口。也是List、Set和Queue接口的父接口。
+
+List 是一个接口，不能实例化，需要一个具体类来实现实例化。
+
+List 接口实现的类有：ArrayList（实现动态数组），Vector（实现动态数组），LinkedList（实现链表），Stack（实现堆栈）。
 
 ArrayList就是动态数组，可自动改变大小，灵活插入删除元素。
 
@@ -45,12 +188,15 @@ public class ArrayListTraversal{
         }
     }
 }
-
 ```
 
-### 1.1.2 HashMap
+Set接口也是 Collection 接口的子接口，它有一个很重要也是很常用的实现类——HashSet，Set 是元素无序并且不包含重复元素的 collection（List 可以重复），被称为集。
+
+#### 2.3.2 Map接口
 
 Map用于应用程序中管理映射。对应键值(key-value)
+
+HashMap 是基于哈希表的 Map 接口的一个重要实现类。HashMap 中的 Entry 对象是无序排列的，Key 值和 value 值都可以为 null，但是一个 HashMap 只能有一个 key 值为 null 的映射。
 
 常用方法:
 
@@ -129,61 +275,25 @@ public class PhoneBookByMap {
 }
 ```
 
-## 2 异常
-
-异常都是从`Throwable`类派生出来的。异常常分成四类：
-
-* Error:系统内部错误，无需捕获
-* Exception:可以处理的异常
-* RuntimeException:可以捕获也可以不捕获的异常
-* 继承Exception的其它类:必须捕获的异常
-
-## 2.1 自定义异常
-
-自定义异常只需要让它继承Exception或其子类即可。
-
-## 2.2 捕获异常
-
-常使用`try`和`catch`来捕获异常。
-
-```java
-package bill;
-
-public class CatchException {
-    public static void main(String[] args) {
-        try {
-            // 下面定义了一个try语句块
-
-            System.out.println("I am try block.");
-
-            Class<?> tempClass = Class.forName("");
-            // 声明一个空的Class对象用于引发“类未发现异常”
-            System.out.println("Bye! Try block.");
-
-        } catch (ClassNotFoundException e) {
-            // 下面定义了一个catch语句块
-            System.out.println("I am catch block.");
-
-            e.printStackTrace();
-            //printStackTrace()的意义在于在命令行打印异常信息在程序中出错的位置及原因
-
-            System.out.println("Goodbye! Catch block.");
-
-        } finally {
-            // 下面定义了一个finally语句块
-            System.out.println("I am finally block.");
-        }
-    }
-}
-```
-
-## 3 输入输出
+## 3 输入输出java.io
 
 按照数据流方向可以分为输入流和输出流；按照处理数据的单位分为字节流和字符流；按照功能分为节点流和处理流。
 
 `java.io`包提供了大多数输入输出接口，有一些来自`java.lang`包中的类但都继承自`java.io`中的类。
 
-### 3.1 读写一个文件
+### 3.1 基类InputStream和OutputStream
+
+字节流主要操作byte类型数据，以byte数组为准，java 中每一种字节流的基本功能依赖于基本类 InputStream 和 Outputstream，他们是抽象类，不能直接使用。
+
+### 3.2 文件流
+
+在 I/O 处理中，最常见的就是对文件的操作。java.io 包中所提供的文件操作类包括：
+
+1. 用于读写本地文件系统中的文件：FileInputStream 和 FileOutputStream
+2. 描述本地文件系统中的文件或目录：File、FileDescriptor 和 FilenameFilter
+3. 提供对本地文件系统中文件的随机访问支持：RandomAccessFile
+
+#### 3.2.1 读写一个文件
 
 读写文件可以使用`FileInputStream`来读取。
 
@@ -260,6 +370,20 @@ public class WriteFileTest {
     }
 }
 ```
+
+### 3.3 缓冲流
+
+类 BufferedInputStream 和 BufferedOutputStream 实现了带缓冲的过滤流，它提供了缓冲机制，把任意的 I/O 流“捆绑”到缓冲流上，可以提高 I/O 流的读取效率。
+
+### 3.4 数据流
+
+接口 DataInput 和 DataOutput，设计了一种较为高级的数据输入输出方式：除了可处理字节和字节数组外，还可以处理 int、float、boolean等基本数据类型，这些数据在文件中的表示方式和它们在内存中的一样，无须转换，如 read(), readInt(), readByte()...; write(), writeChar(), writeBoolean()...此外，还可以用 readLine()方法读取一行信息。
+
+### 3.5 字符流
+
+java.io包中专门用于字符流处理的类，是以 Reader 和 Writer 为基础派生的一系列类。
+
+字符流以字符为单位，根据码表映射字符，一次可能读多个字节，只能处理字符类型的数据。
 
 ## 4 枚举和泛型
 
@@ -349,7 +473,7 @@ public class GenericTest {
 
 采用泛型写法后，在//1处想加入一个Integer类型的对象时会出现编译错误，通过List<String>，直接限定了list集合中只能含有String类型的元素，从而在//2处无须进行强制类型转换，因为此时，集合能够记住元素的类型信息，编译器已经能够确认它是String类型了。
 
-## 5 Swing
+## 5 窗口工具javax.swing
 
 Swing 是在抽象窗口工具箱（AWT）的架构上发展而来的一个用户界面库，整个可视组件库的基础构造块是 JComponent。它是所有组件的父类，为所有组件提供了绘制的基础架构。换言之，所有的Swing组件都是由它派生而来
 
