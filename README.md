@@ -4,7 +4,7 @@
 
 [数据结构-JAVA](https://github.com/billreus/Konwledge/tree/master/Data%20Structures%20and%20Algorithm%20Analysis/JAVA)
 
-## Git :hammer:
+## Git :love_hotel:
 
 [Git基础知识](https://github.com/billreus/Konwledge/blob/master/Git/git.md)
 
