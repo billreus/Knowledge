@@ -26,6 +26,13 @@
         - [4.1 枚举](#41-枚举)
         - [4.2 泛型](#42-泛型)
         - [4.3 包装（装箱和拆箱）](#43-包装装箱和拆箱)
+        - [4.4 String](#44-string)
+            - [4.4.1 Stirng,StringBuffer and StringBuilder](#441-stirngstringbuffer-and-stringbuilder)
+            - [4.4.2 String Pool](#442-string-pool)
+        - [4.5 面向对象](#45-面向对象)
+            - [4.5.1 继承](#451-继承)
+            - [4.5.2 抽象类与接口](#452-抽象类与接口)
+            - [4.5.3 this和super](#453-this和super)
     - [5 窗口工具javax.swing](#5-窗口工具javaxswing)
         - [5.1 JFrame](#51-jframe)
         - [5.2 JLabel](#52-jlabel)
@@ -484,6 +491,147 @@ Integer i = new Integer(10); //以前要生成数值10的Integer对象
 Integer i = 10; //装箱
 int n = i; //拆箱
 ```
+
+其中装箱时调用的是Integer的valueOf(int)方法，拆箱用的是Integer的intValue方法。
+
+总结：装箱过程是通过调用包装器的valueOf方法实现的，而拆箱过程是通过调用包装器的 xxxValue方法实现的。（xxx代表对应的基本数据类型）。
+
+对于new Integer(10)和Integer.value(10)区别在于：
+
+* new Integer(10) 每次都会新建一个对象；
+* Integer.valueOf(10) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。
+
+```java
+Integer x = new Integer(10);
+Integer y = new Integer(10);
+System.out.println(x == y);    // false
+Integer z = Integer.valueOf(10);
+Integer k = Integer.valueOf(10);
+System.out.println(z == k);   // true
+```
+
+```java
+        Integer i1 = 100;
+        Integer i2 = 100;
+        Integer i3 = 200;
+        Integer i4 = 200;
+
+        System.out.println(i1==i2); // true
+        System.out.println(i3==i4); // false
+```
+
+这是由于缓存池的设置，由于valueOf() 方法的实现比较简单，就是先判断值是否在缓存池中，如果在的话就直接返回缓存池的内容。如果不是会new一个新的对象
+
+```java
+public static Integer valueOf(int i) {
+    if (i >= IntegerCache.low && i <= IntegerCache.high)
+        return IntegerCache.cache[i + (-IntegerCache.low)];
+    return new Integer(i);
+}
+```
+
+由下可知创建Integer对象时数值的范围在[-128,127],所以200会显示false。
+
+基本类型对应的缓冲池如下：
+
+* boolean values true and false
+* all byte values
+* short values between -128 and 127
+* int values between -128 and 127
+* char in the range \u0000 to \u007F
+
+###　4.4 String
+
+String被声明成final，因此它不可能被继承。
+
+内部使用char数组存储数据，也被声明成final，同时String内部没有改变value数组的方法，因此可以保证String不可改变。
+
+```java
+public final class String
+    implements java.io.Serializable, Comparable<String>, CharSequence {
+    /** The value is used for character storage. */
+    private final char value[];
+```
+
+不可变的好处：
+
+1. 可以缓存hush值；因为String的hash值经常被使用，例如String用做HashMap的Key。不可变使得hash值也不可变，只需进行一次计算。
+2. String Pool的需要; 如果一个String对象已经被创建，那么就会从String Pool中取引用。只有String不可变才可使用。
+3. 安全性；
+4. 线程安全；
+
+#### 4.4.1 Stirng,StringBuffer and StringBuilder
+
+1. 可变性
+
+* String不可变
+* StringBuffer 和 StringBuilder 可变
+
+2. 线程安全
+
+* String 不可变，因此是线程安全的
+* StringBuilder 不是线程安全的
+* StringBuffer 是线程安全的，内部使用 synchronized 进行同步
+
+#### 4.4.2 String Pool
+
+字符串常量池(String Pool)保存着所有字符串字面量(literal strings),可以使用String的intern()方法将运行过程中的字符串添加到String Pool中。
+
+当一个字符串调用 intern() 方法时，如果 String Pool 中已经存在一个字符串和该字符串值相等（使用 equals() 方法进行确定），那么就会返回 String Pool 中字符串的引用；否则，就会在 String Pool 中添加一个新的字符串，并返回这个新字符串的引用。
+
+```java
+String s1 = new String("aaa");
+String s2 = new String("aaa");
+System.out.println(s1 == s2);           // false
+String s3 = s1.intern();
+String s4 = s1.intern();
+System.out.println(s3 == s4);           // true
+
+// 如果是采用 "bbb" 这种字面量的形式创建字符串，会自动地将字符串放入 String Pool 中。
+String s5 = "bbb";
+String s6 = "bbb";
+System.out.println(s5 == s6);  // true
+```
+
+### 4.5 面向对象
+
+#### 4.5.1 继承
+
+Java中有三种访问权限:private、protected、public.
+
+protected 用于修饰成员，表示在继承体系中成员对于子类可见，但是这个访问修饰符对于类没有意义。
+
+#### 4.5.2 抽象类与接口
+
+抽象类与抽象方法都使用abstract关键字进行声明，抽象类包含抽象方法。抽象类就是为了继承而存在。
+
+抽象类和普通类区别：
+
+1. 抽象方法必须为public或者protected（因为如果为private，则不能被子类继承，子类便无法实现该方法），缺省情况下默认为public。
+2. 抽象类不能用来创建对象；
+3. 如果一个类继承于一个抽象类，则子类必须实现父类的抽象方法。如果子类没有实现父类的抽象方法，则必须将子类也定义为为abstract类。
+
+接口的成员（字段 + 方法）默认都是 public 的，并且不允许定义为 private 或者 protected。
+
+使用选择:
+
+1. 使用接口：
+
+* 需要让不相关的类都实现一个方法，例如不相关的类都可以实现 Compareable 接口中的 compareTo() 方法；
+* 需要使用多重继承。
+
+2. 使用抽象类：
+
+* 需要在几个相关的类中共享代码。
+* 需要能控制继承来的成员的访问权限，而不是都为 public。
+* 需要继承非静态和非常量字段。
+* 在很多情况下，接口优先于抽象类。因为接口没有抽象类严格的类层次结构要求，可以灵活地为一个类添加行为。并且从 Java 8 开始，接口也可以有默认的方法实现，使得修改接口的成本也变的很低。
+
+#### 4.5.3 this和super
+
+this是自身的一个对象，代表对象本身。一般用于：普通的直接引用；形参与成员名重名；引用构造函数
+
+super可以理解为指向超(父)类对象的一个指针,且是离自己最近的一个父类。一般用于：直接引用父类的成员；子类中成员与父类重名；引用构造函数。
 
 ## 5 窗口工具javax.swing
 
