@@ -12,7 +12,7 @@
     - [2 实用包java.util](#2-实用包javautil)
         - [2.1 Calendar类](#21-calendar类)
         - [2.2 Random类](#22-random类)
-        - [2.3 数据结构类](#23-数据结构类)
+        - [2.3 数据结构类(容器)](#23-数据结构类容器)
             - [2.3.1 Collection接口](#231-collection接口)
             - [2.3.2 Map接口](#232-map接口)
     - [3 输入输出java.io](#3-输入输出javaio)
@@ -159,7 +159,9 @@ public class CatchException {
 1. Random() 产生随机数，用时间作为seed
 2. Random(long seed) 单个long种子创建一个新的随机生成器
 
-### 2.3 数据结构类
+### 2.3 数据结构类(容器)
+
+容器主要包括 Collection 和 Map 两种，Collection 存储着对象的集合，而 Map 存储着键值对（两个对象）的映射表。
 
 #### 2.3.1 Collection接口
 
@@ -167,7 +169,11 @@ public class CatchException {
 
 List 是一个接口，不能实例化，需要一个具体类来实现实例化。
 
-List 接口实现的类有：ArrayList（实现动态数组），Vector（实现动态数组），LinkedList（实现链表），Stack（实现堆栈）。
+List 接口实现的类有：
+
+* ArrayList：基于动态数组实现
+* Vector：与ArrayList类似，但线程安全
+* LinkedList：双向链表，只能顺序访问，但可以快速在链表中插入删除元素。可以当作栈，队列，双向队列使用。
 
 ArrayList就是动态数组，可自动改变大小，灵活插入删除元素。
 
@@ -208,9 +214,28 @@ public class ArrayListTraversal{
 
 Set接口也是 Collection 接口的子接口，它有一个很重要也是很常用的实现类——HashSet，Set 是元素无序并且不包含重复元素的 collection（List 可以重复），被称为集。
 
+Set常用接口：
+
+* TreeSet：基于红黑树实现，支持有序性操作，例如根据一个范围查找元素的操作。但是查找效率不如 HashSet，HashSet 查找的时间复杂度为 O(1)，TreeSet 则为 O(logN)。
+* HashSet：基于哈希表实现，支持快速查找，但不支持有序性操作。并且失去了元素的插入顺序信息，也就是说使用 Iterator 遍历 HashSet 得到的结果是不确定的。
+* LinkedHashSet：具有 HashSet 的查找效率，且内部使用双向链表维护元素的插入顺序。
+
+Queue常用接口：
+
+* LinkedList：可以用它来实现双向队列。
+
+* PriorityQueue：基于堆结构实现，可以用它来实现优先队列。
+
 #### 2.3.2 Map接口
 
 Map用于应用程序中管理映射。对应键值(key-value)
+
+Map常用接口：
+
+* TreeMap：基于红黑树实现。
+* HashMap：基于哈希表实现。
+* HashTable：和 HashMap 类似，但它是线程安全的，这意味着同一时刻多个线程可以同时写入 HashTable 并且不会导致数据不一致。它是遗留类，不应该去使用它。现在可以使用 ConcurrentHashMap 来支持线程安全，并且 ConcurrentHashMap 的效率会更高，因为 ConcurrentHashMap 引入了分段锁。
+* LinkedHashMap：使用双向链表来维护元素的顺序，顺序为插入顺序或者最近最少使用（LRU）顺序。
 
 HashMap 是基于哈希表的 Map 接口的一个重要实现类。HashMap 中的 Entry 对象是无序排列的，Key 值和 value 值都可以为 null，但是一个 HashMap 只能有一个 key 值为 null 的映射。
 
