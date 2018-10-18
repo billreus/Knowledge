@@ -77,7 +77,7 @@ CREATE TABLE 表的名字
 );
 ```
 
-表中具体内容使用:`SELECT * FROM employee`查看
+表中具体内容使用:`SELECT * FROM 表名`查看
 
 表中插入数据:`INSERT INTO 表的名字(列名a, 列名b, 列名c) VALUES(值1, 值2, 值3);`
 
