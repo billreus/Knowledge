@@ -6,6 +6,8 @@
         - [1.2 字符处理类](#12-字符处理类)
         - [1.3 Math类](#13-math类)
         - [1.4 Object类](#14-object类)
+            - [1.4.1 equals方法](#141-equals方法)
+            - [1.4.2 hashCode方法](#142-hashcode方法)
         - [1.5 异常类](#15-异常类)
             - [1.5.1 自定义异常](#151-自定义异常)
             - [1.5.2 捕获异常](#152-捕获异常)
@@ -40,6 +42,8 @@
                 - [static声明静态语句块](#static声明静态语句块)
     - [5 窗口工具javax.swing](#5-窗口工具javaxswing)
         - [5.1 JFrame](#51-jframe)
+            - [5.1.1 框架](#511-框架)
+            - [5.1.2 2D图形](#512-2d图形)
         - [5.2 JLabel](#52-jlabel)
 
 <!-- /TOC -->
@@ -83,6 +87,14 @@ java本身的基本数据类型不是面向对象的，如果想处理基本类�
 ### 1.4 Object类
 
 Object类是所有类的父类。存放最基本的方法。
+
+#### 1.4.1 equals方法
+
+Object类中equals方法用于检测一个对象是否等与另一个对象。如果两个对象具有相同引用，它们一定是相等的。
+
+#### 1.4.2 hashCode方法
+
+用于返回每个对象的存储地址，默认是一个散列码。
 
 ### 1.5 异常类
 
@@ -167,6 +179,8 @@ public class CatchException {
 
 因为很多功能类似，Collection接口是一个java集合框架的根接口。也是List、Set和Queue接口的父接口。
 
+List是元素内有序集合，元素可以重复。Set是元素无序集合，元素不可重复。
+
 List 是一个接口，不能实例化，需要一个具体类来实现实例化。
 
 List 接口实现的类有：
@@ -211,6 +225,8 @@ public class ArrayListTraversal{
     }
 }
 ```
+
+由于Set是元素无序且不可重合，如何判断重复，需使用Object.equals方法。但元素过多会计算量大，所以使用哈希表原理，hashCode方法返回对象的物理地址。如果位置上没有元素，直接存放该位置，如果有元素就调用equals来与新元素进行比较。
 
 Set接口也是 Collection 接口的子接口，它有一个很重要也是很常用的实现类——HashSet，Set 是元素无序并且不包含重复元素的 collection（List 可以重复），被称为集。
 
@@ -747,7 +763,21 @@ public class A {
 
 ## 5 窗口工具javax.swing
 
-Swing 是在抽象窗口工具箱（AWT）的架构上发展而来的一个用户界面库，整个可视组件库的基础构造块是 JComponent。它是所有组件的父类，为所有组件提供了绘制的基础架构。换言之，所有的Swing组件都是由它派生而来
+Swing 是在抽象窗口工具箱（AWT）的架构上发展而来的一个用户界面库，整个可视组件库的基础构造块是 JComponent。它是所有组件的父类，为所有组件提供了绘制的基础架构。换言之，所有的Swing组件都是由它派生而来。
+
+每个Swing组件必须由事件分派线程进行配置，线程将鼠标点击和按键控制转移到用户接口组件。
+
+```java
+EventQueue.invokeLater(new Runnable()
+{
+    public void run()
+    {
+        statements
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //用户关闭框架的响应动作，用来退出进程。
+        frame.setVisible(true);  //显示框架
+    }
+});
+```
 
 ### 5.1 JFrame
 
@@ -758,8 +788,41 @@ JFrame类就是一个容器，让你把其他组件添加到里面。
 * get/setTitle() 获取/设置窗体标题
 * get/setState() 获取/设置窗体的最小化、最大化等状态
 * is/setVisible() 获取/设置窗体的可视状态
-* get/setLocation() 获取/设置窗体的大小
+* get/setLocation()和setBounds 获取/设置窗体的大小位置
+* setIconImage() 用于告诉窗口系统在标题栏、任务切换窗口等位置显示哪个图标
+* setResizable() 利用一个布尔值确定框架大小是否允许用户改变
 * add() 将组件添加到窗体中
+
+#### 5.1.1 框架
+
+获取屏幕大小需要调用Toolkit类的静态方法getDefaultToolkit得到一个Tookit对象。然后调用getScreenSize方法，返回屏幕大小。
+
+```java
+Toolkit kit = Toolkit.getDefaultToolkit();
+Dimension screenSize = kit.getScreenSize();
+int screenHeight = screenSize.height;
+int screenWidth = screenSize.width;
+```
+
+对框架大小设定为上面取值的50%，然后告知系统定位框架：
+
+```java
+setSize(screenWidth / 2, screenHeight / 2);
+setLocationByPlatform(true);
+```
+
+#### 5.1.2 2D图形
+
+绘制2D需要获得一个Graphics2D类对象。这个类是Graphics类的子类。
+
+使用paintComponent方法就会自动获得Graphics2D类对象，只需转换。
+
+```java
+public void paintComponment(Graphics g)
+{
+    Graphics2D g2 = (Graphics2D) g;
+}
+```
 
 ### 5.2 JLabel
 
