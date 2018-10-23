@@ -45,6 +45,9 @@
             - [5.1.1 框架](#511-框架)
             - [5.1.2 2D图形](#512-2d图形)
         - [5.2 JLabel](#52-jlabel)
+    - [6 事件处理](#6-事件处理)
+        - [6.1 动作](#61-动作)
+        - [6.2 鼠标事件](#62-鼠标事件)
 
 <!-- /TOC -->
 
@@ -832,3 +835,52 @@ public void paintComponment(Graphics g)
 
 * get/setText() 获取/设置标签文本
 * get/setIcon() 获取/设置标签图片
+
+## 6 事件处理
+
+事件的所有信息都封装再一个事件对象(event object)中，所有事件都派生与java.until.EventObject类。不同的时间源可以产生不同类别的事件，例如按钮可以发送一个ActionEvent对象，窗口可以发送WindowEvent对象。
+
+监听器的示例：
+
+```java
+ActionListener listener = ...;
+JButton button = new JButton("OK");
+button.addActionListener(listener);
+```
+
+然后只要按钮产生一个动作事件，listener对象就会得到通告。因此监听器必须有一个actionPerformed的方法，用来接收ActionEvent对象参数。
+
+```java
+class MyListener implements ActionListener
+{
+    ...
+    public void actionPerformed(ActionEvent event)
+    {
+        // reaction to button click goes here
+        ...
+    }
+}
+```
+
+由此只要用户点击按钮，JButton对象就会创建一个ActionEvent对象，然后调用listener.action Performde(event)传递事件对象。
+
+### 6.1 动作
+
+把一些事件源连接到一个监听器上，即都可以触发监听器内的动作。接口为Action。
+
+Action接口包含下列方法：
+
+* void actionPerformed(ActionEvent event)
+* void setEnabled(boolean b)
+* boolean isEnabled()
+* void putValue(String key, Object value)
+* Object getValue(String key)
+
+### 6.2 鼠标事件
+
+鼠标的监听器方法主要有：
+
+1. 鼠标第一次被按下调用mousePressed
+2. 鼠标被释放mouseReleased
+3. 鼠标点击mouseClicked
+
