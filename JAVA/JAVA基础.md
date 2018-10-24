@@ -535,6 +535,8 @@ public class GenericTest {
 
 ### 4.3 包装（装箱和拆箱）
 
+自动拆箱和装箱就是，计算数值时，integer会自动转为int进行计算。而当int传入类型为integer的引用时，int数值又会被包装为integer。
+
 装箱就是自动将基本数据类型转换成包装器类型；拆箱就是自动将包装类型转换为基本数据类型；
 
 ```java
@@ -563,13 +565,12 @@ System.out.println(z == k);   // true
 ```
 
 ```java
-        Integer i1 = 100;
-        Integer i2 = 100;
-        Integer i3 = 200;
-        Integer i4 = 200;
-
-        System.out.println(i1==i2); // true
-        System.out.println(i3==i4); // false
+Integer i1 = 100;
+Integer i2 = 100;
+Integer i3 = 200;
+Integer i4 = 200;
+System.out.println(i1==i2); // true
+System.out.println(i3==i4); // false
 ```
 
 这是由于缓存池的设置，由于valueOf() 方法的实现比较简单，就是先判断值是否在缓存池中，如果在的话就直接返回缓存池的内容。如果不是会new一个新的对象
@@ -592,11 +593,13 @@ public static Integer valueOf(int i) {
 * int values between -128 and 127
 * char in the range \u0000 to \u007F
 
-###　4.4 String
+### 4.4 String
 
 String被声明成final，因此它不可能被继承。
 
 内部使用char数组存储数据，也被声明成final，同时String内部没有改变value数组的方法，因此可以保证String不可改变。
+
+例如：给一个已有字符串”abcd”第二次赋值成”abcedl”，不是在原内存地址上修改数据，而是重新指向一个新对象，新地址。
 
 ```java
 public final class String
@@ -647,11 +650,49 @@ System.out.println(s5 == s6);  // true
 
 ### 4.5 面向对象
 
-#### 4.5.1 继承
+#### 4.5.1 继承、封装、多态
 
-Java中有三种访问权限:private、protected、public.
+JAVA只能单继承，但可以通过内部类继承其他类实现多继承。
+
+```java
+public class Son extends Father{
+    public void eat () {
+        System.out.println("son eat");
+    }
+    public void sleep() {
+        System.out.println("zzzzzz");
+    }
+    public void cook() {
+        new Mother().cook();
+        Mom mom = new Mom();
+        mom.cook();
+    }
+    //匿名内部类实现的多继承
+    private class Mom extends Mother {
+        @Override
+        public void cook() {
+            System.out.println("mom cook");
+        }
+    }
+}
+```
+
+封装是为了控制访问权限，访问权限依次有:public > protected > package = default > private
+
+* public: 包内、包外，所有类中可见
+* protected: 包内所有类可见，包外有继承关系的子类可见(子类对象可调用)
+* default: 表示默认，不仅本类访问，而且是同包可。
+* private: 仅在同一类中可见 
 
 protected 用于修饰成员，表示在继承体系中成员对于子类可见，但是这个访问修饰符对于类没有意义。
+
+多态一般可以分为两种，一个是重写overwrite，一个是重载override。
+
+重写是由于继承关系中的子类有一个和父类同名同参数的方法，会覆盖掉父类的方法。
+
+重载是因为一个同名方法可以传入多个参数组合。
+
+* @Override 的作用是：如果想重写父类的方法，比如toString()方法的话，在方法前面加上@Override 系统可以帮你检查方法的正确性。
 
 #### 4.5.2 抽象类与接口
 
