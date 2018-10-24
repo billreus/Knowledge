@@ -31,3 +31,103 @@
 3. 无障碍：允许所有线程进入临界区，一起共享数据，如果出错，进行回滚。
 4. 无锁：并行是无障碍的，并行时保证必然有一个线程在有限步内完成操作离开临界区。
 5. 无等待：所有线程在有限步完成操作。
+
+## 2 并发操作
+
+所有线程的状态都在Thread中的State枚举中定义
+
+```java
+public enum State{NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED;}
+```
+
+NEW状态表示刚刚创建的线程，等待start()方法调用，当线程执行时，处于RUNNABLE状态，如果线程执行中遇到synchronized同步块就会进入BLOCKED阻塞状态，会暂停执行，知道获得请求锁。WATTING和TIMED_WAITING都表示等待状态，区别是WAITING会进入无时间限制的等待，TIMED_WAITING会进行有时限的等待。线程执行完毕会进入TERMINATED状态表示结束。
+
+
+### 2.1 线程基本操作
+
+新建线程：
+
+```java
+Thread t1 = new Thread();
+t1.start();
+```
+
+线程运行可以使用Runnable接口，该接口只有一个run()方法：
+
+```java
+public class CreateThread3 implements Runnable {
+    public static void main(String[] args){
+        Thread t1 = new Thread(new CreateThread3());
+        t1.start();
+    }
+
+    @Override
+    public void run(){
+        //动作
+    }
+}
+```
+
+### 2.2 线程中断
+
+线程中断不会让线程立即退出，而是发给线程一个通知，至于线程接到通知后如何处理完全由目标线程自行决定。
+
+线程中断有关的有三个方法：
+
+```java
+public void Thread.interrupt() //中断线程
+public boolean Thread.isInterrupted() //判断是否被中断
+public static boolean Thread.interrupted() //判断是否被中断，并清除当前中断状态
+```
+
+`Thread.sleep()`方法会让当前线程休眠若干时间，并会抛出一个InterruptedException中断异常。
+
+### 2.3 等待(wait)和通知(notify)
+
+属于输出Object类的方法
+
+```java
+public final void wait() throws InterruptedException
+public final native void notify()
+```
+
+当一个对象使用了wait()方法以后，该线程就好停止继续执行变成等待状态，等到其他线程调用obj.notify()方法为止。
+
+* 在等待中的线程会在等待队列中，当notify()被调用时会随机选择一个线程唤醒。
+
+该方法的调用都需要首先获得目标对象的一个监视器，在wait()方法执行后会释放这个监视器。
+
+### 2.4 等待线程结束(join)和谦让(yield)
+
+join有两个方法：
+
+```java
+public final void join() throws InterruptedException
+public final synchronized void join(long mills) throws InterruptedException
+```
+
+第一个方法表示无限等待，会一直阻塞当前线程，直到目标线程执行完毕。第二个方法会给出一个最大等待时间，超过时间线程会继续执行下去。
+
+`public static native void yield();`是一个静态方法，会让当前线程让出CPU。一般用于优先级非常低的功能上。
+
+### 2.5 线程组
+
+当线程数量很多时，可以把相同功能的线程放在一个线程组里。
+
+```java
+ThreadGroup tq = new ThreadGroup("groupname");
+System.out.println(tg.activeCount()); //线程数
+tg.list(); //打印线程组中所有线程信息
+```
+
+### 2.6 守护线程
+
+```java
+Thread t = new DaemonT(); //Daemont为线程功能设置的自己写的类
+t.setDamon(true); //线程守护，必须在start之前
+t.start();
+```
+
+可以使main中主线程结束后，整个线程结束，用户线程不会继续执行。
+
+P69
