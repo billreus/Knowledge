@@ -130,4 +130,41 @@ t.start();
 
 可以使main中主线程结束后，整个线程结束，用户线程不会继续执行。
 
-P69
+### 2.7 线程优先级
+
+线程优先级使用1到10表示，一般可以用内置的三个静态标量表示：
+
+```java
+public final static int MIN_PRIORITY = 1;
+public final static int NORM_PRIORITY = 5;
+public final static int MAX_PPRIORITY = 10;
+```
+
+启动方面优先级主要是对线程类setPriority:
+
+```java
+Thread high = new HightPriority();
+Thread low = new LowPriority();
+high.setPriority(Thread.MAX_PRIORITY);
+low.setPriority(Thread.MIN_PRIORITY);
+low.start();
+high.start();
+```
+
+### 2.8 线程安全synchronized
+
+程序并行运行如果两个线程同时修改某一个数据会产生冲突。
+
+关键字synchronized的作用是实现线程间同步，对同步的代码加锁，每次只能有一个线程进入同步块。
+
+指定加锁对象：`synchronized(instance)`
+
+指定加锁方法：
+
+```java
+public synchronized void increase(){
+    i++;
+}
+```
+
+p84
