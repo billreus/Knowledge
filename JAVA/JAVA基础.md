@@ -32,7 +32,7 @@
             - [4.4.1 Stirng,StringBuffer and StringBuilder](#441-stirngstringbuffer-and-stringbuilder)
             - [4.4.2 String Pool](#442-string-pool)
         - [4.5 面向对象](#45-面向对象)
-            - [4.5.1 继承](#451-继承)
+            - [4.5.1 继承、封装、多态](#451-继承封装多态)
             - [4.5.2 抽象类与接口](#452-抽象类与接口)
             - [4.5.3 this和super](#453-this和super)
             - [4.5.4 final与static](#454-final与static)
@@ -45,6 +45,8 @@
             - [5.1.1 框架](#511-框架)
             - [5.1.2 2D图形](#512-2d图形)
         - [5.2 JLabel](#52-jlabel)
+        - [5.3 JToolBar](#53-jtoolbar)
+        - [5.4 JPanel](#54-jpanel)
     - [6 事件处理](#6-事件处理)
         - [6.1 动作](#61-动作)
         - [6.2 鼠标事件](#62-鼠标事件)
@@ -825,13 +827,13 @@ EventQueue.invokeLater(new Runnable()
 
 ### 5.1 JFrame
 
-JFrame类就是一个容器，让你把其他组件添加到里面。
+JFrame类就是一个容器一个窗体组件，让你把其他组件添加到里面。
 
 它包含一些方法：
 
 * get/setTitle() 获取/设置窗体标题
 * get/setState() 获取/设置窗体的最小化、最大化等状态
-* is/setVisible() 获取/设置窗体的可视状态
+* is/setVisible() 获取/设置窗体的可视状态(一般功能添加完后true结束)
 * get/setLocation()和setBounds 获取/设置窗体的大小位置
 * setIconImage() 用于告诉窗口系统在标题栏、任务切换窗口等位置显示哪个图标
 * setResizable() 利用一个布尔值确定框架大小是否允许用户改变
@@ -876,6 +878,30 @@ public void paintComponment(Graphics g)
 
 * get/setText() 获取/设置标签文本
 * get/setIcon() 获取/设置标签图片
+
+### 5.3 JToolBar
+
+工具条可以把一些按钮等归在一个栏目里面，使用时声明工具条后把按钮等功能add进框架内即可
+
+```java
+JToolBar tb = new JToolBar();
+JButton bSpend = new JButton("消费一览");
+tb.add(bSpend);
+```
+
+### 5.4 JPanel
+
+一个界面只可以有一个JFrame窗体组件，但是可以有多个JPanel面板组件，而JPanel上也可以使用FlowLayout，BorderLayout，GridLayout等各种布局管理器，这样可以组合使用，达到较为复杂的布局效果。
+
+BorderLayout可以实现基础的东南西北和中心定位：
+
+```java
+JFrame f = new JFrame();
+JToolBar tb = new JToolBar();
+f.setLayout(new BorderLayout());
+f.add(tb, BorderLayout.SOUTH);//置顶
+f.add(new JPanel(), BorderLayout.CENTER); //居中
+```
 
 ## 6 事件处理
 
