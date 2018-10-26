@@ -167,4 +167,91 @@ public synchronized void increase(){
 }
 ```
 
-p84
+### 2.9 同步控制
+
+重入锁可以完全替代synchronized，重入锁使用`java.util.concurrent.locks.ReentrantLock`类来实现。
+
+```java
+public static ReentrantLock lock = new ReentrantLock();
+public void run(){
+    lock.lock();
+    action
+    lock.unlock();
+}
+```
+
+锁申请等待时间使用：tryLock(时长，单位(大写))
+
+重入锁可以实现公平调用锁的申请而不是随机，对公平设置使用如下函数：
+
+```java
+public staic ReentrantLock fairLock = new ReentrantLock(true);
+```
+
+#### 2.9.1 Condition条件
+
+与wait()和notify()类似，只是这两个是配合synchronized使用，Condition是与重入锁相关联。
+
+Condition接口基本方法：
+
+* void await() throws InteruptedException：会使当前线程等待，同时释放当前锁，当其他线程中使用signal()方法时，线程重新获得锁继续执行。与wait()方法类似。
+* void signal()：用于唤醒一个等待的线程。
+
+#### 2.9.2 信号量
+
+无论是内部锁还是重入锁，一次只能允许一个线程访问一个资源，而信号量可以指定多个线程访问某一个资源。
+
+信号量提供以下构造函数:
+
+```java
+public Semaphore(int permits)
+public Semaphore(int permits, boolean fair) //指定是否公平
+```
+
+构造函数确定了信号量的准入数，信号量的主要逻辑方法有：
+
+```java
+public void acquire()
+public void acquireUninterruptibly()
+public boolean tryAcquire()
+public boolean tryAcquire(long timeout, TimeUnit unit)
+public void release()
+```
+
+acquire()方法尝试获得准入许可，无法获得会等待直到有线程释放一个许可或者当前线程中断。
+
+acquireUninterruptibly()方法与acquire()方法但不响应中断。
+
+tryAcquire()尝试获得许可，成功返回true，失败返回false。
+
+release()用于线程访问资源结束后释放一个许可，以使其他等待线程可以进行资源访问。
+
+#### 2.9.3 读写锁ReadWriteLock
+
+使用重入锁或者内部锁时，读与读之间，读与写，写与写直接都是串行操作的，由于读操作不会对数据破坏，所以串行读是不合理的。
+
+读写锁可以实现读与读之间的不阻塞。
+
+#### 2.9.4 倒计时器CountDownLatch
+
+可以实现某个线程等到到倒计时结束再开始执行。
+
+构造函数为:
+
+```java
+public CountDownLatch(int count)
+```
+
+#### 2.9.5 循环栅栏CyclicBarrier
+
+它也可以实现线程间的计数等待，但是比CountDownLatch更加复杂强大。
+
+循环栅栏可以是将计算器计数归零，再进行下一次循环。
+
+CyclicBarrier可以接收一个参数作为barrierAction，即当计数完成一次后系统会执行动作。
+
+```java
+public CyclicBarrier(int parties, Runnable barrierAction)
+```
+
+p106
