@@ -152,6 +152,49 @@ public class CatchException {
 }
 ```
 
+#### 1.5.3 throws方法
+
+如果method2要进行异常处理，而本身不打算处理，可以把该异常抛出去，method1接到方法进行处理。
+
+```java
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+ 
+public class TestException {
+ 
+    public static void main(String[] args) {
+        method1();
+ 
+    }
+ 
+    private static void method1() {
+        try {
+            method2();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+ 
+    }
+ 
+    private static void method2() throws FileNotFoundException {
+ 
+        File f = new File("d:/LOL.exe");
+ 
+        System.out.println("试图打开 d:/LOL.exe");
+        new FileInputStream(f);
+        System.out.println("成功打开");
+ 
+    }
+}
+```
+
+throws与throw这两个关键字接近，不过意义不一样，有如下区别：
+
+1. throws 出现在方法声明上，而throw通常都出现在方法体内。
+2. throws 表示出现异常的一种可能性，并不一定会发生这些异常；throw则是抛出了异常，执行throw则一定抛出了某个异常对象。
+
 ## 2 实用包java.util
 
 主要包装了一些实用方法和数据结构。如日历类Calendar，随机类Random和堆栈Stack、向量Vector、位集合Bitset以及哈希表Hashtable等数据结构
