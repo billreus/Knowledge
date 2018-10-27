@@ -254,4 +254,49 @@ CyclicBarrier可以接收一个参数作为barrierAction，即当计数完成一
 public CyclicBarrier(int parties, Runnable barrierAction)
 ```
 
-p106
+#### 2.9.5 线程阻塞工具LockSupport
+
+可以实现线程任意位置内线程阻塞，其静态方法park()可以阻塞当前线程。
+
+### 2.10 线程复用：线程池
+
+最简单的线程创建和回收如下：
+
+```java
+new Thread(new Runnable(){
+    @Override
+    public void run(){
+        // do sth
+    }
+}).start();
+```
+
+在run()方法结束后，自动回收线程。
+
+为了避免系统频发创建和销毁线程，可以让创建的线程进行复用。线程池即放入几个线程，当需要使用线程时可以从池中拿一个空闲线程，完成工作时，把该线程退回到池中。
+
+#### 2.10.1 Executor框架
+
+Executor框架提供各种类型的线程池，Executors类主要的工厂方法：
+
+```java
+public static ExecutorService newFixedThreadPool(int nThreads)
+public static ExecutorService newSingleThreadExecutor()
+public static ExecutorService newCachedThreadPool()
+public static ScheduleExecutorService newSingleThreadScheduledExecutor()
+public static ScheduleExecutorService newScheduledThreadPool(int corePoolSize)
+```
+
+* newFixedThreadPool()：返回固定数量的线程池，当有新任务时，线程池中有空闲线程则立即执行，若没有，会暂存任务队列，待有空闲时。
+* newSingleThreadExecutor()：返回只有一个线程的线程池。
+* newCachedThreadPool()：返回可根据实际情况调整线程数量的线程池，线程池数量不固定，有空闲线程优先使用，若都在工作会创建新的线程。
+* newSingleThreadScheduledExecutor()：返回一个ScheduledExecutorService对象，线程池为1,。可以在给定时间或周期执行任务。
+* newScheduledThreadPool()：与上面功能相似，不同在于线程池数量可以设定。
+
+#### 2.10.2 Fork/Join框架
+
+处理大数据时需要分而治之，ForkJoinPool线程池可以提交一个ForkJoinTask任务，进行fork()分解以及join()等待。ForkJoinTask有两个重要的子类，RecursiveAction和RecursiveTask。分别表示没有返回值的任务和可以携带返回值的任务。
+
+## 3 锁
+
+第四章
