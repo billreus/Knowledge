@@ -42,31 +42,78 @@ public enum State{NEW, RUNNABLE, BLOCKED, WAITING, TIMED_WAITING, TERMINATED;}
 
 NEW状态表示刚刚创建的线程，等待start()方法调用，当线程执行时，处于RUNNABLE状态，如果线程执行中遇到synchronized同步块就会进入BLOCKED阻塞状态，会暂停执行，知道获得请求锁。WATTING和TIMED_WAITING都表示等待状态，区别是WAITING会进入无时间限制的等待，TIMED_WAITING会进行有时限的等待。线程执行完毕会进入TERMINATED状态表示结束。
 
-
 ### 2.1 线程基本操作
 
-新建线程：
+使用线程一共有三种方法：
+
+* 实现Runnable接口;
+* 实现Callable接口;
+* 继承Tread类;
+
+实现 Runnable 和 Callable 接口的类只能当做一个可以在线程中运行的任务，不是真正意义上的线程，因此最后还需要通过 Thread 来调用
+
+#### 2.1.1 Runnable接口
+
+实现run方法，通过Thread调用start()方法来启动线程。
 
 ```java
-Thread t1 = new Thread();
-t1.start();
-```
-
-线程运行可以使用Runnable接口，该接口只有一个run()方法：
-
-```java
-public class CreateThread3 implements Runnable {
-    public static void main(String[] args){
-        Thread t1 = new Thread(new CreateThread3());
-        t1.start();
-    }
-
-    @Override
-    public void run(){
-        //动作
+public class MyRunnable implements Runnable {
+    public void run() {
+        // ...
     }
 }
 ```
+
+```JAVA
+public static void main(String[] args) {
+    MyRunnable instance = new MyRunnable();
+    Thread thread = new Thread(instance);
+    thread.start();
+}
+```
+
+#### 2.1.2 Callable接口
+
+与 Runnable 相比，Callable 可以有返回值，返回值通过 FutureTask 进行封装。
+
+```java
+public class MyCallable implements Callable<Integer> {
+    public Integer call() {
+        return 123;
+    }
+}
+```
+
+```JAVA
+public static void main(String[] args) throws ExecutionException, InterruptedException {
+    MyCallable mc = new MyCallable();
+    FutureTask<Integer> ft = new FutureTask<>(mc);
+    Thread thread = new Thread(ft);
+    thread.start();
+    System.out.println(ft.get());
+}
+```
+
+#### 2.1.3 继承Thread类
+
+同样需要实现run()方法，因为Thread类也实现了Runable接口
+
+```java
+public class MyThread extends Thread {
+    public void run() {
+        // ...
+    }
+}
+```
+
+```java
+public static void main(String[] args) {
+    MyThread mt = new MyThread();
+    mt.start();
+}
+```
+
+相对于继承Thread使用接口实现会更好一些，因为继承了Thread类就无法继承其它类，但可以实现多个接口且继承整个Thread类开销过大。
 
 ### 2.2 线程中断
 
@@ -80,7 +127,82 @@ public boolean Thread.isInterrupted() //判断是否被中断
 public static boolean Thread.interrupted() //判断是否被中断，并清除当前中断状态
 ```
 
-`Thread.sleep()`方法会让当前线程休眠若干时间，并会抛出一个InterruptedException中断异常。
+#### 2.2.1 InterruptedException
+
+通过调用一个线程的 interrupt() 来中断该线程，如果该线程处于阻塞、限期等待或者无限期等待状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能中断 I/O 阻塞和 synchronized 锁阻塞。
+
+对于以下代码，在 main() 中启动一个线程之后再中断它，由于线程中调用了 Thread.sleep() 方法，因此会抛出一个 InterruptedException，从而提前结束线程，不执行之后的语句。
+
+```java
+public class InterruptExample {
+
+    private static class MyThread1 extends Thread {
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(2000);
+                System.out.println("Thread run");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+```
+
+```java
+public static void main(String[] args) throws InterruptedException {
+    Thread thread1 = new MyThread1();
+    thread1.start();
+    thread1.interrupt();
+    System.out.println("Main run");
+}
+```
+
+#### 2.2.2 interrupted()
+
+如果一个线程的 run() 方法执行一个无限循环，并且没有执行 sleep() 等会抛出 InterruptedException 的操作，那么调用线程的 interrupt() 方法就无法使线程提前结束。
+
+但是调用 interrupt() 方法会设置线程的中断标记，此时调用 interrupted() 方法会返回 true。因此可以在循环体中使用 interrupted() 方法来判断线程是否处于中断状态，从而提前结束线程。
+
+```java
+public class InterruptExample {
+
+    private static class MyThread2 extends Thread {
+        @Override
+        public void run() {
+            while (!interrupted()) {
+                // ..
+            }
+            System.out.println("Thread end");
+        }
+    }
+}
+```
+
+```java
+public static void main(String[] args) throws InterruptedException {
+    Thread thread2 = new MyThread2();
+    thread2.start();
+    thread2.interrupt();
+}
+```
+
+#### 2.2.3 sleep()
+
+Thread.sleep(millisec) 方法会休眠当前正在执行的线程，millisec 单位为毫秒
+
+sleep() 可能会抛出 InterruptedException，因为异常不能跨线程传播回 main() 中，因此必须在本地进行处理。线程中抛出的其它异常也同样需要在本地进行处理。
+
+```java
+public void run() {
+    try {
+        Thread.sleep(3000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+}
+```
 
 ### 2.3 等待(wait)和通知(notify)
 
@@ -97,6 +219,11 @@ public final native void notify()
 
 该方法的调用都需要首先获得目标对象的一个监视器，在wait()方法执行后会释放这个监视器。
 
+wait()和sleep()的区别在于：
+
+* wait() 是 Object 的方法，而 sleep() 是 Thread 的静态方法；
+* wait() 会释放锁，sleep() 不会。
+
 ### 2.4 等待线程结束(join)和谦让(yield)
 
 join有两个方法：
@@ -109,6 +236,12 @@ public final synchronized void join(long mills) throws InterruptedException
 第一个方法表示无限等待，会一直阻塞当前线程，直到目标线程执行完毕。第二个方法会给出一个最大等待时间，超过时间线程会继续执行下去。
 
 `public static native void yield();`是一个静态方法，会让当前线程让出CPU。一般用于优先级非常低的功能上。
+
+```java
+public void run(){
+    Thread.yield();
+}
+```
 
 ### 2.5 线程组
 
