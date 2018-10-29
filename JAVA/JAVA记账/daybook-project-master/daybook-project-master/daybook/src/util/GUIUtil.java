@@ -12,10 +12,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 /**
- * 图像界面工具类
+ * 图像界面工具用于一些UI的设置
  */
 public class GUIUtil {
-	private static String imageFolder = "E:/javaproject/daybook/img";
+	private static String imageFolder = "D:/CS/Knowledge/JAVA/JAVA记账/daybook-project-master/daybook-project-master/daybook/img";
 	/*
 	 * 给按钮设置图标和文本以及提示文字
 	 */

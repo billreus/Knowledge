@@ -14,7 +14,9 @@ import com.objectplanet.chart.BarChart;
 import com.objectplanet.chart.Chart;
 
 import entity.Record;
- 
+ /*
+ 第三方表格包，绘制月消费报表
+  */
 public class ChartUtil {
     private static String[] sampleLabels(List<Record> rs) {
         String[] sampleLabels = new String[rs.size()];

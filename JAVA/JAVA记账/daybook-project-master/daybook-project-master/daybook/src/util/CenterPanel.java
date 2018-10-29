@@ -67,7 +67,7 @@ public class CenterPanel extends JPanel {
 	public static void main(String[] args) {
 		JFrame f = new JFrame();
 		f.setSize(200, 200);
-		f.setLocationRelativeTo(null);
+		f.setLocationRelativeTo(null); //设置窗口相对于指定组件的位置,null即放置中央
 		CenterPanel cp = new CenterPanel(0.85, true);
 		f.setContentPane(cp);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

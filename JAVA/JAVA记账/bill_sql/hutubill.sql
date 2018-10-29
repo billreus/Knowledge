@@ -1,6 +1,6 @@
-create database hutubill;
+﻿create database daybook;
 
-use  hutubill;
+use  daybook;
  
 CREATE TABLE config (-- 配置信息表。保存每月预算和安装路径
   id int AUTO_INCREMENT, -- 主键
