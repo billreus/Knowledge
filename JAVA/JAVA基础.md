@@ -3,6 +3,7 @@
 - [JAVA API](#java-api)
     - [1 语言包java.lang](#1-语言包javalang)
         - [1.1 数据类型包装类](#11-数据类型包装类)
+            - [1.1.1 缓存池](#111-缓存池)
         - [1.2 字符处理类](#12-字符处理类)
         - [1.3 Math类](#13-math类)
         - [1.4 Object类](#14-object类)
@@ -11,6 +12,7 @@
         - [1.5 异常类](#15-异常类)
             - [1.5.1 自定义异常](#151-自定义异常)
             - [1.5.2 捕获异常](#152-捕获异常)
+            - [1.5.3 throws方法](#153-throws方法)
     - [2 实用包java.util](#2-实用包javautil)
         - [2.1 Calendar类](#21-calendar类)
         - [2.2 Random类](#22-random类)
@@ -43,9 +45,10 @@
     - [5 窗口工具javax.swing](#5-窗口工具javaxswing)
         - [5.1 JFrame](#51-jframe)
             - [5.1.1 框架](#511-框架)
-            - [5.1.2 2D图形](#512-2d图形)
+            - [5.1.2 获取屏幕大小](#512-获取屏幕大小)
+            - [5.1.3 2D图形](#513-2d图形)
         - [5.2 JLabel](#52-jlabel)
-        - [5.3 JToolBar](#53-jtoolbar)
+        - [5.3 JToolBar、JButton](#53-jtoolbarjbutton)
         - [5.4 JPanel](#54-jpanel)
     - [6 事件处理](#6-事件处理)
         - [6.1 动作](#61-动作)
@@ -73,6 +76,32 @@ java本身的基本数据类型不是面向对象的，如果想处理基本类�
 2. CompareTo(Integer anotherInteger) 比较数值是否相等。
 3. intValue() 以int型返回此Integer对象 /short/long/float/double
 4. toString() 返回一个表示该Integer值的String对象
+
+#### 1.1.1 缓存池
+
+new Integer(123)与Integer.valueOf(123)的区别在于：
+
+* new Integer(123) 每次都会新建一个对象；
+* Integer.valueOf(123) 会使用缓存池中的对象，多次调用会取得同一个对象的引用。
+
+```java
+Integer x = new Integer(123);
+Integer y = new Integer(123);
+System.out.println(x == y);    // false
+Integer z = Integer.valueOf(123);
+Integer k = Integer.valueOf(123);
+System.out.println(z == k);   // true
+```
+
+Java 8中,Integer缓存池的大小默认是-128-127。
+
+基本类型对应的缓冲池如下：
+
+* boolean values true and false
+* all byte values
+* short values between -128 and 127
+* int values between -128 and 127
+* char in the range \u0000 to \u007F
 
 ### 1.2 字符处理类
 
@@ -881,8 +910,27 @@ JFrame类就是一个容器一个窗体组件，让你把其他组件添加到�
 * setIconImage() 用于告诉窗口系统在标题栏、任务切换窗口等位置显示哪个图标
 * setResizable() 利用一个布尔值确定框架大小是否允许用户改变
 * add() 将组件添加到窗体中
+* setLocationRelativeTo(null) 设置窗口相对于指定组件的位置,null即放置中央
+* setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)用户单击窗口的关闭按钮时程序执行的操作
+* setVisible(true)显示
 
 #### 5.1.1 框架
+
+JFrame 不是一个容器，它只是一个框架。添加组件需要使用ContentPane，把窗口能显示的所有组件都是添加在这个ContentPane中。JFrame 提供了两个方法：getContentPane 和 setContentPane就是用于获取和设置其ContentPane的。
+
+对JFrame添加组件有两种方式：
+
+1. 用getContentPane()方法获得JFrame的内容面板，再对其加入组件：frame.getContentPane().add(childComponent)
+2. 建立一个Jpanel或JDesktopPane之类的中间容器，把组件添加到容器中，用setContentPane()方法把该容器置为JFrame的内容面板：
+
+```java
+JpanelcontentPane=newJpanel();
+//把其它组件添加到Jpanel中;
+frame.setContentPane(contentPane);
+//把contentPane对象设置成为frame的内容面板
+```
+
+#### 5.1.2 获取屏幕大小
 
 获取屏幕大小需要调用Toolkit类的静态方法getDefaultToolkit得到一个Tookit对象。然后调用getScreenSize方法，返回屏幕大小。
 
@@ -900,7 +948,7 @@ setSize(screenWidth / 2, screenHeight / 2);
 setLocationByPlatform(true);
 ```
 
-#### 5.1.2 2D图形
+#### 5.1.3 2D图形
 
 绘制2D需要获得一个Graphics2D类对象。这个类是Graphics类的子类。
 
@@ -922,7 +970,7 @@ public void paintComponment(Graphics g)
 * get/setText() 获取/设置标签文本
 * get/setIcon() 获取/设置标签图片
 
-### 5.3 JToolBar
+### 5.3 JToolBar、JButton
 
 工具条可以把一些按钮等归在一个栏目里面，使用时声明工具条后把按钮等功能add进框架内即可
 
@@ -930,6 +978,14 @@ public void paintComponment(Graphics g)
 JToolBar tb = new JToolBar();
 JButton bSpend = new JButton("消费一览");
 tb.add(bSpend);
+```
+
+直接使用按键加入窗口只需要：
+
+```java
+JPanel jp = new JPanel()
+JButton b = new JButton()
+jp.show(b)
 ```
 
 ### 5.4 JPanel
