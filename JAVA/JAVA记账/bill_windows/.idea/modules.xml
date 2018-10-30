@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/bill_JustOneWindow/bill_JustOneWindow.iml" filepath="$PROJECT_DIR$/bill_JustOneWindow/bill_JustOneWindow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bill_OneWindowPlan/bill_OneWindowPlan.iml" filepath="$PROJECT_DIR$/bill_OneWindowPlan/bill_OneWindowPlan.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bill_WindowPlan/hutubill/hutubill.iml" filepath="$PROJECT_DIR$/bill_WindowPlan/hutubill/hutubill.iml" />
+    </modules>
+  </component>
+</project>
