@@ -1,3 +1,47 @@
+<!-- TOC -->
+
+- [高并发设计](#高并发设计)
+    - [1 概念](#1-概念)
+        - [1.1 同步异步](#11-同步异步)
+        - [1.2 并发和并行](#12-并发和并行)
+        - [1.3 临界区](#13-临界区)
+        - [1.4 阻塞和非阻塞](#14-阻塞和非阻塞)
+        - [1.5 死锁、饥饿、活锁](#15-死锁饥饿活锁)
+        - [1.6 并发级别](#16-并发级别)
+    - [2 并发操作](#2-并发操作)
+        - [2.1 线程基本操作](#21-线程基本操作)
+            - [2.1.1 Runnable接口](#211-runnable接口)
+            - [2.1.2 Callable接口](#212-callable接口)
+            - [2.1.3 继承Thread类](#213-继承thread类)
+        - [2.2 线程中断](#22-线程中断)
+            - [2.2.1 InterruptedException](#221-interruptedexception)
+            - [2.2.2 interrupted()](#222-interrupted)
+            - [2.2.3 sleep()](#223-sleep)
+        - [2.3 等待(wait)和通知(notify)](#23-等待wait和通知notify)
+        - [2.4 等待线程结束(join)和谦让(yield)](#24-等待线程结束join和谦让yield)
+        - [2.5 线程组](#25-线程组)
+        - [2.6 守护线程](#26-守护线程)
+        - [2.7 线程优先级](#27-线程优先级)
+        - [2.8 线程安全synchronized](#28-线程安全synchronized)
+        - [2.9 同步控制](#29-同步控制)
+            - [2.9.1 Condition条件](#291-condition条件)
+            - [2.9.2 信号量](#292-信号量)
+            - [2.9.3 读写锁ReadWriteLock](#293-读写锁readwritelock)
+            - [2.9.4 倒计时器CountDownLatch](#294-倒计时器countdownlatch)
+            - [2.9.5 循环栅栏CyclicBarrier](#295-循环栅栏cyclicbarrier)
+            - [2.9.5 线程阻塞工具LockSupport](#295-线程阻塞工具locksupport)
+        - [2.10 线程复用：线程池](#210-线程复用线程池)
+            - [2.10.1 Executor框架](#2101-executor框架)
+            - [2.10.2 Fork/Join框架](#2102-forkjoin框架)
+    - [3 锁](#3-锁)
+        - [3.1 ThreadLocal](#31-threadlocal)
+        - [3.2 无锁](#32-无锁)
+            - [3.2.1 比较交换(CAS)](#321-比较交换cas)
+            - [3.2.2 无锁线程安全整数Atomiclnteger](#322-无锁线程安全整数atomiclnteger)
+    - [4 并行模式与算法](#4-并行模式与算法)
+
+<!-- /TOC -->
+
 # 高并发设计
 
 ## 1 概念
@@ -432,4 +476,43 @@ public static ScheduleExecutorService newScheduledThreadPool(int corePoolSize)
 
 ## 3 锁
 
-第四章
+### 3.1 ThreadLocal
+
+该方法可以通过增加资源来保证线程安全。
+
+```java
+static ThreadLocal<SimpleDateFormat> t1 = new ThreadLocal<SimpleDateFormat> 
+public static class ParseDate implements Runable{
+    int i = 0;
+    public ParseDate(int i){
+        this.i = i;
+    }
+    public void run(){
+        try{
+            if(t1.get() == null){
+                t1.set(new SimpleDateFormat("yyyy-MM-dd:mm:ss"));
+            }
+            Date t = t1.get().parse("2015-03-29 19:29:" +i%60);
+            System.out.println(i+":"+t);
+        } catch (ParseException e){
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+get与set的使用保证如果当前线程不持有SimpleDateforamt对象就新建一个设置到线程中，如果已经持有，则直接使用。
+
+### 3.2 无锁
+
+锁是假设每次临界区操作都会产生冲突，宁可牺牲线程进行等待。无锁是假设对资源访问没有冲突，所有线程都可以不停顿的状态继续执行。
+
+#### 3.2.1 比较交换(CAS)
+
+如果无锁遇到冲突会使用CAS策略，它包含三个参数CAS(V,E,N)。V表示更新的变量，E表示预期值，N表示新值。仅当V值等于E是，才会让V=N，如果V和E值不同则表示其他线程已经更新，当前线程不用做什么。
+
+#### 3.2.2 无锁线程安全整数Atomiclnteger
+
+JDK并发包中的atomic包实现了一些CAS操作。最常用的是AtomicInteger，可以看做一个整数，但是与Integer不同，它是可变且线程安全。
+
+## 4 并行模式与算法
