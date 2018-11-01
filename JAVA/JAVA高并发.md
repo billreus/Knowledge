@@ -39,6 +39,12 @@
             - [3.2.1 比较交换(CAS)](#321-比较交换cas)
             - [3.2.2 无锁线程安全整数Atomiclnteger](#322-无锁线程安全整数atomiclnteger)
     - [4 并行模式与算法](#4-并行模式与算法)
+        - [4.1 单例模式](#41-单例模式)
+        - [4.2 不变模式](#42-不变模式)
+        - [4.3 生产者-消费者模式](#43-生产者-消费者模式)
+        - [4.4 网络NIO P244](#44-网络nio-p244)
+        - [4.5 异步IO](#45-异步io)
+    - [5 Java8并发](#5-java8并发)
 
 <!-- /TOC -->
 
@@ -516,3 +522,53 @@ get与set的使用保证如果当前线程不持有SimpleDateforamt对象就新�
 JDK并发包中的atomic包实现了一些CAS操作。最常用的是AtomicInteger，可以看做一个整数，但是与Integer不同，它是可变且线程安全。
 
 ## 4 并行模式与算法
+
+### 4.1 单例模式
+
+详见设计模式
+
+### 4.2 不变模式
+
+不变模式使用于当对象创建后，内部状态和数据不再变化。对象需要被共享，被多线程频繁访问。
+
+设计基于：
+
+1. 去除setter方法以及所有修改自身属性的方法。
+2. 所有属性设置为私有，并用final标记。
+3. 确保没有子类可以重载修改。
+4. 有一个可以创建完整对象的构造函数。
+
+```java
+public final class Product{ //确保无子类
+    private final String no; //私有属性不被修改
+    private final String name; //final保证属性不会给赋值两次
+    private final double price;
+
+    public Product(String no, String name, double price){ //创建时必须指定数据
+        super(); //创建之后无法修改
+        this.no = no;
+        this.name = name;
+        this.price = price;
+    }
+
+    public String getNo(){
+        return no;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public double getPrice(){
+        return price;
+    }
+}
+```
+
+### 4.3 生产者-消费者模式
+
+### 4.4 网络NIO P244
+
+### 4.5 异步IO
+
+## 5 Java8并发
