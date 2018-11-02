@@ -42,7 +42,7 @@
         - [4.1 单例模式](#41-单例模式)
         - [4.2 不变模式](#42-不变模式)
         - [4.3 生产者-消费者模式](#43-生产者-消费者模式)
-        - [4.4 网络NIO P244](#44-网络nio-p244)
+        - [4.4 网络NIO](#44-网络nio)
         - [4.5 异步IO](#45-异步io)
     - [5 Java8并发](#5-java8并发)
 
@@ -567,7 +567,137 @@ public final class Product{ //确保无子类
 
 ### 4.3 生产者-消费者模式
 
-### 4.4 网络NIO P244
+生产者-消费者模式核心是共享内存缓存区（数据在多线程间共享）。
+
+其中BlocKigQueue充当共享内存缓冲区，PCData对象表示一个生产任务，或相关数据。
+
+生产者首先构建PCDate对象，并放入BlockingQueue队列中。
+
+```java
+public class Producer implements Runnable{
+    private volatile boolean isRunning = true;
+    private BlockingQueue<PCDate> queue; //内存缓冲区
+    private static AtomicInteger count = new AtomicInteger();//总数，原子性的操作
+    private static final int SLEEPTIME = 1000;
+
+    public Producer(BlockingQueue<PCData> queue){
+        this.queue = queue;
+    }
+
+    public void run(){
+        PCDate data = null;
+        Random r = new Random();
+
+        System.out.println("Start producer id="+Thread.currentThread().getId());
+        try{
+            whilie(isRunning){
+                Thread.sleep(r.nextInt(SLEEPTIME));
+                data = new.PCData(count.incrementAndGet()); //构造任务数据
+                System.out.println(data +" is put into queue");
+                if (!queue.offer(data, 2, TimeUnit.SECONDS)){//提交数据到缓冲区
+                    System.err.println("failed to put data:" + data);
+                }
+            }
+        } catch (InterruptedException e){
+            e.printStackTrace();
+            Thread.currentThread().interrupt();
+        }
+    }
+    public void stop(){
+        isRunning = false;
+    }
+}
+```
+
+消费者从BlockingQueue队列中取出PCData对象，并计算。
+
+```java
+public class Consumer implements Runnable{
+    private BlockingQueue<PCData> queue;
+    private static final int SLEEPTIME = 1000;
+
+    public Consumer(BlockingQueue<PCData> queue){
+        this.queue = queue;
+    }
+
+    public void run(){
+        System.out.println("start Consumer id=" + Thread.currentThread().getId());
+        Random r = new Random();
+
+        try{
+            while(true){
+                PCData data = queue.take(); //提取任务
+                if (null != data){
+                    int re = data.getData() * data.getData();
+                    System.out.println(MessageFormat.format("{0}*{1}={2}", data.getData(), data.getData(), re));
+                    Thread.sleep(r.nextInt(SLEEPTIME));
+                }
+            }
+        }catch (InterruptedException e){
+            e.printStackTrace();
+            Thread.currentThread().interupt();
+        }
+    }
+}
+```
+
+PCData设置为共享数据模型：
+
+```java
+public final class PCData{
+    private final int intData;
+    public PCData(int d){
+        inData = d;
+    }
+    public PCData(String d){
+        intData = Integer.valueOf(d);
+    }
+    public int getData(){
+        return intData;
+    }
+    @override
+    public String toString(){
+        return "data:"+intData;
+    }
+}
+```
+
+可以创建三个生产者三个消费者协作运行进行测试
+
+```java
+public class Main{
+    public static void main(String args[]) throws InterruptedException{
+        BlockingQueue<PCData> queue = new LinkedBlockQueue<PCData>(10);
+        Producer producer1 = new Producer(queue);
+        Producer producer2 = new Producer(queue);
+        Producer producer3 = new Producer(queue);
+        Consumer consumer1 = new Consumer(queue);
+        Consumer consumer2 = new Consumer(queue);
+        Consumer consumer3 = new Consumer(queue);
+        ExecutorSevice service = Executors.newCachedThreadPool(); //建立线程池
+        service.excute(producer1);
+        service.excute(producer2);
+        service.excute(producer3);
+        service.excute(consumer1);
+        service.excute(consumer2);
+        service.excute(consumer3);
+        Thread.sleep(10 *1000);
+        producer1.stop();
+        producer2.stop();
+        producer3.stop();
+        Thread.sleep(3000);
+        service.shutdown();
+    }
+}
+```
+
+### 4.4 网络NIO
+
+Java NIO 是一种代替Java IO的机制。
+
+标准的网络IO会使用Socket进行网络读写，每一个客户端连接开启一个线程。
+
+P246
 
 ### 4.5 异步IO
 
