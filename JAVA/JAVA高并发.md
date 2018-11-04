@@ -43,6 +43,7 @@
         - [4.2 不变模式](#42-不变模式)
         - [4.3 生产者-消费者模式](#43-生产者-消费者模式)
         - [4.4 网络NIO](#44-网络nio)
+            - [4.4.1 NIO--channel](#441-nio--channel)
         - [4.5 异步IO](#45-异步io)
     - [5 Java8并发](#5-java8并发)
 
@@ -697,8 +698,78 @@ Java NIO 是一种代替Java IO的机制。
 
 标准的网络IO会使用Socket进行网络读写，每一个客户端连接开启一个线程。
 
-P246
+```java
+public class MultiThreadEchoServer{//基于Socket的服务端
+    private static ExecutorService tp = Executors.newCachedThreadPool();
+    //定义HandleMsg线程，由一个客户端Socket构成，读取Socket内容并返回，返回后关闭Socket
+    static class HandleMsg implements = Runnable{
+        Socket clientSocket;
+        public HandleMsg(Socket clientSocket){
+            this.clientSocket = clientSocket;
+        }
+
+        public void run(){
+            BufferedReader is = null; //缓冲字符输入流,为其他字符输入流添加一些缓冲功能
+            PrintWriter os = null;
+            try{
+                is = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                os = new PrintWriter(clientSocket.getOutputStream(), true);
+                String inputLine = null;
+                long b = System.currentTimeMillis();
+                while ((inputLine = is.readLine()) != null){
+                    os.println(inputLine);
+                }
+                long e = System.currentTimeMills();
+                System.out.println("spend:"+ (e-b) + "ms");//线程处理一次客户端请求所花时间
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally{
+                try{
+                    if(is!=null)is.close();
+                    if(os!=null)os.close();
+                    clientSocket.close();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    public static void main(String args[]){//8000端口等待，有新客户端连接，创建HandleMsg线程
+        ServerSocket echoServer = null;
+        Socket clientSocker = null;
+        try{
+            echoServer = new ServerSocket(8000);
+        }catch (IOException e){
+            System.out.println(e);
+        }
+        while(true){
+            try{//连接HandleMsg
+                clinetSocket = echoServer.accept();
+                System.out.println(clentSocket.getRemoteSocketAddress() + " connect!");
+                tp.execute(new HandleMsg(clientSocket));
+            } catch(IOException e){
+                System.out.println(e);
+            }
+        }
+    }
+}
+```
+
+#### 4.4.1 NIO--channel
+
+使用NIO可以将上面的网络IO等待时间从业务处理线程中抽取出来
+
+NIO中关键组件：Channel(管道)，Selector(选择器),SelectableChannel(通道选择)
+
+线程管理Selector，Selector来选择SocketChannel(表示一个客户端连接),当SocketChannel准备好了数据，Seletor能立即得到通知。
+
 
 ### 4.5 异步IO
+
+对于NIO来说，是在IO操作准备好时，得到通知，再由这个线程自行对IO进行操作，IO操作本身还是同步的。
+
+对于AIO不是在IO准备好再通知线程，而是在IO操作完成后再发出通知。
+
+P259
 
 ## 5 Java8并发
