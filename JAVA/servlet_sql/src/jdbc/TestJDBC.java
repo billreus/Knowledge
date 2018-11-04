@@ -1,38 +1,34 @@
 package jdbc;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-
+import java.sql.*;
 public class TestJDBC {
-    public static void main(String[] args) {
-
+    public static void main(String args[]) {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-
-            // 建立与数据库的Connection连接
-            // 这里需要提供：
-            // 数据库所处于的ip:127.0.0.1 (本机)
-            // 数据库的端口号： 3306 （mysql专用端口号）
-            // 数据库名称 hero
-            // 编码方式 UTF-8
-            // 账号 root
-            // 密码 123456
-
-            Connection c = DriverManager
-                    .getConnection(
-                            "jdbc:mysql://127.0.0.1:3306/hero?characterEncoding=UTF-8",
-                            "root", "123456");
-
-            System.out.println("连接成功，获取连接对象： " + c);
-
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            Class.forName("com.mysql.jdbc.Driver");     //加载MYSQL JDBC驱动程序
+            //Class.forName("org.gjt.mm.mysql.Driver");
+            System.out.println("Success loading Mysql Driver!");
+        }
+        catch (Exception e) {
+            System.out.print("Error loading Mysql Driver!");
             e.printStackTrace();
         }
+        try {
+            Connection connect = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/hero","root","123456");
+            //连接URL为   jdbc:mysql//服务器地址/数据库名  ，后面的2个参数分别是登陆用户名和密码
 
+            System.out.println("Success connect Mysql server!");
+            Statement stmt = connect.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from hero");
+            //user 为你表的名称
+            while (rs.next()) {
+                System.out.println(rs.getString("name"));
+                System.out.println(rs.getString("hp"));
+            }
+        }
+        catch (Exception e) {
+            System.out.print("get data error!");
+            e.printStackTrace();
+        }
     }
 }

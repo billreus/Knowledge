@@ -1,11 +1,6 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,16 +8,18 @@ import bean.Hero;
 
 public class HeroDAO {
 
-    public HeroDAO() {
+    public HeroDAO() {//载入驱动程序
         try {
             Class.forName("com.mysql.jdbc.Driver");
+            System.out.println("Success loading Mysql Driver!");
         } catch (ClassNotFoundException e) {
+            System.out.print("Error loading Mysql Driver!");
             e.printStackTrace();
         }
     }
 
-    public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/hero?characterEncoding=UTF-8",
+    public Connection getConnection() throws SQLException {//打开连接
+        return DriverManager.getConnection("jdbc:mysql://localhost:3306/hero",
                 "root", "123456");
     }
 
@@ -46,7 +43,7 @@ public class HeroDAO {
         return total;
     }
 
-    public void add(Hero hero) {
+    public void add(Hero hero) {//用于HeroAddServlet中的添加数据
 
         String sql = "insert into hero values(null,?,?,?)";
         try (Connection c = getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
@@ -132,7 +129,7 @@ public class HeroDAO {
         return list(0, Short.MAX_VALUE);
     }
 
-    public List<Hero> list(int start, int count) {
+    public List<Hero> list(int start, int count) {//读取所有表格中的数据
         List<Hero> heros = new ArrayList<Hero>();
 
         String sql = "select * from hero order by id desc limit ?,? ";
@@ -142,7 +139,7 @@ public class HeroDAO {
             ps.setInt(1, start);
             ps.setInt(2, count);
 
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();//执行查询语句
 
             while (rs.next()) {
                 Hero hero = new Hero();
