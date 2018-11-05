@@ -1,58 +1,58 @@
 <!-- TOC -->
 
 - [JAVA API](#java-api)
-    - [1 语言包java.lang](#1-语言包javalang)
-        - [1.1 数据类型包装类](#11-数据类型包装类)
-            - [1.1.1 缓存池](#111-缓存池)
-        - [1.2 字符处理类](#12-字符处理类)
-        - [1.3 Math类](#13-math类)
-        - [1.4 Object类](#14-object类)
-            - [1.4.1 equals方法](#141-equals方法)
-            - [1.4.2 hashCode方法](#142-hashcode方法)
-        - [1.5 异常类](#15-异常类)
-            - [1.5.1 自定义异常](#151-自定义异常)
-            - [1.5.2 捕获异常](#152-捕获异常)
-            - [1.5.3 throws方法](#153-throws方法)
-    - [2 实用包java.util](#2-实用包javautil)
-        - [2.1 Calendar类](#21-calendar类)
-        - [2.2 Random类](#22-random类)
-        - [2.3 数据结构类(容器)](#23-数据结构类容器)
-            - [2.3.1 Collection接口](#231-collection接口)
-            - [2.3.2 Map接口](#232-map接口)
-    - [3 输入输出java.io](#3-输入输出javaio)
-        - [3.1 基类InputStream和OutputStream](#31-基类inputstream和outputstream)
-        - [3.2 文件流](#32-文件流)
-            - [3.2.1 读写一个文件](#321-读写一个文件)
-        - [3.3 缓冲流](#33-缓冲流)
-        - [3.4 数据流](#34-数据流)
-        - [3.5 字符流](#35-字符流)
-    - [4 重要思想](#4-重要思想)
-        - [4.1 枚举](#41-枚举)
-        - [4.2 泛型](#42-泛型)
-        - [4.3 包装（装箱和拆箱）](#43-包装装箱和拆箱)
-        - [4.4 String](#44-string)
-            - [4.4.1 Stirng,StringBuffer and StringBuilder](#441-stirngstringbuffer-and-stringbuilder)
-            - [4.4.2 String Pool](#442-string-pool)
-        - [4.5 面向对象](#45-面向对象)
-            - [4.5.1 继承、封装、多态](#451-继承封装多态)
-            - [4.5.2 抽象类与接口](#452-抽象类与接口)
-            - [4.5.3 this和super](#453-this和super)
-            - [4.5.4 final与static](#454-final与static)
-                - [final声明数据](#final声明数据)
-                - [static声明变量](#static声明变量)
-                - [static声明静态方法](#static声明静态方法)
-                - [static声明静态语句块](#static声明静态语句块)
-    - [5 窗口工具javax.swing](#5-窗口工具javaxswing)
-        - [5.1 JFrame](#51-jframe)
-            - [5.1.1 框架](#511-框架)
-            - [5.1.2 获取屏幕大小](#512-获取屏幕大小)
-            - [5.1.3 2D图形](#513-2d图形)
-        - [5.2 JLabel](#52-jlabel)
-        - [5.3 JToolBar、JButton](#53-jtoolbarjbutton)
-        - [5.4 JPanel](#54-jpanel)
-    - [6 事件处理](#6-事件处理)
-        - [6.1 动作](#61-动作)
-        - [6.2 鼠标事件](#62-鼠标事件)
+- [1 语言包java.lang](#1-语言包javalang)
+    - [1.1 数据类型包装类](#11-数据类型包装类)
+        - [1.1.1 缓存池](#111-缓存池)
+    - [1.2 字符处理类](#12-字符处理类)
+    - [1.3 Math类](#13-math类)
+    - [1.4 Object类](#14-object类)
+        - [1.4.1 equals方法](#141-equals方法)
+        - [1.4.2 hashCode方法](#142-hashcode方法)
+    - [1.5 异常类](#15-异常类)
+        - [1.5.1 自定义异常](#151-自定义异常)
+        - [1.5.2 捕获异常](#152-捕获异常)
+        - [1.5.3 throws方法](#153-throws方法)
+- [2 实用包java.util](#2-实用包javautil)
+    - [2.1 Calendar类](#21-calendar类)
+    - [2.2 Random类](#22-random类)
+    - [2.3 数据结构类(容器)](#23-数据结构类容器)
+        - [2.3.1 Collection接口](#231-collection接口)
+        - [2.3.2 Map接口](#232-map接口)
+- [3 输入输出java.io](#3-输入输出javaio)
+    - [3.1 基类InputStream和OutputStream](#31-基类inputstream和outputstream)
+    - [3.2 文件流](#32-文件流)
+        - [3.2.1 读写一个文件](#321-读写一个文件)
+    - [3.3 缓冲流](#33-缓冲流)
+    - [3.4 数据流](#34-数据流)
+    - [3.5 字符流](#35-字符流)
+- [4 重要思想](#4-重要思想)
+    - [4.1 枚举](#41-枚举)
+    - [4.2 泛型](#42-泛型)
+    - [4.3 包装（装箱和拆箱）](#43-包装装箱和拆箱)
+    - [4.4 String](#44-string)
+        - [4.4.1 Stirng,StringBuffer and StringBuilder](#441-stirngstringbuffer-and-stringbuilder)
+        - [4.4.2 String Pool](#442-string-pool)
+    - [4.5 面向对象](#45-面向对象)
+        - [4.5.1 继承、封装、多态](#451-继承封装多态)
+        - [4.5.2 抽象类与接口](#452-抽象类与接口)
+        - [4.5.3 this和super](#453-this和super)
+        - [4.5.4 final与static](#454-final与static)
+            - [final声明数据](#final声明数据)
+            - [static声明变量](#static声明变量)
+            - [static声明静态方法](#static声明静态方法)
+            - [static声明静态语句块](#static声明静态语句块)
+- [5 窗口工具javax.swing](#5-窗口工具javaxswing)
+    - [5.1 JFrame](#51-jframe)
+        - [5.1.1 框架](#511-框架)
+        - [5.1.2 获取屏幕大小](#512-获取屏幕大小)
+        - [5.1.3 2D图形](#513-2d图形)
+    - [5.2 JLabel](#52-jlabel)
+    - [5.3 JToolBar、JButton](#53-jtoolbarjbutton)
+    - [5.4 JPanel](#54-jpanel)
+- [6 事件处理](#6-事件处理)
+    - [6.1 动作](#61-动作)
+    - [6.2 鼠标事件](#62-鼠标事件)
 
 <!-- /TOC -->
 
@@ -60,11 +60,11 @@
 
 核心API主要有：语言包java.lang，实用包java.util，输入输出java.io，抽象窗口工具包java.awt，轻量级窗口工具javax.swing，网络java.net
 
-## 1 语言包java.lang
+# 1 语言包java.lang
 
 语言包主要包括：Object类，数据类型包装类，字符处理，线程类，错误异常值处理类，数学类，过程类，系统和运行类，操作类
 
-### 1.1 数据类型包装类
+## 1.1 数据类型包装类
 
 java本身的基本数据类型不是面向对象的，如果想处理基本类型数据可以使用数据包装类。
 
@@ -77,7 +77,7 @@ java本身的基本数据类型不是面向对象的，如果想处理基本类�
 3. intValue() 以int型返回此Integer对象 /short/long/float/double
 4. toString() 返回一个表示该Integer值的String对象
 
-#### 1.1.1 缓存池
+### 1.1.1 缓存池
 
 new Integer(123)与Integer.valueOf(123)的区别在于：
 
@@ -103,7 +103,7 @@ Java 8中,Integer缓存池的大小默认是-128-127。
 * int values between -128 and 127
 * char in the range \u0000 to \u007F
 
-### 1.2 字符处理类
+## 1.2 字符处理类
 
 常用为String类，用来定义一个字符串。
 
@@ -114,23 +114,23 @@ Java 8中,Integer缓存池的大小默认是-128-127。
 3. concat() 字符串连接
 4. charAt(a) 按照索引值a提取字符串中的字符
 
-### 1.3 Math类
+## 1.3 Math类
 
 主要是一些数学的计算方法。
 
-### 1.4 Object类
+## 1.4 Object类
 
 Object类是所有类的父类。存放最基本的方法。
 
-#### 1.4.1 equals方法
+### 1.4.1 equals方法
 
 Object类中equals方法用于检测一个对象是否等与另一个对象。如果两个对象具有相同引用，它们一定是相等的。
 
-#### 1.4.2 hashCode方法
+### 1.4.2 hashCode方法
 
 用于返回每个对象的存储地址，默认是一个散列码。
 
-### 1.5 异常类
+## 1.5 异常类
 
 异常都是从`Throwable`类派生出来的。异常常分成四类：
 
@@ -142,11 +142,11 @@ Exception 分为两种：
 * 受检异常 ：需要用 try...catch... 语句捕获并进行处理，并且可以从异常中恢复；
 * 非受检异常 ：是程序运行时错误，例如除 0 会引发 Arithmetic Exception，此时程序崩溃并且无法恢复。
 
-#### 1.5.1 自定义异常
+### 1.5.1 自定义异常
 
 自定义异常只需要让它继承Exception或其子类即可。
 
-#### 1.5.2 捕获异常
+### 1.5.2 捕获异常
 
 常使用`try`和`catch`来捕获异常。
 
@@ -181,7 +181,7 @@ public class CatchException {
 }
 ```
 
-#### 1.5.3 throws方法
+### 1.5.3 throws方法
 
 如果method2要进行异常处理，而本身不打算处理，可以把该异常抛出去，method1接到方法进行处理。
 
@@ -224,11 +224,11 @@ throws与throw这两个关键字接近，不过意义不一样，有如下区别
 1. throws 出现在方法声明上，而throw通常都出现在方法体内。
 2. throws 表示出现异常的一种可能性，并不一定会发生这些异常；throw则是抛出了异常，执行throw则一定抛出了某个异常对象。
 
-## 2 实用包java.util
+# 2 实用包java.util
 
 主要包装了一些实用方法和数据结构。如日历类Calendar，随机类Random和堆栈Stack、向量Vector、位集合Bitset以及哈希表Hashtable等数据结构
 
-### 2.1 Calendar类
+## 2.1 Calendar类
 
 用于表示日期和时间
 
@@ -239,7 +239,7 @@ throws与throw这两个关键字接近，不过意义不一样，有如下区别
 3. GregorianCalendar(Locale aLocale)
 4. GregorianCalendar(TimeZone zone, Locale aLocale)
 
-### 2.2 Random类
+## 2.2 Random类
 
 可以产生各种类型的随机数，与math类中不同的是，math中的只产生double类型随机数。
 
@@ -248,11 +248,11 @@ throws与throw这两个关键字接近，不过意义不一样，有如下区别
 1. Random() 产生随机数，用时间作为seed
 2. Random(long seed) 单个long种子创建一个新的随机生成器
 
-### 2.3 数据结构类(容器)
+## 2.3 数据结构类(容器)
 
 容器主要包括 Collection 和 Map 两种，Collection 存储着对象的集合，而 Map 存储着键值对（两个对象）的映射表。
 
-#### 2.3.1 Collection接口
+### 2.3.1 Collection接口
 
 因为很多功能类似，Collection接口是一个java集合框架的根接口。也是List、Set和Queue接口的父接口。
 
@@ -319,7 +319,7 @@ Queue常用接口：
 
 * PriorityQueue：基于堆结构实现，可以用它来实现优先队列。
 
-#### 2.3.2 Map接口
+### 2.3.2 Map接口
 
 Map用于应用程序中管理映射。对应键值(key-value)
 
@@ -409,17 +409,17 @@ public class PhoneBookByMap {
 }
 ```
 
-## 3 输入输出java.io
+# 3 输入输出java.io
 
 按照数据流方向可以分为输入流和输出流；按照处理数据的单位分为字节流和字符流；按照功能分为节点流和处理流。
 
 `java.io`包提供了大多数输入输出接口，有一些来自`java.lang`包中的类但都继承自`java.io`中的类。
 
-### 3.1 基类InputStream和OutputStream
+## 3.1 基类InputStream和OutputStream
 
 字节流主要操作byte类型数据，以byte数组为准，java 中每一种字节流的基本功能依赖于基本类 InputStream 和 Outputstream，他们是抽象类，不能直接使用。
 
-### 3.2 文件流
+## 3.2 文件流
 
 在 I/O 处理中，最常见的就是对文件的操作。java.io 包中所提供的文件操作类包括：
 
@@ -427,7 +427,7 @@ public class PhoneBookByMap {
 2. 描述本地文件系统中的文件或目录：File、FileDescriptor 和 FilenameFilter
 3. 提供对本地文件系统中文件的随机访问支持：RandomAccessFile
 
-#### 3.2.1 读写一个文件
+### 3.2.1 读写一个文件
 
 读写文件可以使用`FileInputStream`来读取。
 
@@ -505,23 +505,23 @@ public class WriteFileTest {
 }
 ```
 
-### 3.3 缓冲流
+## 3.3 缓冲流
 
 类 BufferedInputStream 和 BufferedOutputStream 实现了带缓冲的过滤流，它提供了缓冲机制，把任意的 I/O 流“捆绑”到缓冲流上，可以提高 I/O 流的读取效率。
 
-### 3.4 数据流
+## 3.4 数据流
 
 接口 DataInput 和 DataOutput，设计了一种较为高级的数据输入输出方式：除了可处理字节和字节数组外，还可以处理 int、float、boolean等基本数据类型，这些数据在文件中的表示方式和它们在内存中的一样，无须转换，如 read(), readInt(), readByte()...; write(), writeChar(), writeBoolean()...此外，还可以用 readLine()方法读取一行信息。
 
-### 3.5 字符流
+## 3.5 字符流
 
 java.io包中专门用于字符流处理的类，是以 Reader 和 Writer 为基础派生的一系列类。
 
 字符流以字符为单位，根据码表映射字符，一次可能读多个字节，只能处理字符类型的数据。
 
-## 4 重要思想
+# 4 重要思想
 
-### 4.1 枚举
+## 4.1 枚举
 
 枚举类型可以取代以往常量的定义方式，即将常量封装在类或接口中。
 
@@ -554,7 +554,7 @@ public enum Week {
 }
 ```
 
-### 4.2 泛型
+## 4.2 泛型
 
 泛型不仅可以减少代码的编写，还可以解决类型安全问题，不会因为将对象置于某容器中而失去其类型。
 
@@ -607,7 +607,7 @@ public class GenericTest {
 
 采用泛型写法后，在//1处想加入一个Integer类型的对象时会出现编译错误，通过List<String>，直接限定了list集合中只能含有String类型的元素，从而在//2处无须进行强制类型转换，因为此时，集合能够记住元素的类型信息，编译器已经能够确认它是String类型了。
 
-### 4.3 包装（装箱和拆箱）
+## 4.3 包装（装箱和拆箱）
 
 自动拆箱和装箱就是，计算数值时，integer会自动转为int进行计算。而当int传入类型为integer的引用时，int数值又会被包装为integer。
 
@@ -667,7 +667,7 @@ public static Integer valueOf(int i) {
 * int values between -128 and 127
 * char in the range \u0000 to \u007F
 
-### 4.4 String
+## 4.4 String
 
 String被声明成final，因此它不可能被继承。
 
@@ -689,7 +689,7 @@ public final class String
 3. 安全性；
 4. 线程安全；
 
-#### 4.4.1 Stirng,StringBuffer and StringBuilder
+### 4.4.1 Stirng,StringBuffer and StringBuilder
 
 1. 可变性
 
@@ -702,7 +702,7 @@ public final class String
 * StringBuilder 不是线程安全的
 * StringBuffer 是线程安全的，内部使用 synchronized 进行同步
 
-#### 4.4.2 String Pool
+### 4.4.2 String Pool
 
 字符串常量池(String Pool)保存着所有字符串字面量(literal strings),可以使用String的intern()方法将运行过程中的字符串添加到String Pool中。
 
@@ -722,9 +722,9 @@ String s6 = "bbb";
 System.out.println(s5 == s6);  // true
 ```
 
-### 4.5 面向对象
+## 4.5 面向对象
 
-#### 4.5.1 继承、封装、多态
+### 4.5.1 继承、封装、多态
 
 JAVA只能单继承，但可以通过内部类继承其他类实现多继承。
 
@@ -768,7 +768,7 @@ protected 用于修饰成员，表示在继承体系中成员对于子类可见�
 
 * @Override 的作用是：如果想重写父类的方法，比如toString()方法的话，在方法前面加上@Override 系统可以帮你检查方法的正确性。
 
-#### 4.5.2 抽象类与接口
+### 4.5.2 抽象类与接口
 
 抽象类与抽象方法都使用abstract关键字进行声明，抽象类包含抽象方法。抽象类就是为了继承而存在。
 
@@ -794,17 +794,22 @@ protected 用于修饰成员，表示在继承体系中成员对于子类可见�
 * 需要继承非静态和非常量字段。
 * 在很多情况下，接口优先于抽象类。因为接口没有抽象类严格的类层次结构要求，可以灵活地为一个类添加行为。并且从 Java 8 开始，接口也可以有默认的方法实现，使得修改接口的成本也变的很低。
 
-#### 4.5.3 this和super
+### 4.5.3 this和super
 
 this是自身的一个对象，代表对象本身。一般用于：普通的直接引用；形参与成员名重名；引用构造函数
 
 super可以理解为指向超(父)类对象的一个指针,且是离自己最近的一个父类。一般用于：直接引用父类的成员；子类中成员与父类重名；引用构造函数。
 
-#### 4.5.4 final与static
+### 4.5.4 final与static
 
-##### final声明数据
+#### final声明数据
 
-1. 基本类型，final使数值不变
+1. 基本类型，final使数值不变,如果希望某个常量可以在一个类的多个方法中使用，可以使用关键字static final设置一个类常量。
+
+```java
+public static final double VM_INCH = 2.54;
+```
+
 2. 引用类型，final使引用不变，即不能引用其它对象，但是被引用的对象本身可以修改
 
 ```java
@@ -822,7 +827,7 @@ final声明类：
 
 声明类不允许被继承。
 
-##### static声明变量
+#### static声明变量
 
 1. 静态变量：这个变量属于类，类的所有实例都共享静态变量，可以通过类名访问
 2. 实例变量：每创建一个实例就会产生一个实例变量
@@ -842,7 +847,7 @@ public class A {
 }
 ```
 
-##### static声明静态方法
+#### static声明静态方法
 
 静态方法在类加载的时候就存在了，它不依赖于任何实例。所以静态方法必须有实现，也就是说它不能是抽象方法。且只能访问所属类的静态字段和静态方法，方法中不能有 this 和 super 关键字。
 
@@ -860,7 +865,7 @@ public class A {
 }
 ```
 
-##### static声明静态语句块
+#### static声明静态语句块
 
 静态语句块在类初始化时运行一次
 
@@ -879,7 +884,7 @@ public class A {
 >>> 123
 ```
 
-## 5 窗口工具javax.swing
+# 5 窗口工具javax.swing
 
 Swing 是在抽象窗口工具箱（AWT）的架构上发展而来的一个用户界面库，整个可视组件库的基础构造块是 JComponent。它是所有组件的父类，为所有组件提供了绘制的基础架构。换言之，所有的Swing组件都是由它派生而来。
 
@@ -897,7 +902,7 @@ EventQueue.invokeLater(new Runnable()
 });
 ```
 
-### 5.1 JFrame
+## 5.1 JFrame
 
 JFrame类就是一个容器一个窗体组件，让你把其他组件添加到里面。
 
@@ -914,7 +919,7 @@ JFrame类就是一个容器一个窗体组件，让你把其他组件添加到�
 * setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)用户单击窗口的关闭按钮时程序执行的操作
 * setVisible(true)显示
 
-#### 5.1.1 框架
+### 5.1.1 框架
 
 JFrame 不是一个容器，它只是一个框架。添加组件需要使用ContentPane，把窗口能显示的所有组件都是添加在这个ContentPane中。JFrame 提供了两个方法：getContentPane 和 setContentPane就是用于获取和设置其ContentPane的。
 
@@ -930,7 +935,7 @@ frame.setContentPane(contentPane);
 //把contentPane对象设置成为frame的内容面板
 ```
 
-#### 5.1.2 获取屏幕大小
+### 5.1.2 获取屏幕大小
 
 获取屏幕大小需要调用Toolkit类的静态方法getDefaultToolkit得到一个Tookit对象。然后调用getScreenSize方法，返回屏幕大小。
 
@@ -948,7 +953,7 @@ setSize(screenWidth / 2, screenHeight / 2);
 setLocationByPlatform(true);
 ```
 
-#### 5.1.3 2D图形
+### 5.1.3 2D图形
 
 绘制2D需要获得一个Graphics2D类对象。这个类是Graphics类的子类。
 
@@ -961,7 +966,7 @@ public void paintComponment(Graphics g)
 }
 ```
 
-### 5.2 JLabel
+## 5.2 JLabel
 
 可用作文本描述和图片描述
 
@@ -970,7 +975,7 @@ public void paintComponment(Graphics g)
 * get/setText() 获取/设置标签文本
 * get/setIcon() 获取/设置标签图片
 
-### 5.3 JToolBar、JButton
+## 5.3 JToolBar、JButton
 
 工具条可以把一些按钮等归在一个栏目里面，使用时声明工具条后把按钮等功能add进框架内即可
 
@@ -988,7 +993,7 @@ JButton b = new JButton()
 jp.show(b)
 ```
 
-### 5.4 JPanel
+## 5.4 JPanel
 
 一个界面只可以有一个JFrame窗体组件，但是可以有多个JPanel面板组件，而JPanel上也可以使用FlowLayout，BorderLayout，GridLayout等各种布局管理器，这样可以组合使用，达到较为复杂的布局效果。
 
@@ -1002,7 +1007,7 @@ f.add(tb, BorderLayout.SOUTH);//置顶
 f.add(new JPanel(), BorderLayout.CENTER); //居中
 ```
 
-## 6 事件处理
+# 6 事件处理
 
 事件的所有信息都封装再一个事件对象(event object)中，所有事件都派生与java.until.EventObject类。不同的时间源可以产生不同类别的事件，例如按钮可以发送一个ActionEvent对象，窗口可以发送WindowEvent对象。
 
@@ -1030,7 +1035,7 @@ class MyListener implements ActionListener
 
 由此只要用户点击按钮，JButton对象就会创建一个ActionEvent对象，然后调用listener.action Performde(event)传递事件对象。
 
-### 6.1 动作
+## 6.1 动作
 
 把一些事件源连接到一个监听器上，即都可以触发监听器内的动作。接口为Action。
 
@@ -1042,7 +1047,7 @@ Action接口包含下列方法：
 * void putValue(String key, Object value)
 * Object getValue(String key)
 
-### 6.2 鼠标事件
+## 6.2 鼠标事件
 
 鼠标的监听器方法主要有：
 
