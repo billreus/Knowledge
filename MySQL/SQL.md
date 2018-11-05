@@ -1,3 +1,31 @@
+<!-- TOC -->
+
+- [SQL语法](#sql语法)
+    - [概念](#概念)
+        - [主键与外键](#主键与外键)
+    - [基本操作](#基本操作)
+        - [创建表](#创建表)
+        - [修改表](#修改表)
+        - [插入](#插入)
+        - [更新替换](#更新替换)
+        - [删除](#删除)
+    - [查询](#查询)
+        - [查询列](#查询列)
+        - [排序](#排序)
+        - [过滤](#过滤)
+        - [通配符](#通配符)
+        - [计算](#计算)
+    - [文本处理](#文本处理)
+    - [日期和时间处理](#日期和时间处理)
+    - [分组](#分组)
+    - [连接](#连接)
+        - [内连接](#内连接)
+        - [自连接](#自连接)
+        - [自然连接](#自然连接)
+        - [外连接](#外连接)
+
+<!-- /TOC -->
+
 # SQL语法
 
 ## 概念
@@ -24,7 +52,7 @@
 
 成绩表中的学号不是成绩表的主键，但它和学生表中的学号相对应，并且学生表中的学号是学生表的主键，则称成绩表中的学号是学生表的外键；同理，成绩表中的课程号是课程表的外键。
 
-## 初始化
+## 基本操作
 
 SQL注释支持以下三种
 
@@ -42,7 +70,7 @@ CREATE DATABASE test;
 USE test;
 ```
 
-## 创建表
+### 创建表
 
 ```SQL
 CREATE TABLE mytable(
@@ -53,7 +81,7 @@ CREATE TABLE mytable(
   PRIMARY KEY (`id`)); --主键
 ```
 
-## 修改表
+### 修改表
 
 添加列
 
@@ -75,7 +103,7 @@ DROP COLUMN col;
 DROP TABLE mytable;
 ```
 
-## 插入
+### 插入
 
 普通插入
 
@@ -99,7 +127,7 @@ CREATE TABLE newtable AS
 SELECT * FROM mytable;
 ```
 
-## 更新替换
+### 更新替换
 
 ```SQL
 UPDATE mytable
@@ -107,7 +135,7 @@ SET col = val
 WHERE id = 1;
 ```
 
-## 删除
+### 删除
 
 清空表
 
@@ -122,7 +150,17 @@ DELETE FROM mytable
 WHERE id = 1;
 ```
 
-## 查询列
+## 查询
+
+SELECT语句用于从表中选取数据。
+
+```sql
+SELECT 列名 FROM 表名
+
+SELECT * FROM 表名 -- 选取所有列
+```
+
+### 查询列
 
 DISTINCT:相同值只出现一次，所有列值相同才算相同
 
@@ -139,7 +177,7 @@ FROM mytable
 LIMIT 5;
 ```
 
-## 排序
+### 排序
 
 ASC：升序。
 
@@ -151,7 +189,7 @@ FROM mytable
 ORDER BY col1 DESC, col2 ASC;
 ```
 
-## 过滤
+### 过滤
 
 ```SQL
 SELECT *
@@ -163,7 +201,7 @@ WHERE语句可用的操作符：`=,<,>,<!=>,>!=<,BERWEEN,IS NULL`
 
 可以使用AND和OR过滤多个条件，IN用于匹配一组值，NOT用于否定。
 
-## 通配符
+### 通配符
 
 %:匹配大于等于0个任意字符
 
@@ -179,7 +217,7 @@ FROM mytable
 WHERE col LIKE '[^AB]%'; -- 不以A和B开头的任意文本
 ```
 
-## 计算
+### 计算
 
 计算出结果一般使用AS来取别名，否则输出字段名为计算表达式
 
@@ -254,3 +292,60 @@ Time()：返回一个日期时间的时间部分
 
 Year()：返回一个日期的年份部分
 
+## 分组
+
+分组就是把具有相同数据值的行放在同一组中
+
+```sql
+SELECT col, COUNT(*) AS num --COUNT(*)表示所有行，以选中的相同col，放入num列
+FROM mytable
+GROUP BY col;
+```
+
+## 连接
+
+连接用于连接多个表，使用JOIN关键字，条件语句使用ON而不是WHERE
+
+### 内连接
+
+内连接又称等值连接，使用INNER JOIN关键字
+
+```sql
+SELECT A.value, B.value --选取A,B表的value列，最后显示这两列
+FROM tablea AS A INNER JOIN tableb AS B --tablea AS A取别名
+ON A.key = B.key; --连接条件是a,b表的key列相等
+```
+
+### 自连接
+
+可以看成是内连接的一种，只是连接的表是自己本身
+
+例如：一张员工表，包含员工姓名和员工所属部门，要找出与 Jim 处在同一部门的所有员工姓名。
+
+```sql
+SELECT e1.name
+FROM employee AS e1 INNER JOIN employee AS e2
+ON e1.department = e2.department
+      AND e2.name = "Jim";
+```
+
+### 自然连接
+
+自然连接是把同名列通过等值测试连接起来的，同名列可以有多个。
+
+内连接和自然连接的区别：内连接提供连接的列，而自然连接自动连接所有同名列。
+
+```sql
+SELECT A.value, B.value
+FROM tablea AS A NATURAL JOIN tableb AS B;
+```
+
+### 外连接
+
+外连接保留了没有关联的那些行。分为左外连接，右外连接以及全外连接，左外连接就是保留左表没有关联的行。
+
+```sql
+SELECT Customers.cust_id, Orders.order_num
+FROM Customers LEFT OUTER JOIN Orders
+ON Customers.cust_id = Orders.cust_id;
+```
