@@ -53,4 +53,14 @@
         <servlet-name>HeroDeleteServlet</servlet-name>
         <url-pattern>/deleteHero</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>HeroEditServlet</servlet-name>
+        <servlet-class>servlet.HeroEditServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>HeroEditServlet</servlet-name>
+        <url-pattern>/editHero</url-pattern>
+    </servlet-mapping>
 </web-app>

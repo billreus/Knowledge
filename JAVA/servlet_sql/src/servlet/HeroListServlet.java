@@ -24,10 +24,10 @@ public class HeroListServlet extends HttpServlet {//查询，把HeroDAO中数据
         sb.append("<tr><td>id</td><td>name</td><td>hp</td><td>damage</td></tr>\r\n");
 
         String trFormat = "<tr><td>%d</td><td>%s</td><td>%f</td><td>%d</td><td><a href='deleteHero" +
-                "?id=%d'>delete</a></td></tr>\r\n";
+                "?id=%d'>delete</a></td><td><a href='editHero?id=%d'>edit</a></td></tr>\r\n";
 
         for (Hero hero : heros) {
-            String tr = String.format(trFormat, hero.getId(), hero.getName(), hero.getHp(), hero.getDamage(), hero.getId());
+            String tr = String.format(trFormat, hero.getId(), hero.getName(), hero.getHp(), hero.getDamage(), hero.getId(), hero.getId());
             sb.append(tr);
         }
 
