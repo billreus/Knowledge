@@ -15,18 +15,15 @@ public class HeroEditServlet extends HttpServlet{
             throws ServletException, IOException{
         //System.out.println(System.getProperty("file.encoding"));
 
-        response.setHeader("Content-type", "text/html;charset=UTF-8");
-
-        response.setCharacterEncoding("utf-8");
-        //response.setContentType("text/html; charset=utf-8");
+        //response.setHeader("Content-type", "text/html;charset=UTF-8");
+        //response.setCharacterEncoding("utf-8");
+        //response.setContentType("text/html; charset=UTF-8");
 
         int id = Integer.parseInt(request.getParameter("id"));
 
         Hero hero = new HeroDAO().get(id);
-
+/*
         StringBuffer format = new StringBuffer();
-
-
 
         format.append("<!DOCTYPE html>");
         format.append("<form action='updateHero' method='post'>");
@@ -40,8 +37,9 @@ public class HeroEditServlet extends HttpServlet{
         String html = String.format(format.toString(), hero.getName(), hero.getHp(), hero.getDamage(), hero.getId());
 
         response.getWriter().write(html);
-
-        //response.setContentType("text/html; charset=utf-8");
+*/
+        request.setAttribute("hero", hero);
+        request.getRequestDispatcher("/servelt_sql/editHero.jsp").forward(request, response);
     }
 
 }
