@@ -31,7 +31,7 @@
     - [4.2 泛型](#42-泛型)
     - [4.3 包装（装箱和拆箱）](#43-包装装箱和拆箱)
     - [4.4 String](#44-string)
-        - [4.4.1 Stirng,StringBuffer and StringBuilder](#441-stirngstringbuffer-and-stringbuilder)
+        - [4.4.1 String,StringBuffer and StringBuilder](#441-stringstringbuffer-and-stringbuilder)
         - [4.4.2 String Pool](#442-string-pool)
     - [4.5 面向对象](#45-面向对象)
         - [4.5.1 继承、封装、多态](#451-继承封装多态)
@@ -42,6 +42,8 @@
             - [static声明变量](#static声明变量)
             - [static声明静态方法](#static声明静态方法)
             - [static声明静态语句块](#static声明静态语句块)
+    - [4.6 拷贝](#46-拷贝)
+        - [4.6.1 数组拷贝](#461-数组拷贝)
 - [5 窗口工具javax.swing](#5-窗口工具javaxswing)
     - [5.1 JFrame](#51-jframe)
         - [5.1.1 框架](#511-框架)
@@ -689,7 +691,7 @@ public final class String
 3. 安全性；
 4. 线程安全；
 
-### 4.4.1 Stirng,StringBuffer and StringBuilder
+### 4.4.1 String,StringBuffer and StringBuilder
 
 1. 可变性
 
@@ -701,6 +703,21 @@ public final class String
 * String 不可变，因此是线程安全的
 * StringBuilder 不是线程安全的
 * StringBuffer 是线程安全的，内部使用 synchronized 进行同步
+
+有时候需要用较短的字符串构建字符串，如果采用String每次连接字符等都会构建一个新的String对象，耗时耗空间，使用StringBuilder可以避免该问题。
+
+如果需要用许多小段字符串构建一个字符串应该按照如下步骤:
+
+```java
+StringBuilder builder = new StringBuilder();
+//每次添加内容调用append方法
+builder.append(ch);
+builder.append(str);
+//构建字符串得到String对象需要调用toString方法
+String completedString = builder.toString();
+```
+
+* StringBuilder类的前身是StringBuffer，StringBuffer效率低一些，但是允许多线程照做，如果所有字符串在一个单线程中编辑，应该使用StringBuilder。
 
 ### 4.4.2 String Pool
 
@@ -882,6 +899,23 @@ public class A {
 }
 
 >>> 123
+```
+
+## 4.6 拷贝
+
+### 4.6.1 数组拷贝
+
+一个数组变量拷贝给另一个数组变量，这时两个变量将引用同一个数组
+
+```java
+int[] nub = primes;
+nub[5] = 12; //now primes[5] is also 12
+```
+
+如果希望一个数组将所有值拷贝到一个新的数组中去，需要使用Arrays类的copyTo方法：
+
+```java
+int[] copiednub = Arrays.copyOf(nub, nub.length);
 ```
 
 # 5 窗口工具javax.swing
