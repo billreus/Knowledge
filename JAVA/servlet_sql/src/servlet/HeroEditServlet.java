@@ -39,7 +39,7 @@ public class HeroEditServlet extends HttpServlet{
         response.getWriter().write(html);
 */
         request.setAttribute("hero", hero);
-        request.getRequestDispatcher("/servelt_sql/editHero.jsp").forward(request, response);
+        request.getRequestDispatcher("/editHero.jsp").forward(request, response);
     }
 
 }

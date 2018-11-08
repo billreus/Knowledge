@@ -126,7 +126,7 @@ public class HeroDAO {
     }
 
     public List<Hero> list() {
-        return list(0, Short.MAX_VALUE);//对应下面的start count
+        return list(0, Short.MAX_VALUE);//对应下面的start count。表示列表一页显示的数量
     }
 
     public List<Hero> list(int start, int count) {//读取所有表格中的数据

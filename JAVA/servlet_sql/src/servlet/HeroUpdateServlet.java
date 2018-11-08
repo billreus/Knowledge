@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class HeroUpdateServlet extends HttpServlet{
+public class HeroUpdateServlet extends HttpServlet{//更改edit编辑页面的数据
 
     protected void service(HttpServletRequest request, HttpServletResponse response)
         throws ServletException,IOException{

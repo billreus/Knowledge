@@ -11,6 +11,12 @@
     <title>Title</title>
 </head>
 <body>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
+    <form action="login" method="post"> <%-- action的动作和xml中的url绑定 --%>
+        用户名：<input type="text" name="name"> <br>
+        密码：<input type="password" name="password"> <br>
+        <input type="submit" value="确定">
+    </form>
 </body>
 </html>

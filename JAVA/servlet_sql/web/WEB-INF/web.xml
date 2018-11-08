@@ -5,6 +5,17 @@
          version="4.0">
 
     <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
         <servlet-name>HeroListServlet</servlet-name>
         <servlet-class>servlet.HeroListServlet</servlet-class>
     </servlet>
