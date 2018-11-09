@@ -10,7 +10,7 @@ public class ProductDAO {
 
     public ProductDAO(){
         try {
-            Class.forName("com.mysql.jbdc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
             System.out.println("Success loading Mysql Driver");
         }catch (ClassNotFoundException e){
             System.out.println("Error loading Mysql Driver!");
