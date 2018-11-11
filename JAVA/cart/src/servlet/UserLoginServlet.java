@@ -17,8 +17,8 @@ public class UserLoginServlet extends HttpServlet{
         User user = new UserDAO().getUser(name, password);
         if(null != user){
             request.getSession().setAttribute("user", user);
-            response.sendRedirect("/listProduct");
+            response.sendRedirect("/cart/listProduct");
         }else
-            response.sendRedirect("/login.jsp");
+            response.sendRedirect("/cart/login.jsp");
     }
 }
