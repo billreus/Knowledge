@@ -9,6 +9,7 @@
     - [1.4 Object类](#14-object类)
         - [1.4.1 equals方法](#141-equals方法)
         - [1.4.2 hashCode方法](#142-hashcode方法)
+            - [hashCode()与equals()](#hashcode与equals)
     - [1.5 异常类](#15-异常类)
         - [1.5.1 自定义异常](#151-自定义异常)
         - [1.5.2 捕获异常](#152-捕获异常)
@@ -42,6 +43,7 @@
             - [static声明变量](#static声明变量)
             - [static声明静态方法](#static声明静态方法)
             - [static声明静态语句块](#static声明静态语句块)
+        - [4.5.5 构造方法](#455-构造方法)
     - [4.6 拷贝](#46-拷贝)
         - [4.6.1 数组拷贝](#461-数组拷贝)
 - [5 窗口工具javax.swing](#5-窗口工具javaxswing)
@@ -126,11 +128,48 @@ Object类是所有类的父类。存放最基本的方法。
 
 ### 1.4.1 equals方法
 
-Object类中equals方法用于检测一个对象是否等与另一个对象。如果两个对象具有相同引用，它们一定是相等的。
+==的作用是判断两个对象地址是否相等。(基本数据类型==比较的是值，引用数据类型==比较的是内存地址)
+
+equals() : 它的作用也是判断两个对象是否相等。但它一般有两种使用情况：
+
+* 情况1：类没有覆盖 equals() 方法。则通过 equals() 比较该类的两个对象时，等价于通过“==”比较这两个对象。
+* 情况2：类覆盖了 equals() 方法。一般，我们都覆盖 equals() 方法来两个对象的内容相等；若它们的内容相等，则返回 true (即，认为这两个对象相等)。
+
+String 中的 equals 方法是被重写过的，因为 object 的 equals 方法是比较的对象的内存地址，而 String 的 equals 方法比较的是对象的值。
+
+```java
+public class test {
+    public static void main(String[] args) {
+        String a = new String("ab"); // a 为一个引用
+        String b = new String("ab"); // b为另一个引用,对象的内容一样
+        String aa = "ab"; // 放在常量池中
+        String bb = "ab"; // 从常量池中查找
+        if (aa == bb) // true
+            System.out.println("aa==bb");
+        if (a == b) // false，非同一对象
+            System.out.println("a==b");
+        if (a.equals(b)) // true
+            System.out.println("aEQb");
+        if (42 == 42.0) { // true
+            System.out.println("true");
+        }
+    }
+}
+```
 
 ### 1.4.2 hashCode方法
 
-用于返回每个对象的存储地址，默认是一个散列码。
+用于返回每个对象的存储地址，默认是一个散列码。hashCode() 的作用是获取哈希码，也称为散列码；它实际上是返回一个int整数。这个哈希码的作用是确定该对象在哈希表中的索引位置(key-value)。hashCode() 定义在JDK的Object.java中，这就意味着Java中的任何类都包含有hashCode() 函数。
+
+作用：当你把对象加入 HashSet 时，HashSet 会先计算对象的 hashcode 值来判断对象加入的位置，同时也会与其他已经加入的对象的 hashcode 值作比较，如果没有相符的hashcode，HashSet会假设对象没有重复出现。但是如果发现有相同 hashcode 值的对象，这时会调用 equals（）方法来检查 hashcode 相等的对象是否真的相同。如果两者相同，HashSet 就不会让其加入操作成功。如果不同的话，就会重新散列到其他位置。。这样我们就大大减少了 equals 的次数，相应就大大提高了执行速度。
+
+#### hashCode()与equals()
+
+1. 如果两个对象相等，则hashcode一定也是相同的;
+2. 两个对象相等,对两个对象分别调用equals方法都返回true;
+3. 两个对象有相同的hashcode值，它们也不一定是相等的
+4. 因此，equals 方法被覆盖过，则 hashCode 方法也必须被覆盖
+5. hashCode() 的默认行为是对堆上的对象产生独特值。如果没有重写 hashCode()，则该 class 的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）
 
 ## 1.5 异常类
 
@@ -150,7 +189,16 @@ Exception 分为两种：
 
 ### 1.5.2 捕获异常
 
-常使用`try`和`catch`来捕获异常。
+常使用`try`和`catch`来捕获异常。如果没有catch块，则必须跟一个finally块
+
+无论是否捕获或处理异常，finally块里的语句都会被执行。当在try块或catch块中遇到return语句时，finally语句块将在方法返回之前被执行。
+
+在以下4种特殊情况下，finally块不会被执行：
+
+1. 在finally语句块中发生了异常。
+2. 在前面的代码中用了System.exit()退出程序。
+3. 程序所在的线程死亡。
+4. 关闭CPU。
 
 ```java
 package bill;
@@ -698,11 +746,28 @@ public final class String
 * String不可变
 * StringBuffer 和 StringBuilder 可变
 
+原因如下：
+
+String类中使用final关键字字符数组保存字符串，`private final char value[]`，所以String对象是不可变的。而StringBuilder和StringBuffer都继承自AbstractStringBuilder类，在AbstractStringBuilder中也是使用字符数组`char[] value`保存字符串，但是没有用final关键字修饰，所以两种对象是可变的。
+
+```java
+abstract class AbstractStringBuilder implements Appendable, CharSequence {
+    char[] value;
+    int count;
+    AbstractStringBuilder() {
+    }
+    AbstractStringBuilder(int capacity) {
+        value = new char[capacity];
+    }
+```
+
 2. 线程安全
 
 * String 不可变，因此是线程安全的
 * StringBuilder 不是线程安全的
 * StringBuffer 是线程安全的，内部使用 synchronized 进行同步
+
+String 中的对象是不可变的，也就可以理解为常量，线程安全。AbstractStringBuilder 是 StringBuilder 与 StringBuffer 的公共父类，定义了一些字符串的基本操作，如 expandCapacity、append、insert、indexOf 等公共方法。StringBuffer 对方法加了同步锁或者对调用的方法加了同步锁，所以是线程安全的。StringBuilder 并没有对方法进行加同步锁，所以是非线程安全的。 　
 
 有时候需要用较短的字符串构建字符串，如果采用String每次连接字符等都会构建一个新的String对象，耗时耗空间，使用StringBuilder可以避免该问题。
 
@@ -717,7 +782,7 @@ builder.append(str);
 String completedString = builder.toString();
 ```
 
-* StringBuilder类的前身是StringBuffer，StringBuffer效率低一些，但是允许多线程照做，如果所有字符串在一个单线程中编辑，应该使用StringBuilder。
+* 使用总结：操作少量数据使用String，单线程下大量数据使用StringBuilder，多线程下大量数据使用StringBuffer。
 
 ### 4.4.2 String Pool
 
@@ -900,6 +965,14 @@ public class A {
 
 >>> 123
 ```
+
+### 4.5.5 构造方法
+
+一个类的构造方法用于对类对象的初始化工作，构造方法有以下特性：
+
+1. 名字与类名相同；
+2. 没有返回值，也不能用void声明构造函数；
+3. 生成类的对象时自动执行，无需调用；
 
 ## 4.6 拷贝
 

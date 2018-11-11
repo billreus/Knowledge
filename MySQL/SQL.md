@@ -162,14 +162,14 @@ SELECT * FROM 表名 -- 选取所有列
 
 ### 查询列
 
-DISTINCT:相同值只出现一次，所有列值相同才算相同
+DISTINCT:相同值只出现一次（删除了重复的数据），所有列值相同才算相同
 
 ```SQL
 SELECT DISTINCT col1, col2
 FROM mytable;
 ```
 
-LIMIT:限制返回行数。第一个参数为起始行，第二个参数为返回总行数。
+LIMIT:限制返回行数。第一个参数为起始行（0为第一行），第二个参数为返回总行数。
 
 ```SQL
 SELECT *
