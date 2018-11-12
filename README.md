@@ -20,6 +20,12 @@
 
 [JAVA基础](https://github.com/billreus/Konwledge/blob/master/JAVA/JAVA%E5%9F%BA%E7%A1%80.md)
 
+[JAVA高并发](https://github.com/billreus/Konwledge/blob/master/JAVA/JAVA%E9%AB%98%E5%B9%B6%E5%8F%91.md)
+
+[JavaEE基础](https://github.com/billreus/Konwledge/blob/master/JAVA/JavaEE%E5%9F%BA%E7%A1%80.md)
+
+[Java集合](https://github.com/billreus/Konwledge/blob/master/JAVA/Java%E9%9B%86%E5%90%88.md)
+
 [设计模式](https://github.com/billreus/Konwledge/blob/master/JAVA/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)
 
 ## Linux :wc:
@@ -31,3 +37,7 @@
 [SQLite](https://github.com/billreus/Konwledge/blob/master/MySQL/SQLite.md)
 
 [MySQL](https://github.com/billreus/Konwledge/blob/master/MySQL/MySQL.md)
+
+[SQL](https://github.com/billreus/Konwledge/blob/master/MySQL/SQL.md)
+
+[JDBC](https://github.com/billreus/Konwledge/blob/master/MySQL/JDBC.md)
