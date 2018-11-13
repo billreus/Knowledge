@@ -302,6 +302,15 @@ FROM mytable
 GROUP BY col;
 ```
 
+分组中使用HAVING子句对分组设置条件，与在SELECT中使用WHERE设置类似，WHERE 搜索条件在进行分组操作之前应用；而 HAVING 搜索条件在进行分组操作之后应用。
+
+```sql
+SELECT col
+FROM mytable
+GROUP BY col
+HAVING COUNT(*) > 2; --显示分组中col值重复大于2的col
+```
+
 ## 连接
 
 连接用于连接多个表，使用JOIN关键字，条件语句使用ON而不是WHERE

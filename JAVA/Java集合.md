@@ -237,3 +237,340 @@ ArrayList包含了两个重要的对象：elementData 和 size。
 1. elementData 是"Object[]类型的数组"，它保存了添加到ArrayList中的元素。实际上，elementData是个动态数组，我们能通过构造函数 ArrayList(int initialCapacity)来执行它的初始容量为initialCapacity；如果通过不含参数的构造函数ArrayList()来创建ArrayList，则elementData的容量默认是10。elementData数组的大小会根据ArrayList容量的增长而动态的增长，具体的增长方式，请参考源码分析中的ensureCapacity()函数。
 
 2. size 则是动态数组的实际大小。
+
+### 1.2.2 ArrayList源码
+
+#### 1.2.2.1 继承关系
+
+```java
+public class ArrayList<E> extends AbstractList<E> implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+```
+
+ArrayList继承AbstractList抽象父类，实现了List接口（规定了List的操作规范）、RandomAccess（可随机访问）、Cloneable（可拷贝）、Serializable（可序列化）。
+
+#### 1.2.2.2 属性
+
+```java
+public class ArrayList<E> extends AbstractList<E>
+        implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+{
+    // 版本号
+    private static final long serialVersionUID = 8683452581122892189L;
+    // 缺省容量
+    private static final int DEFAULT_CAPACITY = 10;
+    // 空对象数组
+    private static final Object[] EMPTY_ELEMENTDATA = {};
+    // 缺省空对象数组
+    private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = {};
+    // 元素数组
+    transient Object[] elementData;
+    // 实际元素大小，默认为0
+    private int size;
+    // 最大数组容量
+    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+}
+```
+
+类的属性中核心的属性为元素数组elementData，类型为Object[]，用于存放实际元素，并且被标记为transient，意味着在序列化的时候，此字段是不会被序列化的。
+
+#### 1.2.2.3 构造函数
+
+ArrayList(int)型构造函数
+
+```java
+    public ArrayList(int initialCapacity) {
+        if (initialCapacity > 0) { // 初始容量大于0
+            this.elementData = new Object[initialCapacity]; // 初始化元素数组
+        } else if (initialCapacity == 0) { // 初始容量为0
+            this.elementData = EMPTY_ELEMENTDATA; // 为空对象数组
+        } else { // 初始容量小于0，抛出异常
+            throw new IllegalArgumentException("Illegal Capacity: "+
+                                               initialCapacity);
+        }
+    }
+```
+
+* 指定elementData数组的大小，不允许初始化大小小于0，否则抛出异常。
+
+ArrayList()类型构造函数
+
+```java
+    public ArrayList() {
+        // 无参构造函数，设置元素数组为空 
+        this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;
+    }
+```
+
+* 未指定初始化大小时，给elementData赋值为空集合
+
+ArrayList(Collection<? extends E>)型构造函数
+
+```java
+    public ArrayList(Collection<? extends E> c) { // 集合参数构造函数
+        elementData = c.toArray(); // 转化为数组
+        if ((size = elementData.length) != 0) { // 参数为非空集合
+            if (elementData.getClass() != Object[].class) // 是否成功转化为Object类型数组
+                elementData = Arrays.copyOf(elementData, size, Object[].class); // 不为Object数组的话就进行复制
+        } else { // 集合大小为空，则设置元素数组为空
+            this.elementData = EMPTY_ELEMENTDATA;
+        }
+    }
+```
+
+#### 1.2.2.4 核心函数
+
+add函数：
+
+```java
+    public boolean add(E e) { // 添加元素
+        ensureCapacityInternal(size + 1);  // Increments modCount!!
+        elementData[size++] = e;
+        return true;
+    }
+```
+
+其中ensureCapacityInternal函数可以理解为确保elementData数组有合适的大小。ensureCapacityInternal的具体函数如下：
+
+```java
+private void ensureCapacityInternal(int minCapacity) {
+        if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) { // 判断元素数组是否为空数组
+            minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity); // 取较大值,默认值为10
+        }
+
+        ensureExplicitCapacity(minCapacity);
+    }
+```
+
+ensureExplicitCapacity函数也是为了确保elemenData数组有合适的大小。ensureExplicitCapacity的具体函数如下:
+
+```java
+private void ensureExplicitCapacity(int minCapacity) {
+        // 结构性修改加1
+        modCount++;
+        if (minCapacity - elementData.length > 0)
+            grow(minCapacity);
+    }
+```
+
+grow函数会对数组进行扩容，ensureCapacityInternal、ensureExplicitCapacity都只是过程，最后完成实际扩容操作还是得看grow函数，grow函数的具体函数如下:
+
+```java
+    private void grow(int minCapacity) {
+        int oldCapacity = elementData.length; // 旧容量
+        int newCapacity = oldCapacity + (oldCapacity >> 1); // 新容量为旧容量的1.5倍
+        if (newCapacity - minCapacity < 0) // 新容量小于参数指定容量，修改新容量
+            newCapacity = minCapacity;
+        if (newCapacity - MAX_ARRAY_SIZE > 0) // 新容量大于最大容量
+            newCapacity = hugeCapacity(minCapacity); // 指定新容量
+        // 拷贝扩容
+        elementData = Arrays.copyOf(elementData, newCapacity);
+    }
+```
+
+* 正常情况下会扩容1.5倍，特殊情况下（新扩展数组大小已经达到了最大值）则只取最大值。
+
+set函数：
+
+```java
+    public E set(int index, E element) {
+        // 检验索引是否合法
+        rangeCheck(index);
+        // 旧值
+        E oldValue = elementData(index);
+        // 赋新值
+        elementData[index] = element;
+        // 返回旧值
+        return oldValue;
+    }
+```
+
+* 设定指定下标索引的元素值。
+
+indexOf函数：
+
+```java
+// 从首开始查找数组里面是否存在指定元素
+    public int indexOf(Object o) {
+        if (o == null) { // 查找的元素为空
+            for (int i = 0; i < size; i++) // 遍历数组，找到第一个为空的元素，返回下标
+                if (elementData[i]==null)
+                    return i;
+        } else { // 查找的元素不为空
+            for (int i = 0; i < size; i++) // 遍历数组，找到第一个和指定元素相等的元素，返回下标
+                if (o.equals(elementData[i]))
+                    return i;
+        } 
+        // 没有找到，返回空
+        return -1;
+    }
+```
+
+* 从头开始查找与指定元素相等的元素，注意，是可以查找null元素的，意味着ArrayList中可以存放null元素的。与此函数对应的lastIndexOf，表示从尾部开始查找。
+
+get函数：
+
+```java
+    public E get(int index) {
+        // 检验索引是否合法
+        rangeCheck(index);
+
+        return elementData(index);
+    }
+```
+
+get函数会检查索引值是否合法（只检查是否大于size，而没有检查是否小于0），值得注意的是，在get函数中存在element函数，element函数用于返回具体的元素，具体函数如下:
+
+```java
+    E elementData(int index) {
+        return (E) elementData[index];
+    }
+```
+
+remove函数：
+
+```java
+    public E remove(int index) {
+        // 检查索引是否合法
+        rangeCheck(index);
+
+        modCount++;
+        E oldValue = elementData(index);
+        // 需要移动的元素的个数
+        int numMoved = size - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(elementData, index+1, elementData, index,
+                             numMoved);
+        // 赋值为空，有利于进行GC
+        elementData[--size] = null;
+        // 返回旧值
+        return oldValue;
+    }
+```
+
+* remove函数用户移除指定下标的元素，此时会把指定下标到数组末尾的元素向前移动一个单位，并且会把数组最后一个元素设置为null，这样是为了方便之后将整个数组不被使用时，会被GC，可以作为小的技巧使用。
+
+### 1.2.3 ArrayList遍历方式
+
+ArrayList有三种遍历方式：
+
+1. 通过迭代器遍历(Iterator)
+
+```java
+Integer value = null;
+Iterator iter = list.iterator();
+while(iter.hasNext()){
+    value = (Integr)iter.next();
+}
+```
+
+2. 随机访问通过索引值遍历(RandomAccess)
+
+```java
+Integer value = null;
+int size = list.size();
+for(int i=0; i<size; i++){
+    value = (Integer)list.get(i);
+}
+```
+
+3. for循环遍历
+
+```java
+Integer value = null;
+for(Integer intege:list){
+    value = intege;
+}
+```
+
+* 遍历时随机访问效率最为高效，迭代器最慢。
+
+### 1.2.4 toArray()异常
+
+ArrayList提供2个toArray()函数：
+
+```java
+Object[] toArray()
+<T> T[] toArray(T[] contents)
+```
+
+调用 toArray() 函数会抛出“java.lang.ClassCastException”异常，但是调用 toArray(T[] contents) 能正常返回 T[]。
+
+toArray() 会抛出异常是因为 toArray() 返回的是 Object[] 数组，将 Object[] 转换为其它类型(如如，将Object[]转换为的Integer[])则会抛出“java.lang.ClassCastException”异常，因为Java不支持向下转型。
+
+调用 toArray(T[] contents) 返回T[]的可以通过以下几种方式实现:
+
+```java
+// toArray(T[] contents)调用方式一
+public static Integer[] vectorToArray1(ArrayList<Integer> v) {
+    Integer[] newText = new Integer[v.size()];
+    v.toArray(newText);
+    return newText;
+}
+
+// toArray(T[] contents)调用方式二。最常用！
+public static Integer[] vectorToArray2(ArrayList<Integer> v) {
+    Integer[] newText = (Integer[])v.toArray(new Integer[0]);
+    return newText;
+}
+
+// toArray(T[] contents)调用方式三
+public static Integer[] vectorToArray3(ArrayList<Integer> v) {
+    Integer[] newText = new Integer[v.size()];
+    Integer[] newStrings = (Integer[])v.toArray(newText);
+    return newStrings;
+}
+```
+
+### 1.2.5 常用示例
+
+```java
+import java.util.*;
+
+/*
+ * @desc ArrayList常用API的测试程序
+ * @author skywang 
+ * @email kuiwu-wang@163.com
+ */
+public class ArrayListTest {
+
+    public static void main(String[] args) {
+        
+        // 创建ArrayList
+        ArrayList list = new ArrayList();
+
+        // 将“”
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        // 将下面的元素添加到第1个位置
+        list.add(0, "5");
+
+        // 获取第1个元素
+        System.out.println("the first element is: "+ list.get(0));
+        // 删除“3”
+        list.remove("3");
+        // 获取ArrayList的大小
+        System.out.println("Arraylist size=: "+ list.size());
+        // 判断list中是否包含"3"
+        System.out.println("ArrayList contains 3 is: "+ list.contains(3));
+        // 设置第2个元素为10
+        list.set(1, "10");
+
+        // 通过Iterator遍历ArrayList
+        for(Iterator iter = list.iterator(); iter.hasNext(); ) {
+            System.out.println("next is: "+ iter.next());
+        }
+
+        // 将ArrayList转换为数组
+        String[] arr = (String[])list.toArray(new String[0]);
+        for (String str:arr)
+            System.out.println("str: "+ str);
+
+        // 清空ArrayList
+        list.clear();
+        // 判断ArrayList是否为空
+        System.out.println("ArrayList is empty: "+ list.isEmpty());
+    }
+}
+```
