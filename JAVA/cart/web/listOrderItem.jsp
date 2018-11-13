@@ -17,6 +17,7 @@
         <td>单价</td>
         <td>数量</td>
         <td>小计</td>
+        <td>删除</td>
     </tr>
 
     <c:forEach items="${ois}" var="oi" varStatus="st">
@@ -25,6 +26,7 @@
             <td>${oi.product.price}</td>
             <td>${oi.num}</td>
             <td>${oi.product.price*oi.num}</td>
+            <td><a href="deleteOrderItem?pid=${oi.product.id}">删除</a></td>
         </tr>
     </c:forEach>
 

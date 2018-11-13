@@ -21,7 +21,7 @@ public class OrderCreateServlet extends HttpServlet {
 
         User u = (User) request.getSession().getAttribute("user");
         if(null==u){
-            response.sendRedirect("/login.jsp");
+            response.sendRedirect("/cart/login.jsp");
             return;
         }
 
