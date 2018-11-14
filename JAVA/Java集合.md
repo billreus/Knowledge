@@ -1,3 +1,5 @@
+<!-- TOC -->autoauto- [1 Java集合](#1-java集合)auto    - [1.1 Collection](#11-collection)auto        - [1.1.1 List](#111-list)auto        - [1.1.2 Set](#112-set)auto        - [1.1.3 Iterator](#113-iterator)auto            - [1.1.3.1 ListIterator](#1131-listiterator)auto    - [1.2 ArrayList](#12-arraylist)auto        - [1.2.1 ArrayList数据结构](#121-arraylist数据结构)auto        - [1.2.2 ArrayList源码](#122-arraylist源码)auto            - [1.2.2.1 继承关系](#1221-继承关系)auto            - [1.2.2.2 属性](#1222-属性)auto            - [1.2.2.3 构造函数](#1223-构造函数)auto            - [1.2.2.4 核心函数](#1224-核心函数)auto        - [1.2.3 ArrayList遍历方式](#123-arraylist遍历方式)auto        - [1.2.4 toArray()异常](#124-toarray异常)auto        - [1.2.5 常用示例](#125-常用示例)auto        - [1.2.6 fail-fast总结](#126-fail-fast总结)auto    - [1.3 LinkedList](#13-linkedlist)auto        - [1.3.1 构造函数](#131-构造函数)autoauto<!-- /TOC -->
+
 # 1 Java集合
 
 Java集合包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是java.util.*
@@ -137,7 +139,7 @@ abstract E next()
 abstract void remove()
 ```
 
-### 1.1.3 ListIterator
+#### 1.1.3.1 ListIterator
 
 ListIterator定义如下：
 
@@ -574,3 +576,108 @@ public class ArrayListTest {
     }
 }
 ```
+
+### 1.2.6 fail-fast总结
+
+fail-fast 机制是java集合(Collection)中的一种错误机制。当多个线程对同一个集合的内容进行操作时，就可能会产生fail-fast事件。
+例如：当某一个线程A通过iterator去遍历某集合的过程中，若该集合的内容被其他线程所改变了；那么线程A访问集合时，就会抛出ConcurrentModificationException异常，产生fail-fast事件。
+
+```java
+import java.util.*;
+import java.util.concurrent.*;
+
+/*
+ * @desc java集合中Fast-Fail的测试程序。
+ *
+ *   fast-fail事件产生的条件：当多个线程对Collection进行操作时，若其中某一个线程通过iterator去遍历集合时，该集合的内容被其他线程所改变；则会抛出ConcurrentModificationException异常。
+ *   fast-fail解决办法：通过util.concurrent集合包下的相应类去处理，则不会产生fast-fail事件。
+ *
+ *   本例中，分别测试ArrayList和CopyOnWriteArrayList这两种情况。ArrayList会产生fast-fail事件，而CopyOnWriteArrayList不会产生fast-fail事件。
+ *   (01) 使用ArrayList时，会产生fast-fail事件，抛出ConcurrentModificationException异常；定义如下：
+ *            private static List<String> list = new ArrayList<String>();
+ *   (02) 使用时CopyOnWriteArrayList，不会产生fast-fail事件；定义如下：
+ *            private static List<String> list = new CopyOnWriteArrayList<String>();
+ *
+ */
+public class FastFailTest {
+
+    private static List<String> list = new ArrayList<String>();
+    //private static List<String> list = new CopyOnWriteArrayList<String>();
+    public static void main(String[] args) {
+    
+        // 同时启动两个线程对list进行操作！
+        new ThreadOne().start();
+        new ThreadTwo().start();
+    }
+
+    private static void printAll() {
+        System.out.println("");
+
+        String value = null;
+        Iterator iter = list.iterator();
+        while(iter.hasNext()) {
+            value = (String)iter.next();
+            System.out.print(value+", ");
+        }
+    }
+
+    /**
+     * 向list中依次添加0,1,2,3,4,5，每添加一个数之后，就通过printAll()遍历整个list
+     */
+    private static class ThreadOne extends Thread {
+        public void run() {
+            int i = 0;
+            while (i<6) {
+                list.add(String.valueOf(i));
+                printAll();
+                i++;
+            }
+        }
+    }
+
+    /**
+     * 向list中依次添加10,11,12,13,14,15，每添加一个数之后，就通过printAll()遍历整个list
+     */
+    private static class ThreadTwo extends Thread {
+        public void run() {
+            int i = 10;
+            while (i<16) {
+                list.add(String.valueOf(i));
+                printAll();
+                i++;
+            }
+        }
+    }
+
+}
+```
+
+运行结果：
+运行该代码，抛出异常java.util.ConcurrentModificationException！即，产生fail-fast事件！
+
+结果说明：
+(01) FastFailTest中通过 new ThreadOne().start() 和 new ThreadTwo().start() 同时启动两个线程去操作list。
+    ThreadOne线程：向list中依次添加0,1,2,3,4,5。每添加一个数之后，就通过printAll()遍历整个list。
+    ThreadTwo线程：向list中依次添加10,11,12,13,14,15。每添加一个数之后，就通过printAll()遍历整个list。
+(02) 当某一个线程遍历list的过程中，list的内容被另外一个线程所改变了；就会抛出ConcurrentModificationException异常，产生fail-fast事件。
+
+解决方法是
+
+```java
+private static List<String> list = new ArrayList<String>();//替换为
+
+private static List<String> list = new CopyOnWriteArrayList<String>();
+```
+
+具体原理参考：http://www.cnblogs.com/skywang12345/p/3308762.html
+
+## 1.3 LinkedList
+
+LinkedList 是一个继承于AbstractSequentialList的双向链表。它也可以被当作堆栈、队列或双端队列进行操作。
+LinkedList 实现 List 接口，能对它进行队列操作。
+LinkedList 实现 Deque 接口，即能将LinkedList当作双端队列使用。
+LinkedList 实现了Cloneable接口，即覆盖了函数clone()，能克隆。
+LinkedList 实现java.io.Serializable接口，这意味着LinkedList支持序列化，能通过序列化去传输。
+LinkedList 是非同步的。
+
+### 1.3.1 构造函数

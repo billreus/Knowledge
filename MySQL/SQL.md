@@ -1,30 +1,4 @@
-<!-- TOC -->
-
-- [SQL语法](#sql语法)
-    - [概念](#概念)
-        - [主键与外键](#主键与外键)
-    - [基本操作](#基本操作)
-        - [创建表](#创建表)
-        - [修改表](#修改表)
-        - [插入](#插入)
-        - [更新替换](#更新替换)
-        - [删除](#删除)
-    - [查询](#查询)
-        - [查询列](#查询列)
-        - [排序](#排序)
-        - [过滤](#过滤)
-        - [通配符](#通配符)
-        - [计算](#计算)
-    - [文本处理](#文本处理)
-    - [日期和时间处理](#日期和时间处理)
-    - [分组](#分组)
-    - [连接](#连接)
-        - [内连接](#内连接)
-        - [自连接](#自连接)
-        - [自然连接](#自然连接)
-        - [外连接](#外连接)
-
-<!-- /TOC -->
+<!-- TOC -->autoauto- [SQL语法](#sql语法)auto    - [概念](#概念)auto        - [主键与外键](#主键与外键)auto    - [基本操作](#基本操作)auto        - [创建表](#创建表)auto        - [修改表](#修改表)auto        - [插入](#插入)auto        - [更新替换](#更新替换)auto        - [删除](#删除)auto    - [查询](#查询)auto        - [查询列](#查询列)auto        - [排序](#排序)auto        - [过滤](#过滤)auto        - [通配符](#通配符)auto        - [计算](#计算)auto    - [文本处理](#文本处理)auto    - [日期和时间处理](#日期和时间处理)auto    - [分组](#分组)auto    - [连接](#连接)auto        - [内连接](#内连接)auto        - [自连接](#自连接)auto        - [自然连接](#自然连接)auto        - [外连接](#外连接)auto        - [子查询](#子查询)autoauto<!-- /TOC -->
 
 # SQL语法
 
@@ -357,4 +331,28 @@ FROM tablea AS A NATURAL JOIN tableb AS B;
 SELECT Customers.cust_id, Orders.order_num
 FROM Customers LEFT OUTER JOIN Orders
 ON Customers.cust_id = Orders.cust_id;
+```
+
+### 子查询
+
+当一个查询是另一个查询的条件时，称之为子查询。
+
+子查询的结果可以作为WHERE语句的过滤条件
+
+```sql
+SELECT *
+FROM mytable1
+WHERE col1 IN (SELECT col2
+               FROM mytable2);
+```
+
+下面的语句可以检索出客户的订单数量，子查询语句会对第一个查询检索出的每个客户执行一次：
+
+```sql
+SELECT cust_name, (SELECT COUNT(*)
+                   FROM Orders
+                   WHERE Orders.cust_id = Customers.cust_id)
+                   AS orders_num
+FROM Customers
+ORDER BY cust_name;
 ```
