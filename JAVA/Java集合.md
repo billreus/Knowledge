@@ -1,4 +1,28 @@
-<!-- TOC -->autoauto- [1 Java集合](#1-java集合)auto    - [1.1 Collection](#11-collection)auto        - [1.1.1 List](#111-list)auto        - [1.1.2 Set](#112-set)auto        - [1.1.3 Iterator](#113-iterator)auto            - [1.1.3.1 ListIterator](#1131-listiterator)auto    - [1.2 ArrayList](#12-arraylist)auto        - [1.2.1 ArrayList数据结构](#121-arraylist数据结构)auto        - [1.2.2 ArrayList源码](#122-arraylist源码)auto            - [1.2.2.1 继承关系](#1221-继承关系)auto            - [1.2.2.2 属性](#1222-属性)auto            - [1.2.2.3 构造函数](#1223-构造函数)auto            - [1.2.2.4 核心函数](#1224-核心函数)auto        - [1.2.3 ArrayList遍历方式](#123-arraylist遍历方式)auto        - [1.2.4 toArray()异常](#124-toarray异常)auto        - [1.2.5 常用示例](#125-常用示例)auto        - [1.2.6 fail-fast总结](#126-fail-fast总结)auto    - [1.3 LinkedList](#13-linkedlist)auto        - [1.3.1 构造函数](#131-构造函数)autoauto<!-- /TOC -->
+<!-- TOC -->
+
+- [1 Java集合](#1-java%E9%9B%86%E5%90%88)
+    - [1.1 Collection](#11-collection)
+        - [1.1.1 List](#111-list)
+        - [1.1.2 Set](#112-set)
+        - [1.1.3 Iterator](#113-iterator)
+            - [1.1.3.1 ListIterator](#1131-listiterator)
+    - [1.2 ArrayList](#12-arraylist)
+        - [1.2.1 ArrayList数据结构](#121-arraylist%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+        - [1.2.2 ArrayList源码](#122-arraylist%E6%BA%90%E7%A0%81)
+            - [1.2.2.1 继承关系](#1221-%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB)
+            - [1.2.2.2 属性](#1222-%E5%B1%9E%E6%80%A7)
+            - [1.2.2.3 构造函数](#1223-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+            - [1.2.2.4 核心函数](#1224-%E6%A0%B8%E5%BF%83%E5%87%BD%E6%95%B0)
+        - [1.2.3 ArrayList遍历方式](#123-arraylist%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F)
+        - [1.2.4 toArray()异常](#124-toarray%E5%BC%82%E5%B8%B8)
+        - [1.2.5 常用示例](#125-%E5%B8%B8%E7%94%A8%E7%A4%BA%E4%BE%8B)
+        - [1.2.6 fail-fast总结](#126-fail-fast%E6%80%BB%E7%BB%93)
+    - [1.3 LinkedList](#13-linkedlist)
+        - [1.3.1 构造函数](#131-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+        - [1.3.2 API](#132-api)
+
+<!-- /TOC -->
+
 
 # 1 Java集合
 
@@ -681,3 +705,57 @@ LinkedList 实现java.io.Serializable接口，这意味着LinkedList支持序列
 LinkedList 是非同步的。
 
 ### 1.3.1 构造函数
+
+```java
+// 默认构造函数
+LinkedList()
+
+// 创建一个LinkedList, 保护Collection中的全部元素
+LinkedList(Collection<? extends E> collection)
+```
+
+### 1.3.2 API
+
+```java
+//LinkedList的API
+boolean       add(E object)
+void          add(int location, E object)
+boolean       addAll(Collection<? extends E> collection)
+boolean       addAll(int location, Collection<? extends E> collection)
+void          addFirst(E object)
+void          addLast(E object)
+void          clear()
+Object        clone()
+boolean       contains(Object object)
+Iterator<E>   descendingIterator()
+E             element()
+E             get(int location)
+E             getFirst()
+E             getLast()
+int           indexOf(Object object)
+int           lastIndexOf(Object object)
+ListIterator<E>     listIterator(int location)
+boolean       offer(E o)
+boolean       offerFirst(E e)
+boolean       offerLast(E e)
+E             peek()
+E             peekFirst()
+E             peekLast()
+E             poll()
+E             pollFirst()
+E             pollLast()
+E             pop()
+void          push(E e)
+E             remove()
+E             remove(int location)
+boolean       remove(Object object)
+E             removeFirst()
+boolean       removeFirstOccurrence(Object o)
+E             removeLast()
+boolean       removeLastOccurrence(Object o)
+E             set(int location, E object)
+int           size()
+<T> T[]       toArray(T[] contents)
+Object[]     toArray()
+```
+
