@@ -12,13 +12,13 @@ public class TestGET {
         Session s = sf.openSession();
         s.beginTransaction();
         //调用session的get方法，需要传递类的对象
-        ProductEntity p =s.get(ProductEntity.class, 1);
-        //s.delete(p)
-        System.out.println("id=1的产品是" + p.getName());
+        ProductEntity p =s.get(ProductEntity.class, 2);
+        s.delete(p);
+        //System.out.println("id=1的产品是" + p.getName());
 
         //修改
-        p.setName("iphone1");
-        s.update(p);
+        //p.setName("iphone1");
+        //s.update(p);
 
         s.getTransaction().commit();
         s.close();

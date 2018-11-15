@@ -921,22 +921,18 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="232" parent="9" name="product_"/>
-    <column id="233" parent="232" name="id">
+    <table id="232" parent="9" name="category_"/>
+    <table id="233" parent="9" name="product_"/>
+    <column id="234" parent="232" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="234" parent="232" name="name">
+    <column id="235" parent="232" name="name">
       <Position>2</Position>
       <DataType>varchar(30)|0s</DataType>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="235" parent="232" name="price">
-      <Position>3</Position>
-      <DataType>float|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
     <key id="236" parent="232" name="PRIMARY">
@@ -944,5 +940,42 @@
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
+    <column id="237" parent="233" name="id">
+      <Position>1</Position>
+      <DataType>int(11)|0s</DataType>
+      <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="238" parent="233" name="name">
+      <Position>2</Position>
+      <DataType>varchar(30)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="239" parent="233" name="price">
+      <Position>3</Position>
+      <DataType>float|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="240" parent="233" name="cid">
+      <Position>4</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="241" parent="233" name="FKpwlo1eh59b6t1yp4kq7ih251n">
+      <ColNames>cid</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="242" parent="233" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>id</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="243" parent="233" name="FKpwlo1eh59b6t1yp4kq7ih251n">
+      <ColNames>cid</ColNames>
+      <RefSchemaName>test</RefSchemaName>
+      <RefTableName>category_</RefTableName>
+      <RefColNames>id</RefColNames>
+    </foreign-key>
   </database-model>
 </dataSource>

@@ -24,6 +24,10 @@
         - [7.3. 自然连接](#73-%E8%87%AA%E7%84%B6%E8%BF%9E%E6%8E%A5)
         - [7.4. 外连接](#74-%E5%A4%96%E8%BF%9E%E6%8E%A5)
         - [7.5. 子查询](#75-%E5%AD%90%E6%9F%A5%E8%AF%A2)
+        - [7.6. 组合查询](#76-%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2)
+    - [8. 功能](#8-%E5%8A%9F%E8%83%BD)
+        - [8.1. 触发器](#81-%E8%A7%A6%E5%8F%91%E5%99%A8)
+        - [8.2. 事物管理](#82-%E4%BA%8B%E7%89%A9%E7%AE%A1%E7%90%86)
 
 <!-- /TOC -->
 
@@ -383,3 +387,52 @@ SELECT cust_name, (SELECT COUNT(*)
 FROM Customers
 ORDER BY cust_name;
 ```
+
+### 7.6. 组合查询
+
+使用UNION来组合两个查询，如果第一个查询返回M行，第二个返回N行，组合查询返回M+N行。
+
+注：
+
+* 每个查询必须包含相同列，表达式和函数
+* 默认除去相同行，需要保留使用UNION ALL
+* 只能包含一个ORDER BY子句，且位于句尾
+  
+```sql
+SELECT col FROM mytable
+WHERE col = 1
+UNION 
+SELECT col FROM mytable
+WHERE col = 2;
+```
+
+## 8. 功能
+
+### 8.1. 触发器
+
+触发器表示在表执行以下语句时自动执行：DELETE、INSERT、UPDATE
+
+触发器必须指定在语句执行之前还是之后自动执行，之前执行使用 BEFORE 关键字，之后执行使用 AFTER 关键字。BEFORE 用于数据验证和净化，AFTER 用于审计跟踪，将修改记录到另外一张表中。
+
+```sql
+CREATE TRIGGER mytrigger AFTER INSERT ON mytable
+FOR EACH ROW SELECT NEW.col into @result;
+
+SELECT @result; -- 获取结果
+```
+
+注：
+
+* INSERT 触发器包含一个名为 NEW 的虚拟表
+* DELETE 触发器包含一个名为 OLD 的虚拟表，并且是只读的
+* UPDATE 触发器包含一个名为 NEW 和一个名为 OLD 的虚拟表，其中 NEW 是可以被修改的，而 OLD 是只读的
+* MySQL 不允许在触发器中使用 CALL 语句，也就是不能调用存储过程
+  
+### 8.2. 事物管理
+
+基本术语：
+
+* 事务（transaction）指一组 SQL 语句；
+* 回退（rollback）指撤销指定 SQL 语句的过程；
+* 提交（commit）指将未存储的 SQL 语句结果写入数据库表；
+* 保留点（savepoint）指事务处理中设置的临时占位符（placeholder），你可以对它发布回退（与回退整个事务处理不同）。
