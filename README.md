@@ -34,10 +34,10 @@
 
 ## 数据库 :floppy_disk:
 
-[SQLite](https://github.com/billreus/Konwledge/blob/master/MySQL/SQLite.md)
+[SQLite](https://github.com/billreus/Konwledge/blob/master/%E6%95%B0%E6%8D%AE%E5%BA%93/SQLite.md)
 
-[MySQL](https://github.com/billreus/Konwledge/blob/master/MySQL/MySQL.md)
+[MySQL](https://github.com/billreus/Konwledge/blob/master/%E6%95%B0%E6%8D%AE%E5%BA%93/MySQL.md)
 
-[SQL](https://github.com/billreus/Konwledge/blob/master/MySQL/SQL.md)
+[SQL](https://github.com/billreus/Konwledge/blob/master/%E6%95%B0%E6%8D%AE%E5%BA%93/SQL.md)
 
-[JDBC](https://github.com/billreus/Konwledge/blob/master/MySQL/JDBC.md)
+[JDBC](https://github.com/billreus/Konwledge/blob/master/%E6%95%B0%E6%8D%AE%E5%BA%93/JDBC.md)
