@@ -2,48 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58941b23-c852-4fce-b738-0df8621e9c41" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Struts/.idea/artifacts/Struts_war_exploded.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/Struts.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/antlr-2.7.6.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/commons-collections-3.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/commons-fileupload-1.2.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/commons-io-1.3.2.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/commons-logging-1.0.4.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/commons-logging-1.1.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/commons-logging-api-1.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/dom4j-1.6.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/ehcache-1.2.4.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/freemarker-2.3.16.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/hibernate-jpa-2.0-api-1.0.1.Final.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/hibernate3.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/javassist-3.12.0.GA.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/javassist-3.7.ga.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/jta-1.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/log4j-1.2.14.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/mysql-connector-java-5.0.8-bin.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/ognl-3.0.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/slf4j-api-1.6.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/struts2-core-2.2.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/lib/xwork-core-2.2.1.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/out/artifacts/Struts_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/out/artifacts/Struts_war_exploded/WEB-INF/web.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/out/artifacts/Struts_war_exploded/index.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/out/production/Struts/struts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/src/struts.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/web/WEB-INF/web.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts/web/index.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Struts2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts2/Struts2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Struts2/Struts2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts2/out/artifacts/Struts2_war_exploded/WEB-INF/classes/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Struts2/out/artifacts/Struts2_war_exploded/WEB-INF/classes/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts2/out/production/Struts2/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Struts2/out/production/Struts2/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Struts2/src/struts.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Struts2/src/struts.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../数据库/MySQL.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../数据库/MySQL.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../数据库/数据库原理.md" beforeDir="false" afterPath="$PROJECT_DIR$/../../数据库/数据库原理.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Java集合.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Java集合.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/commons-logging-1.2.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-aop-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-aspects-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-beans-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-context-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-context-support-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-core-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-expression-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-instrument-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-instrument-tomcat-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-jdbc-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-jms-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-messaging-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-orm-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-oxm-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-test-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/spring-tx-4.3.18.RELEASE.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/spring/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/spring/applicationContext.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/spring.iml" beforeDir="false" afterPath="$PROJECT_DIR$/spring.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/applicationContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/applicationContext.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -56,34 +36,36 @@
     <session id="-1121418623">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="4" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.49" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.54" value="1" />
-          <entry key="project.opened" value="2" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="3" />
+          <entry key="java" value="7" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="3" />
+          <entry key="JAVA" value="7" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="73" />
-          <entry key="xml" value="82" />
+          <entry key="java" value="372" />
+          <entry key="xml" value="147" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="73" />
-          <entry key="XML" value="82" />
+          <entry key="JAVA" value="372" />
+          <entry key="XML" value="147" />
         </counts>
       </usages-collector>
     </session>
@@ -91,38 +73,32 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/basic/Category.java">
+        <entry file="file://$PROJECT_DIR$/src/applicationContext.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="216">
-              <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
-              <folding>
-                <element signature="e#63#64#0" expanded="true" />
-                <element signature="e#88#89#0" expanded="true" />
-                <element signature="e#120#121#0" expanded="true" />
-                <element signature="e#148#149#0" expanded="true" />
-                <element signature="e#178#179#0" expanded="true" />
-                <element signature="e#205#206#0" expanded="true" />
-                <element signature="e#244#245#0" expanded="true" />
-                <element signature="e#276#277#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="651">
+              <caret line="43" column="47" selection-start-line="43" selection-start-column="47" selection-end-line="43" selection-end-column="47" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/applicationContext.xml">
+        <entry file="file://$PROJECT_DIR$/src/basic/ProductService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="675">
-              <caret line="25" column="8" lean-forward="true" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+            <state relative-caret-position="108">
+              <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+              <folding>
+                <element signature="e#77#78#0" expanded="true" />
+                <element signature="e#128#129#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Test/TestSpring.java">
+        <entry file="file://$PROJECT_DIR$/src/Test/TestSpringAOP.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="18" column="40" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
+            <state relative-caret-position="243">
+              <caret line="9" column="46" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -131,10 +107,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/basic/Product.java">
+        <entry file="file://$PROJECT_DIR$/src/aspect/LoggerAspect.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="2" column="62" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="62" />
+            <state relative-caret-position="297">
+              <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -156,8 +135,11 @@
       <list>
         <option value="$PROJECT_DIR$/src/basic/Category.java" />
         <option value="$PROJECT_DIR$/src/Test/TestSpring.java" />
-        <option value="$PROJECT_DIR$/src/applicationContext.xml" />
         <option value="$PROJECT_DIR$/src/basic/Product.java" />
+        <option value="$PROJECT_DIR$/src/Test/TestSpringAOP.java" />
+        <option value="$PROJECT_DIR$/src/aspect/LoggerAspect.java" />
+        <option value="$PROJECT_DIR$/src/applicationContext.xml" />
+        <option value="$PROJECT_DIR$/src/basic/ProductService.java" />
       </list>
     </option>
   </component>
@@ -168,10 +150,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="386" />
-    <option name="y" value="-10" />
-    <option name="width" value="1029" />
-    <option name="height" value="867" />
+    <option name="x" value="502" />
+    <option name="y" value="-15" />
+    <option name="width" value="801" />
+    <option name="height" value="803" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -199,18 +181,24 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="basic" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="spring" type="b2602c69:ProjectViewProjectNode" />
+              <item name="spring" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="Test" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542368781040" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542445695213" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Global Libraries" />
@@ -229,7 +217,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.TestSpringAOP">
     <configuration name="TestSpring" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Test.TestSpring" />
       <module name="spring" />
@@ -243,8 +231,26 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestSpringAOP" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test.TestSpringAOP" />
+      <module name="spring" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="Test.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.TestSpring" />
+      <item itemvalue="Application.TestSpringAOP" />
+    </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.TestSpringAOP" />
         <item itemvalue="Application.TestSpring" />
       </list>
     </recent_temporary>
@@ -261,16 +267,18 @@
       <updated>1542355818455</updated>
       <workItem from="1542355822226" duration="3837000" />
       <workItem from="1542374604876" duration="774000" />
+      <workItem from="1542437808921" duration="764000" />
+      <workItem from="1542439104707" duration="6962000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4611000" />
+    <option name="totallyTimeSpent" value="12337000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15745501" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.2667095" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -279,7 +287,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.27530363" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.37381917" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -325,9 +333,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/basic/Product.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="62" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/Test/TestSpring.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
+        <state relative-caret-position="486">
           <caret line="18" column="40" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -335,31 +350,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/basic/Product.java">
+    <entry file="file://$PROJECT_DIR$/src/Test/TestSpringAOP.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="2" column="62" selection-start-line="2" selection-start-column="62" selection-end-line="2" selection-end-column="62" />
+        <state relative-caret-position="243">
+          <caret line="9" column="46" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
           <folding>
-            <element signature="e#138#139#0" expanded="true" />
-            <element signature="e#163#164#0" expanded="true" />
-            <element signature="e#195#196#0" expanded="true" />
-            <element signature="e#223#224#0" expanded="true" />
-            <element signature="e#253#254#0" expanded="true" />
-            <element signature="e#280#281#0" expanded="true" />
-            <element signature="e#319#320#0" expanded="true" />
-            <element signature="e#351#352#0" expanded="true" />
-            <element signature="e#387#388#0" expanded="true" />
-            <element signature="e#418#419#0" expanded="true" />
-            <element signature="e#467#468#0" expanded="true" />
-            <element signature="e#507#508#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/aspect/LoggerAspect.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/applicationContext.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="675">
-          <caret line="25" column="8" lean-forward="true" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
+        <state relative-caret-position="651">
+          <caret line="43" column="47" selection-start-line="43" selection-start-column="47" selection-end-line="43" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/basic/ProductService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" column="21" selection-start-line="4" selection-start-column="21" selection-end-line="4" selection-end-column="21" />
+          <folding>
+            <element signature="e#77#78#0" expanded="true" />
+            <element signature="e#128#129#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

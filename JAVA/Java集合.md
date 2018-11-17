@@ -24,6 +24,13 @@
         - [1.3.4 LinkedList源码](#134-linkedlist%E6%BA%90%E7%A0%81)
         - [1.3.5 LinkedList遍历](#135-linkedlist%E9%81%8D%E5%8E%86)
         - [1.3.6 LinkedList与ArrayList区别](#136-linkedlist%E4%B8%8Earraylist%E5%8C%BA%E5%88%AB)
+    - [1.4. Vector](#14-vector)
+        - [1.4.1. 构造函数](#141-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0)
+        - [1.4.2. API](#142-api)
+        - [1.4.3. 数据结构](#143-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
+        - [1.4.4. 源码](#144-%E6%BA%90%E7%A0%81)
+        - [1.4.5. 遍历方式](#145-%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F)
+        - [1.4.6. ArrayList和vector的区别](#146-arraylist%E5%92%8Cvector%E7%9A%84%E5%8C%BA%E5%88%AB)
 
 <!-- /TOC -->
 
@@ -1253,3 +1260,612 @@ try {
 3. ArrayList的空间浪费主要体现在在list列表的结尾预留一定的容量空间，而LinkedList的空间花费则体现在它的每一个元素都需要消耗相当的空间，就存储密度来说，ArrayList是优于LinkedList的。
 
 总结：，当操作是在一列数据的后面添加数据而不是在前面或中间,并且需要随机地访问其中的元素时,使用ArrayList会提供比较好的性能，当你的操作是在一列数据的前面或中间添加或删除数据,并且按照顺序访问其中的元素时,就应该使用LinkedList了。
+
+## 1.4. Vector
+
+Vector是矢量矩阵，继承于AbstractList，实现了List。所以，它是一个队列，支持相关添加、删除、修改、遍历。
+
+Vector实现了RandmoAccess接口，即提供了随机访问功能。
+
+Vector 实现了Cloneable接口，即实现clone()函数。它能被克隆。
+
+和ArrayList不同，Vector中的操作是线程安全的。
+
+### 1.4.1. 构造函数
+
+```Java
+// 默认构造函数
+Vector()
+
+// capacity是Vector的默认容量大小。当由于增加数据导致容量增加时，每次容量会增加一倍。
+Vector(int capacity)
+
+// capacity是Vector的默认容量大小，capacityIncrement是每次Vector容量增加时的增量值。
+Vector(int capacity, int capacityIncrement)
+
+// 创建一个包含collection的Vector
+Vector(Collection<? extends E> collection)
+```
+
+### 1.4.2. API
+
+```java
+synchronized boolean        add(E object)
+             void           add(int location, E object)
+synchronized boolean        addAll(Collection<? extends E> collection)
+synchronized boolean        addAll(int location, Collection<? extends E> collection)
+synchronized void           addElement(E object)
+synchronized int            capacity()
+             void           clear()
+synchronized Object         clone()
+             boolean        contains(Object object)
+synchronized boolean        containsAll(Collection<?> collection)
+synchronized void           copyInto(Object[] elements)
+synchronized E              elementAt(int location)
+             Enumeration<E> elements()
+synchronized void           ensureCapacity(int minimumCapacity)
+synchronized boolean        equals(Object object)
+synchronized E              firstElement()
+             E              get(int location)
+synchronized int            hashCode()
+synchronized int            indexOf(Object object, int location)
+             int            indexOf(Object object)
+synchronized void           insertElementAt(E object, int location)
+synchronized boolean        isEmpty()
+synchronized E              lastElement()
+synchronized int            lastIndexOf(Object object, int location)
+synchronized int            lastIndexOf(Object object)
+synchronized E              remove(int location)
+             boolean        remove(Object object)
+synchronized boolean        removeAll(Collection<?> collection)
+synchronized void           removeAllElements()
+synchronized boolean        removeElement(Object object)
+synchronized void           removeElementAt(int location)
+synchronized boolean        retainAll(Collection<?> collection)
+synchronized E              set(int location, E object)
+synchronized void           setElementAt(E object, int location)
+synchronized void           setSize(int length)
+synchronized int            size()
+synchronized List<E>        subList(int start, int end)
+synchronized <T> T[]        toArray(T[] contents)
+synchronized Object[]       toArray()
+synchronized String         toString()
+synchronized void           trimToSize()
+```
+
+### 1.4.3. 数据结构
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/vector.jpg)
+
+Vector的数据结构与ArrayList类似，它包含了3个成员变量：elementData , elementCount， capacityIncrement。
+
+1. elementData 是"Object[]类型的数组"，它保存了添加到Vector中的元素。elementData是个动态数组，如果初始化Vector时，没指定动态数组的大小，则使用默认大小10。随着Vector中元素的增加，Vector的容量也会动态增长，capacityIncrement是与容量增长相关的增长系数，具体的增长方式，请参考源码分析中的ensureCapacity()函数。
+
+2. elementCount 是动态数组的实际大小。
+
+3. capacityIncrement 是动态数组的增长系数。如果在创建Vector时，指定了capacityIncrement的大小；则，每次当Vector中动态数组容量增加时，增加的大小都是capacityIncrement。如果没有指定增长系数，每次容量大小增加一倍。
+
+### 1.4.4. 源码
+
+```java
+package java.util;
+
+public class Vector<E>
+    extends AbstractList<E>
+    implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+{
+   
+    // 保存Vector中数据的数组
+    protected Object[] elementData;
+
+    // 实际数据的数量
+    protected int elementCount;
+
+    // 容量增长系数
+    protected int capacityIncrement;
+
+    // Vector的序列版本号
+    private static final long serialVersionUID = -2767605614048989439L;
+
+    // Vector构造函数。默认容量是10。
+    public Vector() {
+        this(10);
+    }
+
+    // 指定Vector容量大小的构造函数
+    public Vector(int initialCapacity) {
+        this(initialCapacity, 0);
+    }
+
+    // 指定Vector"容量大小"和"增长系数"的构造函数
+    public Vector(int initialCapacity, int capacityIncrement) {
+        super();
+        if (initialCapacity < 0)
+            throw new IllegalArgumentException("Illegal Capacity: "+
+                                               initialCapacity);
+        // 新建一个数组，数组容量是initialCapacity
+        this.elementData = new Object[initialCapacity];
+        // 设置容量增长系数
+        this.capacityIncrement = capacityIncrement;
+    }
+
+    // 指定集合的Vector构造函数。
+    public Vector(Collection<? extends E> c) {
+        // 获取“集合(c)”的数组，并将其赋值给elementData
+        elementData = c.toArray();
+        // 设置数组长度
+        elementCount = elementData.length;
+        // c.toArray might (incorrectly) not return Object[] (see 6260652)
+        if (elementData.getClass() != Object[].class)
+            elementData = Arrays.copyOf(elementData, elementCount, Object[].class);
+    }
+
+    // 将数组Vector的全部元素都拷贝到数组anArray中
+    public synchronized void copyInto(Object[] anArray) {
+        System.arraycopy(elementData, 0, anArray, 0, elementCount);
+    }
+
+    // 将当前容量值设为 =实际元素个数
+    public synchronized void trimToSize() {
+        modCount++;
+        int oldCapacity = elementData.length;
+        if (elementCount < oldCapacity) {
+            elementData = Arrays.copyOf(elementData, elementCount);
+        }
+    }
+
+    // 确认“Vector容量”的帮助函数
+    private void ensureCapacityHelper(int minCapacity) {
+        int oldCapacity = elementData.length;
+        // 当Vector的容量不足以容纳当前的全部元素，增加容量大小。
+        // 若 容量增量系数>0(即capacityIncrement>0)，则将容量增大当capacityIncrement
+        // 否则，将容量增大一倍。
+        if (minCapacity > oldCapacity) {
+            Object[] oldData = elementData;
+            int newCapacity = (capacityIncrement > 0) ?
+                (oldCapacity + capacityIncrement) : (oldCapacity * 2);
+            if (newCapacity < minCapacity) {
+                newCapacity = minCapacity;
+            }
+            elementData = Arrays.copyOf(elementData, newCapacity);
+        }
+    }
+
+    // 确定Vector的容量。
+    public synchronized void ensureCapacity(int minCapacity) {
+        // 将Vector的改变统计数+1
+        modCount++;
+        ensureCapacityHelper(minCapacity);
+    }
+
+    // 设置容量值为 newSize
+    public synchronized void setSize(int newSize) {
+        modCount++;
+        if (newSize > elementCount) {
+            // 若 "newSize 大于 Vector容量"，则调整Vector的大小。
+            ensureCapacityHelper(newSize);
+        } else {
+            // 若 "newSize 小于/等于 Vector容量"，则将newSize位置开始的元素都设置为null
+            for (int i = newSize ; i < elementCount ; i++) {
+                elementData[i] = null;
+            }
+        }
+        elementCount = newSize;
+    }
+
+    // 返回“Vector的总的容量”
+    public synchronized int capacity() {
+        return elementData.length;
+    }
+
+    // 返回“Vector的实际大小”，即Vector中元素个数
+    public synchronized int size() {
+        return elementCount;
+    }
+
+    // 判断Vector是否为空
+    public synchronized boolean isEmpty() {
+        return elementCount == 0;
+    }
+
+    // 返回“Vector中全部元素对应的Enumeration”
+    public Enumeration<E> elements() {
+        // 通过匿名类实现Enumeration
+        return new Enumeration<E>() {
+            int count = 0;
+
+            // 是否存在下一个元素
+            public boolean hasMoreElements() {
+                return count < elementCount;
+            }
+
+            // 获取下一个元素
+            public E nextElement() {
+                synchronized (Vector.this) {
+                    if (count < elementCount) {
+                        return (E)elementData[count++];
+                    }
+                }
+                throw new NoSuchElementException("Vector Enumeration");
+            }
+        };
+    }
+
+    // 返回Vector中是否包含对象(o)
+    public boolean contains(Object o) {
+        return indexOf(o, 0) >= 0;
+    }
+
+
+    // 从index位置开始向后查找元素(o)。
+    // 若找到，则返回元素的索引值；否则，返回-1
+    public synchronized int indexOf(Object o, int index) {
+        if (o == null) {
+            // 若查找元素为null，则正向找出null元素，并返回它对应的序号
+            for (int i = index ; i < elementCount ; i++)
+            if (elementData[i]==null)
+                return i;
+        } else {
+            // 若查找元素不为null，则正向找出该元素，并返回它对应的序号
+            for (int i = index ; i < elementCount ; i++)
+            if (o.equals(elementData[i]))
+                return i;
+        }
+        return -1;
+    }
+
+    // 查找并返回元素(o)在Vector中的索引值
+    public int indexOf(Object o) {
+        return indexOf(o, 0);
+    }
+
+    // 从后向前查找元素(o)。并返回元素的索引
+    public synchronized int lastIndexOf(Object o) {
+        return lastIndexOf(o, elementCount-1);
+    }
+
+    // 从后向前查找元素(o)。开始位置是从前向后的第index个数；
+    // 若找到，则返回元素的“索引值”；否则，返回-1。
+    public synchronized int lastIndexOf(Object o, int index) {
+        if (index >= elementCount)
+            throw new IndexOutOfBoundsException(index + " >= "+ elementCount);
+
+        if (o == null) {
+            // 若查找元素为null，则反向找出null元素，并返回它对应的序号
+            for (int i = index; i >= 0; i--)
+            if (elementData[i]==null)
+                return i;
+        } else {
+            // 若查找元素不为null，则反向找出该元素，并返回它对应的序号
+            for (int i = index; i >= 0; i--)
+            if (o.equals(elementData[i]))
+                return i;
+        }
+        return -1;
+    }
+
+    // 返回Vector中index位置的元素。
+    // 若index月结，则抛出异常
+    public synchronized E elementAt(int index) {
+        if (index >= elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index + " >= " + elementCount);
+        }
+
+        return (E)elementData[index];
+    }
+
+    // 获取Vector中的第一个元素。
+    // 若失败，则抛出异常！
+    public synchronized E firstElement() {
+        if (elementCount == 0) {
+            throw new NoSuchElementException();
+        }
+        return (E)elementData[0];
+    }
+
+    // 获取Vector中的最后一个元素。
+    // 若失败，则抛出异常！
+    public synchronized E lastElement() {
+        if (elementCount == 0) {
+            throw new NoSuchElementException();
+        }
+        return (E)elementData[elementCount - 1];
+    }
+
+    // 设置index位置的元素值为obj
+    public synchronized void setElementAt(E obj, int index) {
+        if (index >= elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index + " >= " +
+                                 elementCount);
+        }
+        elementData[index] = obj;
+    }
+
+    // 删除index位置的元素
+    public synchronized void removeElementAt(int index) {
+        modCount++;
+        if (index >= elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index + " >= " +
+                                 elementCount);
+        } else if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException(index);
+        }
+
+        int j = elementCount - index - 1;
+        if (j > 0) {
+            System.arraycopy(elementData, index + 1, elementData, index, j);
+        }
+        elementCount--;
+        elementData[elementCount] = null; /* to let gc do its work */
+    }
+
+    // 在index位置处插入元素(obj)
+    public synchronized void insertElementAt(E obj, int index) {
+        modCount++;
+        if (index > elementCount) {
+            throw new ArrayIndexOutOfBoundsException(index
+                                 + " > " + elementCount);
+        }
+        ensureCapacityHelper(elementCount + 1);
+        System.arraycopy(elementData, index, elementData, index + 1, elementCount - index);
+        elementData[index] = obj;
+        elementCount++;
+    }
+
+    // 将“元素obj”添加到Vector末尾
+    public synchronized void addElement(E obj) {
+        modCount++;
+        ensureCapacityHelper(elementCount + 1);
+        elementData[elementCount++] = obj;
+    }
+
+    // 在Vector中查找并删除元素obj。
+    // 成功的话，返回true；否则，返回false。
+    public synchronized boolean removeElement(Object obj) {
+        modCount++;
+        int i = indexOf(obj);
+        if (i >= 0) {
+            removeElementAt(i);
+            return true;
+        }
+        return false;
+    }
+
+    // 删除Vector中的全部元素
+    public synchronized void removeAllElements() {
+        modCount++;
+        // 将Vector中的全部元素设为null
+        for (int i = 0; i < elementCount; i++)
+            elementData[i] = null;
+
+        elementCount = 0;
+    }
+
+    // 克隆函数
+    public synchronized Object clone() {
+        try {
+            Vector<E> v = (Vector<E>) super.clone();
+            // 将当前Vector的全部元素拷贝到v中
+            v.elementData = Arrays.copyOf(elementData, elementCount);
+            v.modCount = 0;
+            return v;
+        } catch (CloneNotSupportedException e) {
+            // this shouldn't happen, since we are Cloneable
+            throw new InternalError();
+        }
+    }
+
+    // 返回Object数组
+    public synchronized Object[] toArray() {
+        return Arrays.copyOf(elementData, elementCount);
+    }
+
+    // 返回Vector的模板数组。所谓模板数组，即可以将T设为任意的数据类型
+    public synchronized <T> T[] toArray(T[] a) {
+        // 若数组a的大小 < Vector的元素个数；
+        // 则新建一个T[]数组，数组大小是“Vector的元素个数”，并将“Vector”全部拷贝到新数组中
+        if (a.length < elementCount)
+            return (T[]) Arrays.copyOf(elementData, elementCount, a.getClass());
+
+        // 若数组a的大小 >= Vector的元素个数；
+        // 则将Vector的全部元素都拷贝到数组a中。
+    System.arraycopy(elementData, 0, a, 0, elementCount);
+
+        if (a.length > elementCount)
+            a[elementCount] = null;
+
+        return a;
+    }
+
+    // 获取index位置的元素
+    public synchronized E get(int index) {
+        if (index >= elementCount)
+            throw new ArrayIndexOutOfBoundsException(index);
+
+        return (E)elementData[index];
+    }
+
+    // 设置index位置的值为element。并返回index位置的原始值
+    public synchronized E set(int index, E element) {
+        if (index >= elementCount)
+            throw new ArrayIndexOutOfBoundsException(index);
+
+        Object oldValue = elementData[index];
+        elementData[index] = element;
+        return (E)oldValue;
+    }
+
+    // 将“元素e”添加到Vector最后。
+    public synchronized boolean add(E e) {
+        modCount++;
+        ensureCapacityHelper(elementCount + 1);
+        elementData[elementCount++] = e;
+        return true;
+    }
+
+    // 删除Vector中的元素o
+    public boolean remove(Object o) {
+        return removeElement(o);
+    }
+
+    // 在index位置添加元素element
+    public void add(int index, E element) {
+        insertElementAt(element, index);
+    }
+
+    // 删除index位置的元素，并返回index位置的原始值
+    public synchronized E remove(int index) {
+        modCount++;
+        if (index >= elementCount)
+            throw new ArrayIndexOutOfBoundsException(index);
+        Object oldValue = elementData[index];
+
+        int numMoved = elementCount - index - 1;
+        if (numMoved > 0)
+            System.arraycopy(elementData, index+1, elementData, index,
+                     numMoved);
+        elementData[--elementCount] = null; // Let gc do its work
+
+        return (E)oldValue;
+    }
+
+    // 清空Vector
+    public void clear() {
+        removeAllElements();
+    }
+
+    // 返回Vector是否包含集合c
+    public synchronized boolean containsAll(Collection<?> c) {
+        return super.containsAll(c);
+    }
+
+    // 将集合c添加到Vector中
+    public synchronized boolean addAll(Collection<? extends E> c) {
+        modCount++;
+        Object[] a = c.toArray();
+        int numNew = a.length;
+        ensureCapacityHelper(elementCount + numNew);
+        // 将集合c的全部元素拷贝到数组elementData中
+        System.arraycopy(a, 0, elementData, elementCount, numNew);
+        elementCount += numNew;
+        return numNew != 0;
+    }
+
+    // 删除集合c的全部元素
+    public synchronized boolean removeAll(Collection<?> c) {
+        return super.removeAll(c);
+    }
+
+    // 删除“非集合c中的元素”
+    public synchronized boolean retainAll(Collection<?> c)  {
+        return super.retainAll(c);
+    }
+
+    // 从index位置开始，将集合c添加到Vector中
+    public synchronized boolean addAll(int index, Collection<? extends E> c) {
+        modCount++;
+        if (index < 0 || index > elementCount)
+            throw new ArrayIndexOutOfBoundsException(index);
+
+        Object[] a = c.toArray();
+        int numNew = a.length;
+        ensureCapacityHelper(elementCount + numNew);
+
+        int numMoved = elementCount - index;
+        if (numMoved > 0)
+        System.arraycopy(elementData, index, elementData, index + numNew, numMoved);
+
+        System.arraycopy(a, 0, elementData, index, numNew);
+        elementCount += numNew;
+        return numNew != 0;
+    }
+
+    // 返回两个对象是否相等
+    public synchronized boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    // 计算哈希值
+    public synchronized int hashCode() {
+        return super.hashCode();
+    }
+
+    // 调用父类的toString()
+    public synchronized String toString() {
+        return super.toString();
+    }
+
+    // 获取Vector中fromIndex(包括)到toIndex(不包括)的子集
+    public synchronized List<E> subList(int fromIndex, int toIndex) {
+        return Collections.synchronizedList(super.subList(fromIndex, toIndex), this);
+    }
+
+    // 删除Vector中fromIndex到toIndex的元素
+    protected synchronized void removeRange(int fromIndex, int toIndex) {
+        modCount++;
+        int numMoved = elementCount - toIndex;
+        System.arraycopy(elementData, toIndex, elementData, fromIndex,
+                         numMoved);
+
+        // Let gc do its work
+        int newElementCount = elementCount - (toIndex-fromIndex);
+        while (elementCount != newElementCount)
+            elementData[--elementCount] = null;
+    }
+
+    // java.io.Serializable的写入函数
+    private synchronized void writeObject(java.io.ObjectOutputStream s)
+        throws java.io.IOException {
+        s.defaultWriteObject();
+    }
+}
+```
+
+### 1.4.5. 遍历方式
+
+Vecort支持4种遍历方式：迭代器，随机访问，for循环，Enumeration遍历。速度最快的是随机访问。
+
+迭代器：
+
+```java
+Integer value = null;
+int size= vec.size();
+for (int i=0; i<size; i++){
+    value = (Integer)vec.get(i);
+}
+```
+
+随机访问:
+
+```java
+Integer value = null;
+int size = vec.size();
+for (int i=0; i<size; i++){
+    value = (Integer)vec.get(i);
+}
+```
+
+for循环：
+
+```java
+Integer value = null;
+for (Integer integ:vec){
+    value = integ;
+}
+```
+
+Enumeration遍历:
+
+```java
+Integer value = null;
+Enumeration enu = vec.elements();
+while (enu.hasMoreElements()) {
+    value = (Integer)enu.nextElement();
+}
+```
+
+### 1.4.6. ArrayList和vector的区别
+
+1. Vector的方法都是同步的(Synchronized),是线程安全的(thread-safe)，而ArrayList的方法不是，由于线程的同步必然要影响性能，因此,ArrayList的性能比Vector好。 
+2. 当Vector或ArrayList中的元素超过它的初始大小时,Vector会将它的容量翻倍,而ArrayList只增加50%的大小，这样,ArrayList就有利于节约内存空间。
+

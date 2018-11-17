@@ -22,5 +22,25 @@
         <property name="name" value="product 1"/>
     <!--    <property name="category" ref="c" />  -->
     </bean>
+    <!--
+    <bean name="s" class="basic.ProductService">
+    </bean>
 
+    <bean id="loggerAspect" class="aspect.LoggerAspect"/> 声明日志切面
+    -->
+    <!--
+    <aop:config>
+        <aop:pointcut id="loggerCutpoint"
+                      expression=
+                              "execution(* basic.ProductService.*(..)) "/> 业务对象与辅助功能编织
+
+        <aop:aspect id="logAspect" ref="loggerAspect">
+            <aop:around pointcut-ref="loggerCutpoint" method="log"/>
+        </aop:aspect>
+    </aop:config>
+    -->
+
+    <context:component-scan base-package="aspect"/>
+    <context:component-scan base-package="basic"/>
+    <aop:aspectj-autoproxy/>
 </beans>
