@@ -1,6 +1,7 @@
 <!-- TOC -->
 
-- [1 Java集合](#1-java%E9%9B%86%E5%90%88)
+- [Java集合](#java%E9%9B%86%E5%90%88)
+- [1. List](#1-list)
     - [1.1 Collection](#11-collection)
         - [1.1.1 List](#111-list)
         - [1.1.2 Set](#112-set)
@@ -31,11 +32,15 @@
         - [1.4.4. 源码](#144-%E6%BA%90%E7%A0%81)
         - [1.4.5. 遍历方式](#145-%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F)
         - [1.4.6. ArrayList和vector的区别](#146-arraylist%E5%92%8Cvector%E7%9A%84%E5%8C%BA%E5%88%AB)
+    - [1.5. Stack](#15-stack)
+        - [1.5.1. 构造函数和API](#151-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8Capi)
+        - [1.5.2. 源码](#152-%E6%BA%90%E7%A0%81)
+        - [1.5.3. 示例](#153-%E7%A4%BA%E4%BE%8B)
 
 <!-- /TOC -->
 
 
-# 1 Java集合
+# Java集合
 
 Java集合包含了常用的数据结构：集合、链表、队列、栈、数组、映射等。Java集合工具包位置是java.util.*
 
@@ -44,6 +49,8 @@ Java集合包含了常用的数据结构：集合、链表、队列、栈、数�
 Java集合主要可以分为四个部分：List列表、Set集合、Map映射、工具类(Iterator迭代器、Enumeration枚举类、Arrays和Collections)。
 
 主要实现的接口是Collection和Map。
+
+# 1. List
 
 ## 1.1 Collection
 
@@ -1869,3 +1876,157 @@ while (enu.hasMoreElements()) {
 1. Vector的方法都是同步的(Synchronized),是线程安全的(thread-safe)，而ArrayList的方法不是，由于线程的同步必然要影响性能，因此,ArrayList的性能比Vector好。 
 2. 当Vector或ArrayList中的元素超过它的初始大小时,Vector会将它的容量翻倍,而ArrayList只增加50%的大小，这样,ArrayList就有利于节约内存空间。
 
+## 1.5. Stack
+
+Stack是栈，满足先进后出，java中stack继承于Vector，由于Vector是通过数组实现的，这就意味着，Stack也是通过数组实现的，而非链表。当然，我们也可以将LinkedList当作栈来使用。
+
+Stack与Collection的关系如下：
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/stack.jpg)
+
+### 1.5.1. 构造函数和API
+
+Stack只有一个默认构造函数：`Stack()`
+
+Stack由于继承Vector，因此包含Vector全部的API，且还有如下API:
+
+```JAVA
+             boolean       empty()
+synchronized E             peek()
+synchronized E             pop()
+             E             push(E object)
+synchronized int           search(Object o)
+```
+
+### 1.5.2. 源码
+
+```java
+package java.util;
+
+public
+class Stack<E> extends Vector<E> {
+    // 版本ID。
+    private static final long serialVersionUID = 1224463164541339165L;
+
+    // 构造函数
+    public Stack() {
+    }
+
+    // push函数：将元素存入栈顶
+    public E push(E item) {
+        // 将元素存入栈顶。
+        // addElement()的实现在Vector.java中
+        addElement(item);
+
+        return item;
+    }
+
+    // pop函数：返回栈顶元素，并将其从栈中删除
+    public synchronized E pop() {
+        E    obj;
+        int    len = size();
+
+        obj = peek();
+        // 删除栈顶元素，removeElementAt()的实现在Vector.java中
+        removeElementAt(len - 1);
+
+        return obj;
+    }
+
+    // peek函数：返回栈顶元素，不执行删除操作
+    public synchronized E peek() {
+        int    len = size();
+
+        if (len == 0)
+            throw new EmptyStackException();
+        // 返回栈顶元素，elementAt()具体实现在Vector.java中
+        return elementAt(len - 1);
+    }
+
+    // 栈是否为空
+    public boolean empty() {
+        return size() == 0;
+    }
+
+    // 查找“元素o”在栈中的位置：由栈底向栈顶方向数
+    public synchronized int search(Object o) {
+        // 获取元素索引，elementAt()具体实现在Vector.java中
+        int i = lastIndexOf(o);
+
+        if (i >= 0) {
+            return size() - i;
+        }
+        return -1;
+    }
+}
+```
+
+Stack实际上也是通过数组去实现的：
+
+1. 执行push时(即，将元素推入栈中)，是通过将元素追加的数组的末尾中。
+2. 执行peek时(即，取出栈顶元素，不执行删除)，是返回数组末尾的元素。
+3. 执行pop时(即，取出栈顶元素，并将该元素从栈中删除)，是取出数组末尾的元素，然后将该元素从数组中删除。
+
+### 1.5.3. 示例
+
+```java
+import java.util.Stack;
+import java.util.Iterator;
+import java.util.List;
+
+public class StackTest {
+
+    public static void main(String[] args) {
+        Stack stack = new Stack();
+        // 将1,2,3,4,5添加到栈中
+        for(int i=1; i<6; i++) {
+            stack.push(String.valueOf(i));
+        }
+
+        // 遍历并打印出该栈
+        iteratorThroughRandomAccess(stack) ;
+
+        // 查找“2”在栈中的位置，并输出
+        int pos = stack.search("2");
+        System.out.println("the postion of 2 is:"+pos);
+
+        // pop返回栈顶元素将其删除之后，遍历栈
+        stack.pop();
+        iteratorThroughRandomAccess(stack) ;
+
+        // peek栈顶元素之后，遍历栈
+        String val = (String)stack.peek();
+        System.out.println("peek:"+val);
+        iteratorThroughRandomAccess(stack) ;
+
+        // 通过Iterator去遍历Stack
+        iteratorThroughIterator(stack) ;
+    }
+
+    /**
+     * 通过快速访问遍历Stack
+     */
+    public static void iteratorThroughRandomAccess(List list) {
+        String val = null;
+        for (int i=0; i<list.size(); i++) {
+            val = (String)list.get(i);
+            System.out.print(val+" ");
+        }
+        System.out.println();
+    }
+
+    /**
+     * 通过迭代器遍历Stack
+     */
+    public static void iteratorThroughIterator(List list) {
+
+        String val = null;
+        for(Iterator iter = list.iterator(); iter.hasNext(); ) {
+            val = (String)iter.next();
+            System.out.print(val+" ");
+        }
+        System.out.println();
+    }
+
+}
+```

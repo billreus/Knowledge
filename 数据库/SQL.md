@@ -436,3 +436,7 @@ SELECT @result; -- 获取结果
 * 回退（rollback）指撤销指定 SQL 语句的过程；
 * 提交（commit）指将未存储的 SQL 语句结果写入数据库表；
 * 保留点（savepoint）指事务处理中设置的临时占位符（placeholder），你可以对它发布回退（与回退整个事务处理不同）。
+
+## 9. 数值计算
+
+常用的计算有：SIN(), COS(), TAN(), ABS(), SQRT(), MOD()余数, EXP()指数, PI()圆周率, RAND()随机数。
