@@ -36,6 +36,12 @@
         - [1.5.1. 构造函数和API](#151-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0%E5%92%8Capi)
         - [1.5.2. 源码](#152-%E6%BA%90%E7%A0%81)
         - [1.5.3. 示例](#153-%E7%A4%BA%E4%BE%8B)
+    - [1.6. List总结](#16-list%E6%80%BB%E7%BB%93)
+        - [1.6.1 使用场景](#161-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF)
+        - [1.6.2. LinkedList和ArrayList性能分析](#162-linkedlist%E5%92%8Carraylist%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90)
+            - [插入，删除](#%E6%8F%92%E5%85%A5%E5%88%A0%E9%99%A4)
+            - [随机访问](#%E9%9A%8F%E6%9C%BA%E8%AE%BF%E9%97%AE)
+        - [1.6.3 Vector和ArrayList性能分析](#163-vector%E5%92%8Carraylist%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90)
 
 <!-- /TOC -->
 
@@ -2030,3 +2036,235 @@ public class StackTest {
 
 }
 ```
+
+## 1.6. List总结
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/list.jpg)
+
+List是一个接口，继承于Collection的接口，代表着是一个有序队列。
+
+AbstractList实现List接口中除size()、get(int location)之外的函数。
+
+AbstractSequentialList 实现了“链表中，根据index索引值操作链表的全部函数”。
+
+ArrayList, LinkedList, Vector, Stack是List的4个实现类：
+
+1. ArrayList 是一个数组队列，相当于动态数组。它由数组实现，随机访问效率高，随机插入、随机删除效率低。
+2. LinkedList 是一个双向链表。它也可以被当作堆栈、队列或双端队列进行操作。LinkedList随机访问速度慢，但插入、删除效率高。
+3. Vector 是矢量队列，和ArrayList一样，它也是一个动态数组，由数组实现。但是ArrayList是非线程安全的，而Vector是线程安全的。
+4. Stack 是栈，它继承于Vector。它的特性是：先进后出(FILO, First In Last Out)。
+
+### 1.6.1 使用场景
+
+如果涉及到“栈”、“队列”、“链表”等操作，应该考虑用List，具体的选择哪个List，根据下面的标准来取舍。
+
+* 对于需要快速插入，删除元素，应该使用LinkedList。
+* 对于需要快速随机访问元素，应该使用ArrayList。
+* 对于“单线程环境” 或者 “多线程环境，但List仅仅只会被单个线程操作”，此时应该使用非同步的类(如ArrayList)。
+* 对于“多线程环境，且List可能同时被多个线程操作”，此时，应该使用同步的类(如Vector)。
+
+### 1.6.2. LinkedList和ArrayList性能分析
+
+#### 插入，删除
+
+对于插入元素，LinkedList定位插入元素代码如下：
+
+```java
+// 在index前添加节点，且节点的值为element
+public void add(int index, E element) {
+    addBefore(element, (index==size ? header : entry(index)));
+}
+
+// 获取双向链表中指定位置的节点
+private Entry<E> entry(int index) {
+    if (index < 0 || index >= size)
+        throw new IndexOutOfBoundsException("Index: "+index+
+                                            ", Size: "+size);
+    Entry<E> e = header;
+    // 获取index处的节点。
+    // 若index < 双向链表长度的1/2,则从前向后查找;
+    // 否则，从后向前查找。
+    if (index < (size >> 1)) {
+        for (int i = 0; i <= index; i++)
+            e = e.next;
+    } else {
+        for (int i = size; i > index; i--)
+            e = e.previous;
+    }
+    return e;
+}
+
+// 将节点(节点数据是e)添加到entry节点之前。
+private Entry<E> addBefore(E e, Entry<E> entry) {
+    // 新建节点newEntry，将newEntry插入到节点e之前；并且设置newEntry的数据是e
+    Entry<E> newEntry = new Entry<E>(e, entry, entry.previous);
+    // 插入newEntry到链表中
+    newEntry.previous.next = newEntry;
+    newEntry.next.previous = newEntry;
+    size++;
+    modCount++;
+    return newEntry;
+}
+```
+
+可以看出通过add(int index, E element)向LinkedList插入元素时。先是在双向链表中找到要插入节点的位置index；找到之后，再插入一个新节点。
+
+双向链表查找index位置的节点时，有一个加速动作：若index < 双向链表长度的1/2，则从前向后查找; 否则，从后向前查找。
+
+相对于ArrayList中插入代码：
+
+```java
+// 将e添加到ArrayList的指定位置
+public void add(int index, E element) {
+    if (index > size || index < 0)
+        throw new IndexOutOfBoundsException(
+        "Index: "+index+", Size: "+size);
+
+    //确认ArrayList的容量，若容量不够，则增加容量
+    ensureCapacity(size+1);  
+    System.arraycopy(elementData, index, elementData, index + 1,
+         size - index);//耗时
+    elementData[index] = element;
+    size++;
+}
+```
+
+arraycopy()会移动index之后所有元素,所以会增加时间。
+
+删除与插入原理类似。
+
+#### 随机访问
+
+随机访问中LinkedList很慢，而ArrayList访问很快
+
+LinkedList源码：
+
+```java
+// 返回LinkedList指定位置的元素
+public E get(int index) {
+    return entry(index).element;
+}
+
+// 获取双向链表中指定位置的节点
+private Entry<E> entry(int index) {
+    if (index < 0 || index >= size)
+        throw new IndexOutOfBoundsException("Index: "+index+
+                                            ", Size: "+size);
+    Entry<E> e = header;
+    // 获取index处的节点。
+    // 若index < 双向链表长度的1/2,则从前先后查找;
+    // 否则，从后向前查找。
+    if (index < (size >> 1)) {
+        for (int i = 0; i <= index; i++)
+            e = e.next;
+    } else {
+        for (int i = size; i > index; i--)
+            e = e.previous;
+    }
+    return e;
+}
+```
+
+通过get(int index)获取LinkedList第index个元素时。先是在双向链表中找到要index位置的元素；找到之后再返回。
+
+ArrayList源码：
+
+```java
+// 获取index位置的元素值
+public E get(int index) {
+    RangeCheck(index);
+
+    return (E) elementData[index];
+}
+
+private void RangeCheck(int index) {
+    if (index >= size)
+        throw new IndexOutOfBoundsException(
+        "Index: "+index+", Size: "+size);
+}
+```
+
+通过get(int index)获取ArrayList第index个元素时。直接返回数组中index位置的元素，而不需要像LinkedList一样进行查找。
+
+### 1.6.3 Vector和ArrayList性能分析
+
+相同点：
+
+1. 都是List，都继承于AbstractList,并实现了List接口。
+
+ArrayList和Vector的类定义如下：
+
+```java
+
+// ArrayList的定义
+public class ArrayList<E> extends AbstractList<E>
+        implements List<E>, RandomAccess, Cloneable, java.io.Serializable
+
+// Vector的定义
+public class Vector<E> extends AbstractList<E>
+    implements List<E>, RandomAccess, Cloneable, java.io.Serializable {}
+```
+
+2. 都实现了RandomAccess和Cloneable接口
+
+实现RandomAccess接口，意味着它们都支持快速随机访问；
+
+实现Cloneable接口，意味着它们能克隆自己。
+
+3. 都是通过数组实现，本质上都是动态数组
+4. 它们的默认数组容量都是10
+5. 都支持Iterator和ListIerator遍历
+
+不同点：
+
+1. 线程安全不同
+
+ArrayList是非线程安全，Vector是线程安全的支持同步，多线程。
+
+2. 对序列化支持不同
+
+ArrayList支持序列化，而Vector不支持；即ArrayList有实现java.io.Serializable接口，而Vector没有实现该接口。
+
+3. 构造函数个数不同
+
+ArrayList有3个构造函数，而Vector有4个构造函数。Vector除了包括和ArrayList类似的3个构造函数之外，另外的一个构造函数可以指定容量增加系数。
+
+4. 增加容量方式不同
+
+ArrayList：逐个添加元素，当容量不足时，新的容量=(原始容量*3)/2+1
+
+Vector:与增长系数有关，“新的容量”=“原始容量+增长系数”。若增长系数无效(即，小于/等于0)，则“新的容量”=“原始容量 x 2”。
+
+```java
+public void ensureCapacity(int minCapacity) {//ArrayList
+    // 将“修改统计数”+1
+    modCount++;
+    int oldCapacity = elementData.length;
+    // 若当前容量不足以容纳当前的元素个数，设置 新的容量=“(原始容量x3)/2 + 1”
+    if (minCapacity > oldCapacity) {
+        Object oldData[] = elementData;
+        int newCapacity = (oldCapacity * 3)/2 + 1;
+        if (newCapacity < minCapacity)
+            newCapacity = minCapacity;
+        elementData = Arrays.copyOf(elementData, newCapacity);
+    }
+}
+
+private void ensureCapacityHelper(int minCapacity) {//Vector
+    int oldCapacity = elementData.length;
+    // 当Vector的容量不足以容纳当前的全部元素，增加容量大小。
+    // 若 容量增量系数>0(即capacityIncrement>0)，则将容量增大当capacityIncrement
+    // 否则，将容量增大一倍。
+    if (minCapacity > oldCapacity) {
+        Object[] oldData = elementData;
+        int newCapacity = (capacityIncrement > 0) ?
+            (oldCapacity + capacityIncrement) : (oldCapacity * 2);
+        if (newCapacity < minCapacity) {
+            newCapacity = minCapacity;
+        }
+        elementData = Arrays.copyOf(elementData, newCapacity);
+    }
+}
+```
+
+5. 对Enumeration的支持不同。Vector支持通过Enumeration去遍历，而List不支持

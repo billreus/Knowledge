@@ -55,21 +55,29 @@ HTTP/1.1：告诉Web服务器，浏览器是以HTTP协议请求的，使用的�
 
 # 2. Servlet
 
-Servlet主要负责接收用户请求HttpServletRequest,在doGet(),doPost()中做相应的处理，并将回应HttpServletResponse反馈给用户。Servlet可以设置初始化参数，供Servlet内部使用。一个Servlet类只会有一个实例，在它初始化时调用init()方法，销毁时调用destroy()方法。Servlet需要在web.xml中配置，一个Servlet可以设置多个URL访问。Servlet不是线程安全，因此要谨慎使用类变量。
+Servlet主要负责接收用户请求HttpServletRequest,在doGet(),doPost()中做相应的处理，并将回应HttpServletResponse反馈给用户。
+
+Servlet可以设置初始化参数，供Servlet内部使用。一个Servlet类只会有一个实例，在它初始化时调用init()方法，销毁时调用destroy()方法。Servlet需要在web.xml中配置，一个Servlet可以设置多个URL访问。Servlet不是线程安全，因此要谨慎使用类变量。
 
 ## 2.1. Servlet接口
 
 Servlet接口定义了5个方法，其中前三个方法与Servlet生命周期相关：
 
-* void init(ServletConfig config) throws ServletException
-* void service(ServletRequest req, ServletResponse resp) throws ServletException, java.io.IOException
-* void destory()
-* java.lang.String getServletInfo()
-* ServletConfig getServletConfig()
+* 初始化：void init(ServletConfig config) throws ServletException
+* 服务：void service(ServletRequest req, ServletResponse resp) throws ServletException, java.io.IOException
+* 销毁：void destory()
+* 信息：java.lang.String getServletInfo()
+* 配置：ServletConfig getServletConfig()
 
-生命周期： Web容器加载Servlet并将其实例化后，Servlet生命周期开始，容器运行其init()方法进行Servlet的初始化；请求到达时调用Servlet的service()方法，service()方法会根据需要调用与请求对应的doGet或doPost等方法；当服务器关闭或项目被卸载时服务器会将Servlet实例销毁，此时会调用Servlet的destroy()方法。
+生命周期： 
 
-init方法和destory方法只会执行一次，service方法客户端每次请求Servlet都会执行。Servlet中有时会用到一些需要初始化与销毁的资源，因此可以把初始化资源的代码放入init方法中，销毁资源的代码放入destroy方法中，这样就不需要每次处理客户端的请求都要初始化与销毁资源。
+1. Web容器加载Servlet并将其实例化后，Servlet生命周期开始。
+2. 容器运行其init()方法进行Servlet的初始化；
+3. 请求到达时调用Servlet的service()方法，service()方法会根据需要调用与请求对应的doGet或doPost等方法；
+4. 当服务器关闭或项目被卸载时服务器会将Servlet实例销毁，此时会调用Servlet的destroy()方法。
+5. 当Servlet调用完destroy()方法后，等待垃圾回收。如果有需要再次使用这个Servlet，会重新调用init()方法进行初始化操作。
+
+* Servlet中有时会用到一些需要初始化与销毁的资源，因此可以把初始化资源的代码放入init方法中，销毁资源的代码放入destroy方法中，这样就不需要每次处理客户端的请求都要初始化与销毁资源。
 
 ## 2.2. 转发（Forward）和重新定向（Redirect）
 
@@ -252,6 +260,77 @@ Cookie其实还可以用在一些方便用户的场景下，设想你某次登�
 <servlet>元素用于注册Servlet，它包含有两个主要的子元素：<servlet-name>用于设置Servlet的注册名称和<servlet-class>设置Servlet的完整类名。 
 
 一个<servlet-mapping>元素用于映射一个已注册的Servlet的一个对外访问路径，它包含有两个子元素：<servlet-name>指定Servlet的注册名称和<url-pattern>用于Servlet的对外访问路径。
+
+### 2.6.1. 参数映射
+
+在<servlet>中同时可以映射参数信息：
+
+```xml
+<init-param>
+    <param-name>name</param-name>
+    <param-value>value</param-value>
+<init-param>
+```
+
+获取对象：
+
+```java
+ServletConfig servletConfig = this.getServletConfig();
+String value = servletConfig.getInitParamet("name")
+```
+
+对整个站点映射参数信息
+
+```xml
+ <context-param>
+    <param-name>name</param-name>
+    <param-value>zhongfucheng</param-value>
+</context-param>
+```
+
+## 2.7. ServletContext对象
+
+当Tomcat启动的时候，就会创建一个ServletContext对象。它代表着当前web站点。
+
+### 2.7.1. Servlet之间通讯
+
+实现Servlet之间通讯就要用到ServletContext的setAttribute(String name,Object obj)方法，第一个参数是关键字，第二个参数是你要存储的对象
+
+```java
+//获取ServletContext对象,存储信息的Servlet
+ServletContext servletContext = this.getServletContext();
+String value = "valuetext"
+servletContext.setAttribute("name", value)
+
+//访问上面Servlet的信息
+ServletContext servletContext = this.getServletContext();
+//读取上面的value
+String value = (String) servletContext.getAttribute("name");
+```
+
+### 2.7.2. 读取文件
+
+1. 将文件放在web目录下，使用ServletContext对象即可读取文件流
+
+```java
+//获取到ServletContext对象
+ServletContext servletContext = this.getServletContext();
+
+//调用ServletContext方法获取到读取文件的流
+InputStream inputStream = servletContext.getResourceAsStream("2.png");
+```
+
+2. 将文件放在src目录下，使用类装载器读取
+
+```java
+//获取到类装载器
+ClassLoader classLoader = Servlet111.class.getClassLoader();
+
+//通过类装载器获取到读取文件流
+InputStream inputStream = classLoader.getResourceAsStream("3.png");
+```
+
+* 如果文件太大，就不能用类装载器的方式去读取，会导致内存溢出
 
 # 3. hibernate
 
