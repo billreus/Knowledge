@@ -29,11 +29,11 @@
 
 ![Image text](https://github.com/billreus/Konwledge/blob/master/picture/tomcat.png)
 
-当我们在地址栏输入URL地址"http://www.gacl.cn:8080/JavaWebDemo1/1.jsp"时服务器和浏览器做了以下操作：
+当我们在地址栏输入URL地址`"http://www.gacl.cn:8080/JavaWebDemo1/1.jsp"`时服务器和浏览器做了以下操作：
 
-1. 浏览器根据主机名"www.gacl.cn"去操作系统的Hosts文件查找主机名对应的IP地址。
-2. 如果在系统Host中没有对应IP地址，会去互联网上的DNS服务器查找"www.gacl.cn"这台主机对应的IP。
-3. 查找到"www.gacl.cn"主机对应的IP地址后，使用IP地址连接到Web服务器。
+1. 浏览器根据主机名`"www.gacl.cn"`去操作系统的Hosts文件查找主机名对应的IP地址。
+2. 如果在系统Host中没有对应IP地址，会去互联网上的DNS服务器查找`"www.gacl.cn"`这台主机对应的IP。
+3. 查找到`"www.gacl.cn"`主机对应的IP地址后，使用IP地址连接到Web服务器。
 4. 浏览器连接到web服务器吼，就会使用http协议向服务器发送请求，发送请求过程中，浏览器会向Web服务器以Stream(流)的形式传输数据，告诉Web服务器要访问服务器里面的哪个Web应用下的Web资源，如下图所示：
 
 ![Image text](https://github.com/billreus/Konwledge/blob/master/picture/tomcat2.png)
@@ -57,7 +57,7 @@ HTTP/1.1：告诉Web服务器，浏览器是以HTTP协议请求的，使用的�
 
 Servlet主要负责接收用户请求HttpServletRequest,在doGet(),doPost()中做相应的处理，并将回应HttpServletResponse反馈给用户。
 
-Servlet可以设置初始化参数，供Servlet内部使用。一个Servlet类只会有一个实例，在它初始化时调用init()方法，销毁时调用destroy()方法。Servlet需要在web.xml中配置，一个Servlet可以设置多个URL访问。Servlet不是线程安全，因此要谨慎使用类变量。
+Servlet需要在web.xml中配置，一个Servlet可以设置多个URL访问。Servlet不是线程安全，因此要谨慎使用类变量。
 
 ## 2.1. Servlet接口
 
@@ -85,29 +85,58 @@ Servlet接口定义了5个方法，其中前三个方法与Servlet生命周期�
 
 ### 2.2.1. 转发（Forword） 
 
-通过RequestDispatcher对象的forward（HttpServletRequest request,HttpServletResponse response）方法实现的。RequestDispatcher可以通过HttpServletRequest 的getRequestDispatcher()方法获得。例如下面的代码就是跳转到login_success.jsp页面。
+通过RequestDispatcher对象的forward（HttpServletRequest request,HttpServletResponse response）方法实现的
+
+下面的代码就是跳转到login_success.jsp页面
 
 ```java
-     request.getRequestDispatcher("login_success.jsp").forward(request, response);
+request.getRequestDispatcher("login_success.jsp").forward(request, response);
 ```
 
 ### 2.2.2. 重定向（Redirect） 
 
-利用服务器返回的状态码来实现的，客户端浏览器请求服务器的时候，服务器会返回一个状态码。服务器通过HttpServletRequestResponse的setStatus(int status)方法设置状态码。如果服务器返回301或者302，则浏览器会到新的网址重新请求该资源。
+通知浏览器跳转到另一个网页就叫重定向跳转。
+
+利用服务器返回的状态码来实现的，客户端浏览器请求服务器的时候，服务器会返回一个状态码。
+
+服务器通过HttpServletRequestResponse的setStatus(int status)方法设置状态码。如果服务器返回301或者302，则浏览器会到新的网址重新请求该资源。
+
+```java
+response.sendRedirect("login.jsp");
+```
+
+注意： 
+
+* 给服务器用的直接从资源名开始写，给浏览器用的要把应用名写上,所以重定向可以去任何资源，转发只能跳转当前web应用资源
+
+```java
+request.getRequestDispatcher("/资源名 URI").forward(request,response)
+//转发时"/"代表的是本应用程序的根目录
+
+response.send("/webINF/资源名 URI");
+//重定向时"/"代表的是webapps目录
+```
+
 
 ### 2.2.3. 区别
 
 #### 地址栏
 
-forward是服务器请求资源,服务器直接访问目标地址的URL,把那个URL的响应内容读取过来,然后把这些内容再发给浏览器.浏览器根本不知道服务器发送的内容从哪里来的,所以它的地址栏还是原来的地址. redirect是服务端根据逻辑,发送一个状态码,告诉浏览器重新去请求那个地址.所以地址栏显示的是新的URL.
+forward是由服务器进行跳转服务器直接访问目标地址的URL,把那个URL的响应内容读取过来,然后把这些内容再发给浏览器.浏览器根本不知道服务器发送的内容从哪里来的,所以它的地址栏还是原来的地址.
+
+redirect是服务端根据逻辑,发送一个状态码,告诉浏览器重新去请求那个地址.所以地址栏显示的是新的URL.
 
 #### 数据共享
 
-forward:转发页面和转发到的页面可以共享request里面的数据. redirect:不能共享数据.
+forward:转发页面和转发到的页面可以共享request里面的数据. 
+
+redirect:不能共享数据.
 
 #### 运用地方
 
-forward:一般用于用户登陆的时候,根据角色转发到相应的模块. redirect:一般用于用户注销登陆时返回主页面和跳转到其它的网站等
+forward:访问 Servlet 处理业务逻辑，然后 forward 到 jsp 显示处理结果，浏览器里 URL 不变。（一般用于用户登陆的时候,根据角色转发到相应的模块，执行到语句立刻跳转）
+
+redirect:提交表单，处理成功后 redirect 到另一个 jsp，防止表单重复提交，浏览器里 URL 变了（一般用于用户注销登陆时返回主页面和跳转到其它的网站等，整个页面执行完才跳转）
 
 #### 效率
 
@@ -331,6 +360,56 @@ InputStream inputStream = classLoader.getResourceAsStream("3.png");
 ```
 
 * 如果文件太大，就不能用类装载器的方式去读取，会导致内存溢出
+
+## 2.8. HttpServletRequest
+
+Request代表客户端的请求，当客户端通过HTTP协议访问服务器，HTTP请求头中的所有信息都封装在这个对象中，开发人员通过这个对象的方法，可以获得客户这些信息。
+
+### 2.8.1. 常用方法
+
+获取浏览器信息
+
+* getRequestURL方法返回客户端发出请求时的完整URL。
+* getRequestURI方法返回请求行中的资源名部分。
+* getQueryString 方法返回请求行中的参数部分。
+* getPathInfo方法返回请求URL中的额外路径信息。额外路径信息是请求URL中的位于Servlet的路径之后和查询参数之前的内容，它以“/”开头。
+* getRemoteAddr方法返回发出请求的客户机的IP地址
+* getRemoteHost方法返回发出请求的客户机的完整主机名
+* getRemotePort方法返回客户机所使用的网络端口号
+* getLocalAddr方法返回WEB服务器的IP地址。
+* getLocalName方法返回WEB服务器的主机名
+
+获取请求头
+
+* getHeader方法
+* getHeaders方法
+* getHeaderNames方法
+
+### 2.8.2. 应用
+
+防盗链
+
+```java
+//获取网页来源信息
+String referer = request.getHeader("Referer");
+//如果不是指定网址返回首页
+if (referer == null || ! referer.contains("localhost:8080/bill/index.jsp")){
+    respose.sendRedirect("/bill/index.jsp");
+    reruen;
+}
+```
+
+表单提取数据
+
+```java
+//设置request字符编码的格式
+request.setCharacterEncoding("UTF-8");
+
+//通过html的name属性，获取到值
+String username = request.getParameter("username");
+String password = request.getParameter("password");
+String gender = request.getParameter("gender");
+```
 
 # 3. hibernate
 
