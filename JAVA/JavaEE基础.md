@@ -222,9 +222,7 @@ JSP中的四种作用域包括page、request、session和application，具体来
 
 ### 2.5.1. 会话跟踪
 
-可以使用Cookies和URL重写
-
-1. 向客户端发送Cookie
+向客户端发送Cookie
 
 ```java
 Cookie c =new Cookie("name","value"); //创建Cookie 
@@ -237,14 +235,16 @@ response.addCookie(c); //把Cookie放入到HTTP响应中
 ```java
 String name ="name"; 
 Cookie[]cookies =request.getCookies(); 
+
 if(cookies !=null){ 
-   for(int i= 0;i<cookies.length;i++){ 
-    Cookie cookie =cookies[i]; 
-    if(name.equals(cookis.getName())) 
-    //something is here. 
-    //you can get the value 
-    cookie.getValue(); 
-       
+    
+    for(int i= 0;i<cookies.length;i++){ 
+        
+        Cookie cookie =cookies[i]; 
+        if(name.equals(cookis.getName())) 
+        //something is here. 
+        //you can get the value 
+        cookie.getValue(); 
    }
  }
  ```
@@ -253,7 +253,7 @@ if(cookies !=null){
 
 缺点: 大小受到限制，用户可以禁用Cookie功能，由于保存在本地，有一定的安全风险。
 
-2. URL重写
+也可以使用URL重写
 
 在URL中添加用户会话的信息作为请求的参数，或者将唯一的会话ID添加到URL结尾以标识一个会话。
 
@@ -261,7 +261,7 @@ if(cookies !=null){
 
 缺点： 必须对网站的URL进行编码，所有页面必须动态生成，不能用预先记录下来的URL进行访问。
 
-3. 隐藏的表单域
+1. 隐藏的表单域
 
 ```jsp
 <input type="hidden" name ="session" value="..."/>

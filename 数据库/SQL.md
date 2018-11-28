@@ -146,7 +146,7 @@ WHERE id = 1;
 ```SQL
 SET
     col = CASE col
-        WHEN '原值' THEN '替换值'
+        WHEN '条件' THEN '替换值'
         ELSE '替换值'
     END
 ```
