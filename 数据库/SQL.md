@@ -193,6 +193,14 @@ FROM mytable
 LIMIT 5;
 ```
 
+同时LIMIT可作为分页查询使用，下面表示显示从第六行开始显示十个数。
+
+```SQL
+SELECT *
+FROM mytable
+LIMIT 5, 10;
+```
+
 ###  3.2. 排序
 
 ASC：升序。
