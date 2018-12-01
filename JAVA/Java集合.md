@@ -90,7 +90,7 @@
         - [3.2.2. 数据结构](#322-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84)
         - [3.2.3. 源码](#323-%E6%BA%90%E7%A0%81)
         - [3.2.4. 遍历方式](#324-%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F)
-- [4.](#4)
+- [4. Iterator和Enumeration区别](#4-iterator%E5%92%8Cenumeration%E5%8C%BA%E5%88%AB)
 
 <!-- /TOC -->
 
@@ -8178,4 +8178,33 @@ for (String str:arr)
     System.out.printf("for each : %s\n", str);
 ```
 
-# 4. 
+# 4. Iterator和Enumeration区别
+
+Iterator是迭代器，接口源码如下：
+
+```java
+package java.util;
+
+public interface Iterator<E>{
+    boolean hasNest();
+    E next();
+    void remove();
+}
+```
+
+Enumeration是枚举类，接口源码如下：
+
+```java
+package java.util;
+
+public interface Enumeration<E>{
+    boolean hasMoreElemnets();
+    E nextElement();
+}
+```
+
+不同点：
+
+1. Enumeration只能读取集合数据不能修改，Iterator除了可以读取集合还可以进行删除操作。
+2. Ierator支持fail-fast机制，当多个线程对同一个集合操作时，会产生fail-fast事件，EnumerationEnumeration本身并没有支持同步，而在Vector、Hashtable实现Enumeration时，添加了同步。
+3. Enumeration 比 Iterator 的遍历速度更快。（Hashtable中Iterator是通过Enumeration去实现的，而且Iterator添加了对fail-fast机制的支持）
