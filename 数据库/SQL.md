@@ -19,6 +19,7 @@
     - [4. 文本处理](#4-文本处理)
     - [5. 日期和时间处理](#5-日期和时间处理)
     - [6. 分组](#6-分组)
+        - [6.1. 组内连接](#61-组内连接)
     - [7. 连接](#7-连接)
         - [7.1. 内连接](#71-内连接)
         - [7.2. 自连接](#72-自连接)
@@ -109,6 +110,13 @@ CREATE TABLE mytable(
 ```
 
 ###  2.2. 修改表
+
+修改表名
+
+```sql
+ALTER TABLE mytable 
+RENAME TO newtable;
+```
 
 添加列
 
@@ -361,6 +369,17 @@ SELECT col
 FROM mytable
 GROUP BY col
 HAVING COUNT(*) > 2; --显示分组中col值重复大于2的col
+```
+
+### 6.1. 组内连接
+group_concat(X), group_concat(X,Y)
+
+返回X的非null值的连接后的字符串。 如果给出了参数Y，将会在每个X之间用Y作为分隔符。如果省略了Y，“，”将作为默认的分隔符且每个元素连接的顺序是随机的。
+
+```sql
+SELECT col1, group_concat(col2)
+FROM mytable
+GROUP BY col1
 ```
 
 ##  7. 连接
