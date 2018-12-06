@@ -259,7 +259,7 @@ WHERE col IS NULL;
 
 WHERE语句可用的操作符：`=,<,>,<!=>,>!=<,BERWEEN,IS NULL`
 
-可以使用AND和OR过滤多个条件，IN用于匹配一组值，NOT用于否定。
+可以使用AND和OR过滤多个条件，IN用于匹配一组值，NOT IN用于否定。
 
 ###  3.4. 通配符
 

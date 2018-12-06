@@ -2,22 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="73df7b91-5147-4303-a290-d849bfc9dde5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Java集合.md" beforeDir="false" afterPath="$PROJECT_DIR$/../Java集合.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/1c8474aa-6663-44e1-95fe-0fb41344b8df.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/1c8474aa-6663-44e1-95fe-0fb41344b8df.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/himtest/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/himtest/hibernate.cfg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/himtest/ma/TestGET.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/himtest/ma/TestGET.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/himtest/ma/TestThreeStation.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/himtest/ma/TestThreeStation.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/himtest/test/ProductEntity.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/himtest/test/ProductEntity.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/himtest/test/ProductEntity.hbm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/himtest/test/ProductEntity.hbm.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/hibernate.cfg.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ma/TestGET.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ma/TestGET.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/ProductEntity.hbm.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/ProductEntity.hbm.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/ProductEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/ProductEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MySQL/JDBC.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MySQL/MySQL.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MySQL/SQL.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../MySQL/SQLite.md" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,12 +52,14 @@
     <session id="631719185">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="4" />
+          <entry key="project.closed" value="5" />
           <entry key="project.open.time.10" value="1" />
+          <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.21" value="1" />
+          <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.46" value="1" />
           <entry key="project.open.time.9" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -152,8 +139,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/hibernate.cfg.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="17" column="44" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
+            <state relative-caret-position="297">
+              <caret line="11" column="74" lean-forward="true" selection-start-line="11" selection-start-column="74" selection-end-line="11" selection-end-column="74" />
             </state>
           </provider>
         </entry>
@@ -227,9 +214,9 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="350" />
-    <option name="y" value="40" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="381" />
+    <option name="y" value="113" />
     <option name="width" value="1029" />
     <option name="height" value="867" />
   </component>
@@ -247,6 +234,11 @@
             <path>
               <item name="himtest" type="b2602c69:ProjectViewProjectNode" />
               <item name="himtest" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="himtest" type="b2602c69:ProjectViewProjectNode" />
+              <item name="himtest" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="himtest" type="b2602c69:ProjectViewProjectNode" />
@@ -284,8 +276,9 @@
     <property name="JPA.DatabaseSchemaImportDialog" value="1c8474aa-6663-44e1-95fe-0fb41344b8df" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542271406456" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543765117556" />
     <property name="database.console.LAST_STATE" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Facets" />
@@ -431,16 +424,19 @@
       <workItem from="1542261236712" duration="60000" />
       <workItem from="1542261386168" duration="9687000" />
       <workItem from="1542272386322" duration="800000" />
+      <workItem from="1543764479383" duration="637000" />
+      <workItem from="1543926526716" duration="713000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21142000" />
+    <option name="totallyTimeSpent" value="22492000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="350" y="40" width="1029" height="867" extended-state="0" />
+    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8292994" visible="true" weight="0.18575852" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8292994" visible="true" weight="0.28598973" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Persistence" order="2" sideWeight="0.17070064" side_tool="true" weight="0.14440434" />
       <window_info id="Designer" order="3" />
@@ -529,9 +525,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -539,9 +532,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
           <caret line="20" column="10" selection-start-line="20" selection-start-column="10" selection-end-line="20" selection-end-column="10" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -549,33 +539,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="364">
           <caret line="35" column="19" lean-forward="true" selection-start-line="35" selection-start-column="19" selection-end-line="35" selection-end-column="19" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="das://1c8474aa-6663-44e1-95fe-0fb41344b8df/schema/test/table/product_">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="das://1c8474aa-6663-44e1-95fe-0fb41344b8df/schema/test/table/category_">
-      <provider selected="true" editor-type-id="com.intellij.database.editor.DatabaseTableFileEditorProvider">
-        <state>
-          <filtering enabled="true" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="das://1c8474aa-6663-44e1-95fe-0fb41344b8df/schema/test/table/product_" />
+    <entry file="das://1c8474aa-6663-44e1-95fe-0fb41344b8df/schema/test/table/category_" />
     <entry file="file://$PROJECT_DIR$/src/ma/TestManyToOne.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="567">
           <caret line="21" column="9" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -638,8 +610,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/hibernate.cfg.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="17" column="44" selection-start-line="17" selection-start-column="44" selection-end-line="17" selection-end-column="44" />
+        <state relative-caret-position="297">
+          <caret line="11" column="74" lean-forward="true" selection-start-line="11" selection-start-column="74" selection-end-line="11" selection-end-column="74" />
         </state>
       </provider>
     </entry>
