@@ -1,3 +1,5 @@
+# 字符串
+
 ## 771. 宝石与石头
 
 ### 最初想法
@@ -73,5 +75,66 @@ class Solution{
             if(J.indexOf(ch) >= 0) sum++;
         }
         return sum;
+}
+```
+
+## 929. 独特的电子邮件
+
+* leetcode答案中9,10ms为错误答案
+
+### 基本思路
+
+主要需要解决的问题：
+
+1. 对于@前后字符的分割
+2. 对于+和,的处理
+3. 对于本地名称的去重
+
+解决方法：
+
+1. 使用indexOf()方法进行定位，substring()方法进行切割
+2. 使用substring()处理"+"，用replace()处理"，"
+3. 使用HastSet去重
+
+```java
+    public int numUniqueEmails(String[] emails) {
+        Set<String> set=new HashSet<>();
+        for(String email:emails){
+            //本地名称(前闭后开)
+            String name=email.substring(0,email.indexOf("@"));
+            //域名
+            String domain=email.substring(email.indexOf("@"));
+            //根据指定规则解析后的本地名称，先按加号切割字符串，然后替换'.'
+            String newName=name.substring(0,name.indexOf("+")).replaceAll(".","");
+            //使用HashSet去重
+            set.add(newName+domain);
+        }
+        return set.size();
+    }
+```
+
+### 改进
+
+```java
+class Solution {
+
+    public int numUniqueEmails(String[] emails) {
+        ArrayList<String> ans = new ArrayList<>();
+        
+        for (String email : emails) {
+            String web[] = email.split("@");
+            web[0] = web[0].replace(".", "");
+
+            for (int i = 0; i < web[0].length(); i++) {
+                if (web[0].charAt(i) == '+') {
+                    web[0] = web[0].substring(0, i);
+                }
+            }
+            email = web[0] + "@" + web[1];
+            if(!ans.contains(email))
+                ans.add(email);
+        }
+        return ans.size();
+    }
 }
 ```
