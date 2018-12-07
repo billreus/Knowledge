@@ -1,62 +1,70 @@
 <!-- TOC -->
 
 - [JAVA API](#java-api)
-- [1 语言包java.lang](#1-语言包javalang)
-    - [1.1 数据类型包装类](#11-数据类型包装类)
-        - [1.1.1 缓存池](#111-缓存池)
-    - [1.2 字符处理类](#12-字符处理类)
-    - [1.3 Math类](#13-math类)
-    - [1.4 Object类](#14-object类)
-        - [1.4.1 equals方法](#141-equals方法)
-        - [1.4.2 hashCode方法](#142-hashcode方法)
-            - [hashCode()与equals()](#hashcode与equals)
-    - [1.5 异常类](#15-异常类)
-        - [1.5.1 自定义异常](#151-自定义异常)
-        - [1.5.2 捕获异常](#152-捕获异常)
-        - [1.5.3 throws方法](#153-throws方法)
-- [2 实用包java.util](#2-实用包javautil)
-    - [2.1 Calendar类](#21-calendar类)
-    - [2.2 Random类](#22-random类)
-    - [2.3 数据结构类(容器)](#23-数据结构类容器)
-        - [2.3.1 Collection接口](#231-collection接口)
-        - [2.3.2 Map接口](#232-map接口)
-- [3 输入输出java.io](#3-输入输出javaio)
-    - [3.1 基类InputStream和OutputStream](#31-基类inputstream和outputstream)
-    - [3.2 文件流](#32-文件流)
-        - [3.2.1 读写一个文件](#321-读写一个文件)
-    - [3.3 缓冲流](#33-缓冲流)
-    - [3.4 数据流](#34-数据流)
-    - [3.5 字符流](#35-字符流)
-- [4 重要思想](#4-重要思想)
-    - [4.1 枚举](#41-枚举)
-    - [4.2 泛型](#42-泛型)
-    - [4.3 包装（装箱和拆箱）](#43-包装装箱和拆箱)
+- [1 语言包java.lang](#1-%E8%AF%AD%E8%A8%80%E5%8C%85javalang)
+    - [1.1 数据类型包装类](#11-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%8C%85%E8%A3%85%E7%B1%BB)
+        - [1.1.1 缓存池](#111-%E7%BC%93%E5%AD%98%E6%B1%A0)
+    - [1.2 字符处理类](#12-%E5%AD%97%E7%AC%A6%E5%A4%84%E7%90%86%E7%B1%BB)
+    - [1.3 Math类](#13-math%E7%B1%BB)
+    - [1.4 Object类](#14-object%E7%B1%BB)
+        - [1.4.1 equals方法](#141-equals%E6%96%B9%E6%B3%95)
+        - [1.4.2 hashCode方法](#142-hashcode%E6%96%B9%E6%B3%95)
+            - [hashCode()与equals()](#hashcode%E4%B8%8Eequals)
+    - [1.5. String](#15-string)
+        - [1.5.1. 概念](#151-%E6%A6%82%E5%BF%B5)
+        - [1.5.2. valueOf](#152-valueof)
+        - [1.5.3. index](#153-index)
+        - [1.5.4. String, StringBuffer, StringBuilder区别](#154-string-stringbuffer-stringbuilder%E5%8C%BA%E5%88%AB)
+            - [运行速度](#%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6)
+            - [线程安全](#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8)
+            - [使用场景](#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF)
+    - [1.6 异常类](#16-%E5%BC%82%E5%B8%B8%E7%B1%BB)
+        - [1.6.1 自定义异常](#161-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%BC%82%E5%B8%B8)
+        - [1.6.2 捕获异常](#162-%E6%8D%95%E8%8E%B7%E5%BC%82%E5%B8%B8)
+        - [1.6.3 throws方法](#163-throws%E6%96%B9%E6%B3%95)
+- [2 实用包java.util](#2-%E5%AE%9E%E7%94%A8%E5%8C%85javautil)
+    - [2.1 Calendar类](#21-calendar%E7%B1%BB)
+    - [2.2 Random类](#22-random%E7%B1%BB)
+    - [2.3 数据结构类(容器)](#23-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%B1%BB%E5%AE%B9%E5%99%A8)
+        - [2.3.1 Collection接口](#231-collection%E6%8E%A5%E5%8F%A3)
+        - [2.3.2 Map接口](#232-map%E6%8E%A5%E5%8F%A3)
+- [3 输入输出java.io](#3-%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BAjavaio)
+    - [3.1 基类InputStream和OutputStream](#31-%E5%9F%BA%E7%B1%BBinputstream%E5%92%8Coutputstream)
+    - [3.2 文件流](#32-%E6%96%87%E4%BB%B6%E6%B5%81)
+        - [3.2.1 读写一个文件](#321-%E8%AF%BB%E5%86%99%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6)
+    - [3.3 缓冲流](#33-%E7%BC%93%E5%86%B2%E6%B5%81)
+    - [3.4 数据流](#34-%E6%95%B0%E6%8D%AE%E6%B5%81)
+    - [3.5 字符流](#35-%E5%AD%97%E7%AC%A6%E6%B5%81)
+- [4 重要思想](#4-%E9%87%8D%E8%A6%81%E6%80%9D%E6%83%B3)
+    - [4.1 枚举](#41-%E6%9E%9A%E4%B8%BE)
+    - [4.2 泛型](#42-%E6%B3%9B%E5%9E%8B)
+    - [4.3 包装（装箱和拆箱）](#43-%E5%8C%85%E8%A3%85%E8%A3%85%E7%AE%B1%E5%92%8C%E6%8B%86%E7%AE%B1)
     - [4.4 String](#44-string)
         - [4.4.1 String,StringBuffer and StringBuilder](#441-stringstringbuffer-and-stringbuilder)
         - [4.4.2 String Pool](#442-string-pool)
-    - [4.5 面向对象](#45-面向对象)
-        - [4.5.1 继承、封装、多态](#451-继承封装多态)
-        - [4.5.2 抽象类与接口](#452-抽象类与接口)
-        - [4.5.3 this和super](#453-this和super)
-        - [4.5.4 final与static](#454-final与static)
-            - [final声明数据](#final声明数据)
-            - [static声明变量](#static声明变量)
-            - [static声明静态方法](#static声明静态方法)
-            - [static声明静态语句块](#static声明静态语句块)
-        - [4.5.5 构造方法](#455-构造方法)
-    - [4.6 拷贝](#46-拷贝)
-        - [4.6.1 数组拷贝](#461-数组拷贝)
-- [5 窗口工具javax.swing](#5-窗口工具javaxswing)
+    - [4.5 面向对象](#45-%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1)
+        - [4.5.1 继承、封装、多态](#451-%E7%BB%A7%E6%89%BF%E5%B0%81%E8%A3%85%E5%A4%9A%E6%80%81)
+        - [4.5.2 抽象类与接口](#452-%E6%8A%BD%E8%B1%A1%E7%B1%BB%E4%B8%8E%E6%8E%A5%E5%8F%A3)
+        - [4.5.3 this和super](#453-this%E5%92%8Csuper)
+        - [4.5.4 final与static](#454-final%E4%B8%8Estatic)
+            - [final声明数据](#final%E5%A3%B0%E6%98%8E%E6%95%B0%E6%8D%AE)
+            - [static声明变量](#static%E5%A3%B0%E6%98%8E%E5%8F%98%E9%87%8F)
+            - [static声明静态方法](#static%E5%A3%B0%E6%98%8E%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95)
+            - [static声明静态语句块](#static%E5%A3%B0%E6%98%8E%E9%9D%99%E6%80%81%E8%AF%AD%E5%8F%A5%E5%9D%97)
+        - [4.5.5 构造方法](#455-%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95)
+    - [4.6 拷贝](#46-%E6%8B%B7%E8%B4%9D)
+        - [4.6.1 数组拷贝](#461-%E6%95%B0%E7%BB%84%E6%8B%B7%E8%B4%9D)
+- [5 窗口工具javax.swing](#5-%E7%AA%97%E5%8F%A3%E5%B7%A5%E5%85%B7javaxswing)
     - [5.1 JFrame](#51-jframe)
-        - [5.1.1 框架](#511-框架)
-        - [5.1.2 获取屏幕大小](#512-获取屏幕大小)
-        - [5.1.3 2D图形](#513-2d图形)
+        - [5.1.1 框架](#511-%E6%A1%86%E6%9E%B6)
+        - [5.1.2 获取屏幕大小](#512-%E8%8E%B7%E5%8F%96%E5%B1%8F%E5%B9%95%E5%A4%A7%E5%B0%8F)
+        - [5.1.3 2D图形](#513-2d%E5%9B%BE%E5%BD%A2)
     - [5.2 JLabel](#52-jlabel)
     - [5.3 JToolBar、JButton](#53-jtoolbarjbutton)
     - [5.4 JPanel](#54-jpanel)
-- [6 事件处理](#6-事件处理)
-    - [6.1 动作](#61-动作)
-    - [6.2 鼠标事件](#62-鼠标事件)
+- [6 事件处理](#6-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86)
+    - [6.1 动作](#61-%E5%8A%A8%E4%BD%9C)
+    - [6.2 鼠标事件](#62-%E9%BC%A0%E6%A0%87%E4%BA%8B%E4%BB%B6)
 
 <!-- /TOC -->
 
@@ -171,7 +179,149 @@ public class test {
 4. 因此，equals 方法被覆盖过，则 hashCode 方法也必须被覆盖
 5. hashCode() 的默认行为是对堆上的对象产生独特值。如果没有重写 hashCode()，则该 class 的两个对象无论如何都不会相等（即使这两个对象指向相同的数据）
 
-## 1.5 异常类
+## 1.5. String
+
+### 1.5.1. 概念
+
+String, StringBuilder和StringBuffer本质上都是通过字符数组实现的。
+
+StringBuilder是非线程安全的，而StringBuffer是线程安全的。
+
+### 1.5.2. valueOf
+
+把各种对象转换成String使用valueOf()函数
+
+```java
+import java.util.HashMap;
+
+public class StringValueTest {
+    
+    public static void main(String[] args) {
+        testValueAPIs() ;
+    }
+
+    /**
+     * String 的valueOf()演示程序
+     */
+    private static void testValueAPIs() {
+        System.out.println("-------------------------------- testValueAPIs --------------------------------");
+        // 1. String    valueOf(Object obj)
+        //  实际上，返回的是obj.toString();
+        HashMap map = new HashMap();
+        map.put("1", "one");
+        map.put("2", "two");
+        map.put("3", "three");
+        System.out.printf("%-50s = %s\n", "String.valueOf(map)", String.valueOf(map));
+
+        // 2.String    valueOf(boolean b)
+        System.out.printf("%-50s = %s\n", "String.valueOf(true)", String.valueOf(true));
+
+        // 3.String    valueOf(char c)
+        System.out.printf("%-50s = %s\n", "String.valueOf('m')", String.valueOf('m'));
+
+        // 4.String    valueOf(int i)
+        System.out.printf("%-50s = %s\n", "String.valueOf(96)", String.valueOf(96));
+
+        // 5.String    valueOf(long l)
+        System.out.printf("%-50s = %s\n", "String.valueOf(12345L)", String.valueOf(12345L));
+
+        // 6.String    valueOf(float f)
+        System.out.printf("%-50s = %s\n", "String.valueOf(1.414f)", String.valueOf(1.414f));
+
+        // 7.String    valueOf(double d)
+        System.out.printf("%-50s = %s\n", "String.valueOf(3.14159d)", String.valueOf(3.14159d));
+
+        // 8.String    valueOf(char[] data)
+        System.out.printf("%-50s = %s\n", "String.valueOf(new char[]{'s','k','y'})", String.valueOf(new char[]{'s','k','y'}));
+
+        // 9.String    valueOf(char[] data, int offset, int count)
+        System.out.printf("%-50s = %s\n", "String.valueOf(new char[]{'s','k','y'}, 0, 2)", String.valueOf(new char[]{'s','k','y'}, 0, 2));
+
+        System.out.println();
+    }
+}
+```
+
+### 1.5.3. index
+
+```java
+public class StringIndexTest {
+
+    public static void main(String[] args) {
+        testIndexAPIs() ;
+    }
+
+    /**
+     * String 中index相关API演示
+     */
+    private static void testIndexAPIs() {
+        System.out.println("-------------------------------- testIndexAPIs --------------------------------");
+
+        String istr = "abcAbcABCabCaBcAbCaBCabc";
+        System.out.printf("istr=%s\n", istr);
+
+        // 1. 从前往后，找出‘a’第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.indexOf((int)'a')", istr.indexOf((int)'a'));
+
+        // 2. 从位置5开始，从前往后，找出‘a’第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.indexOf((int)'a', 5)", istr.indexOf((int)'a', 5));
+
+        // 3. 从后往前，找出‘a’第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.lastIndexOf((int)'a')", istr.lastIndexOf((int)'a'));
+
+        // 4. 从位置10开始，从后往前，找出‘a’第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.lastIndexOf((int)'a', 10)", istr.lastIndexOf((int)'a', 10));
+
+
+        // 5. 从前往后，找出"bc"第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.indexOf(\"bc\")", istr.indexOf("bc"));
+
+        // 6. 从位置5开始，从前往后，找出"bc"第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.indexOf(\"bc\", 5)", istr.indexOf("bc", 5));
+
+        // 7. 从后往前，找出"bc"第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.lastIndexOf(\"bc\")", istr.lastIndexOf("bc"));
+
+        // 8. 从位置4开始，从后往前，找出"bc"第一次出现的位置
+        System.out.printf("%-30s = %d\n", "istr.lastIndexOf(\"bc\", 4)", istr.lastIndexOf("bc", 4));
+
+        System.out.println();
+    }
+}
+
+-------------- testIndexAPIs --------------
+istr=abcAbcABCabCaBcAbCaBCabc
+istr.indexOf((int)'a')         = 0
+istr.indexOf((int)'a', 5)      = 9
+istr.lastIndexOf((int)'a')     = 21
+istr.lastIndexOf((int)'a', 10) = 9
+istr.indexOf("bc")             = 1
+istr.indexOf("bc", 5)          = 22
+istr.lastIndexOf("bc")         = 22
+istr.lastIndexOf("bc", 4)      = 4
+```
+
+### 1.5.4. String, StringBuffer, StringBuilder区别
+
+#### 运行速度
+
+StringBuilder > StringBuffer > String
+
+* String为字符串常量，而StringBuilder和StringBuffer均为字符串变量，即String对象一旦创建之后该对象是不可更改的，但后两者的对象是变量，是可以更改的。
+
+#### 线程安全
+
+StringBuilder是线程不安全的，而StringBuffer是线程安全的
+
+#### 使用场景
+
+String：适用于少量的字符串操作的情况
+
+StringBuilder：适用于单线程下在字符缓冲区进行大量操作的情况
+
+StringBuffer：适用多线程下在字符缓冲区进行大量操作的情况
+
+## 1.6 异常类
 
 异常都是从`Throwable`类派生出来的。异常常分成四类：
 
@@ -183,11 +333,11 @@ Exception 分为两种：
 * 受检异常 ：需要用 try...catch... 语句捕获并进行处理，并且可以从异常中恢复；
 * 非受检异常 ：是程序运行时错误，例如除 0 会引发 Arithmetic Exception，此时程序崩溃并且无法恢复。
 
-### 1.5.1 自定义异常
+### 1.6.1 自定义异常
 
 自定义异常只需要让它继承Exception或其子类即可。
 
-### 1.5.2 捕获异常
+### 1.6.2 捕获异常
 
 常使用`try`和`catch`来捕获异常。如果没有catch块，则必须跟一个finally块
 
@@ -231,7 +381,7 @@ public class CatchException {
 }
 ```
 
-### 1.5.3 throws方法
+### 1.6.3 throws方法
 
 如果method2要进行异常处理，而本身不打算处理，可以把该异常抛出去，method1接到方法进行处理。
 
