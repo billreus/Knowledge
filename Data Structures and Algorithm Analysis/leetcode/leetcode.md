@@ -1,3 +1,16 @@
+<!-- TOC -->
+
+- [字符串](#字符串)
+    - [771. 宝石与石头](#771-宝石与石头)
+        - [最初想法](#最初想法)
+        - [改进](#改进)
+    - [929. 独特的电子邮件](#929-独特的电子邮件)
+        - [基本思路](#基本思路)
+        - [改进](#改进-1)
+    - [709. 转换成小写字母](#709-转换成小写字母)
+
+<!-- /TOC -->
+
 # 字符串
 
 ## 771. 宝石与石头
@@ -135,6 +148,18 @@ class Solution {
                 ans.add(email);
         }
         return ans.size();
+    }
+}
+```
+
+## 709. 转换成小写字母
+
+String中toLowerCase()可以使字符变成小写字母，toUpperCase()变成大写字母；
+
+```java
+class Solution {
+    public String toLowerCase(String str) {
+        return str.toLowerCase();
     }
 }
 ```
