@@ -8,6 +8,10 @@
         - [基本思路](#基本思路)
         - [改进](#改进-1)
     - [709. 转换成小写字母](#709-转换成小写字母)
+- [数组](#数组)
+    - [905. 按奇偶排序数组](#905-按奇偶排序数组)
+        - [基本思路](#基本思路-1)
+        - [改进](#改进-2)
 
 <!-- /TOC -->
 
@@ -162,4 +166,60 @@ class Solution {
         return str.toLowerCase();
     }
 }
+```
+
+# 数组
+
+## 905. 按奇偶排序数组
+
+### 基本思路
+
+遍历数组，偶数正向赋值给新数组，奇数反向赋值给新数组。
+
+```java
+class Solution {
+    public int[] sortArrayByParity(int[] A) {
+        int[] doub = new int[A.length];
+        int d = 0;
+        int l = A.length - 1;
+                    
+        for(int i=0 ; i<A.length; i++){
+
+            if(A[i] % 2 == 0){
+                doub[d] = A[i];
+                d++;
+            }
+            else{
+                doub[l] = A[i];
+                l--;
+            }
+            
+        }
+        return doub;
+    }
+}
+```
+
+### 改进
+
+基本的方法开辟了额外空间，不开辟新空间可以遍历数组，找到第一个奇数后就从当前位置搜索下一个偶数，并交换。不过效率不一定高。
+
+```python
+class Solution:
+    def sortArrayByParityII(self, A):
+        """
+        :type A: List[int]
+        :rtype: List[int]
+        """
+        A_len, i, j = len(A), 0, 1
+        while i < A_len:
+            if A[i] % 2 == 1:
+                while A[j] % 2 == 1:
+                    j += 2
+                
+                A[i], A[j] = A[j], A[i]
+
+            i += 2
+
+        return A
 ```
