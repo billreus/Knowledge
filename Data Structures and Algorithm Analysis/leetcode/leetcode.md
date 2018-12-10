@@ -12,6 +12,9 @@
     - [905. 按奇偶排序数组](#905-按奇偶排序数组)
         - [基本思路](#基本思路-1)
         - [改进](#改进-2)
+    - [832. 翻转图像](#832-翻转图像)
+        - [基本思路](#基本思路-2)
+        - [改进](#改进-3)
 
 <!-- /TOC -->
 
@@ -222,4 +225,63 @@ class Solution:
             i += 2
 
         return A
+```
+
+## 832. 翻转图像
+
+### 基本思路
+
+1. 获取数列行列
+2. 固定行进行反转和取反
+3. 遍历列
+
+```java
+class Solution {
+    public int[][] flipAndInvertImage(int[][] A) {
+        int lineLen = A.length;
+        int columnLen = A[0].length;        
+        int picture [][] = new int[lineLen][columnLen];
+        
+        
+        for (int i=0; i < lineLen; i++){
+            int copy = columnLen - 1;
+            for(int j=0; j < columnLen; j++){
+                picture[i][j] = A[i][copy];
+                copy--;
+                notA(picture, i, j);
+            }
+        }
+        return picture;
+    }
+
+    public void notA(int[][] A,int x,int y){
+            if(A[x][y] ==0){
+                A[x][y] =1;
+            }else{A[x][y] =0;}
+    }    
+}
+```
+
+### 改进
+
+每行的取反和头尾交换其实不需要遍历整个数组，只需要一个临时数去存储头，然后把头尾交换取反即可，交换到中间就整行交换结束。
+
+```java
+class Solution {
+    public int[][] flipAndInvertImage(int[][] A) {
+        for(int i =0;i<A.length;i++){
+            int temp;
+            int front = 0;
+            int end = A[i].length-1;
+            while(front <=end ){ //一行的交换取反
+                temp = A[i][front]; //头存在临时里面
+                A[i][front] = 1-A[i][end]; //头等于尾且取反
+                A[i][end] = 1-temp; //临时取反
+                front ++;
+                end --;
+            }
+        }
+        return A;
+    }
+}
 ```
