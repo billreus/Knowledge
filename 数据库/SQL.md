@@ -162,6 +162,8 @@ CREATE TABLE newtable AS
 SELECT * FROM mytable;
 ```
 
+* 插入数据避免重复插入：`INSERT IGNORE INTO mytable`
+
 ###  2.4. 更新替换
 
 ```SQL
