@@ -8,17 +8,42 @@
         - [基本思路](#基本思路)
         - [改进](#改进-1)
     - [709. 转换成小写字母](#709-转换成小写字母)
+    - [804. 唯一摩尔斯密码词](#804-唯一摩尔斯密码词)
+        - [最初想法](#最初想法-1)
+        - [改进](#改进-2)
 - [数组](#数组)
     - [905. 按奇偶排序数组](#905-按奇偶排序数组)
         - [基本思路](#基本思路-1)
-        - [改进](#改进-2)
+        - [改进](#改进-3)
     - [832. 翻转图像](#832-翻转图像)
         - [基本思路](#基本思路-2)
-        - [改进](#改进-3)
+        - [改进](#改进-4)
 
 <!-- /TOC -->
 
 # 字符串
+
+String转换成char
+
+```java
+String s = "abcd";
+char[] ss = s.toCharArray();
+```
+
+char转换成String:`String.valueOf(ss);`
+
+String看作字符串，char看作字符
+
+返回指定索引处的字符：`char word = words.chartAt(int index);`
+
+返回指定字符所在索引：`stringword.indexOf(word)`
+
+切割字符串(前开后闭)：`word.substring(0,3);`
+
+替换字符:`word.replace(".", ",")`
+
+* list,set添加使用add，stringbuilder和char添加使用append
+* string作为字符串是不可改变的，需要添加型字符串可以使用Stringbuilder和StringBuffer
 
 ## 771. 宝石与石头
 
@@ -168,6 +193,63 @@ class Solution {
     public String toLowerCase(String str) {
         return str.toLowerCase();
     }
+}
+```
+
+## 804. 唯一摩尔斯密码词
+
+### 最初想法
+
+1. 创建一个String存储摩斯密码，一个char存储24个字母，一个stringbuilder存储测试的摩斯密码，一个HashSet去重统计最后输出
+2. 双重for把words提取出单个字母，再for对比24个字母，相同即添加对应位置的摩斯密码，最后转化成string添加到hashset计算size
+```java
+class Solution {
+    public int uniqueMorseRepresentations(String[] words) {
+        String[] j = {".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
+        char[] w ={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+        HashSet<String> set = new HashSet<String>();
+        
+        for(String word : words){
+            //StringBuffer ms = new StringBuffer();
+            //单线程使用builder即可，速度快3ms
+            StringBuilder ms = new StringBuilder();
+            char[] wor = word.toCharArray();
+            for(char ww : wor){
+                for(int i=0; i<w.length; i++){
+                    if(ww == w[i]){
+                        ms.append(j[i]);
+                    }
+                }
+            }
+            set.add(ms.toString());
+        }
+        return set.size();
+    }
+}
+```
+
+### 改进
+
+无需存储完整的24字母，使用ascii码，获取word字母减去97即可得到对应在摩斯数组中的位置
+```java
+class Solution {
+    public int uniqueMorseRepresentations(String[] words) {
+        int baseIndex = 97;
+        Set<String> set = new HashSet<>();
+        for (String word : words) {
+        	int lenght = word.length();
+        	StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < lenght; i++) {
+				sb.append(morse[word.charAt(i) - baseIndex]);
+			}
+			set.add(sb.toString());
+		}
+        return set.size();
+    }
+    
+    String[] morse = {
+        ".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."
+    };
 }
 ```
 
