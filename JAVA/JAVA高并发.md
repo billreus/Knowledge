@@ -17,6 +17,9 @@
         - [2.2.2. interrupted()](#222-interrupted)
         - [2.2.3. sleep()](#223-sleep)
     - [2.3. 等待(wait)和通知(notify)](#23-等待wait和通知notify)
+        - [2.3.1. wait()和notify()示例](#231-wait和notify示例)
+        - [2.3.2. wait(long timeout)和notify()](#232-waitlong-timeout和notify)
+        - [2.3.3. wait()和notifyAll()](#233-wait和notifyall)
     - [2.4. 等待线程结束(join)和谦让(yield)](#24-等待线程结束join和谦让yield)
     - [2.5. 线程组](#25-线程组)
     - [2.6. 守护线程](#26-守护线程)
@@ -282,6 +285,170 @@ wait()和sleep()的区别在于：
 
 * wait() 是 Object 的方法，而 sleep() 是 Thread 的静态方法；
 * wait() 会释放锁，sleep() 不会。
+
+### 2.3.1. wait()和notify()示例
+
+```java
+// WaitTest.java的源码
+class ThreadA extends Thread{
+
+    public ThreadA(String name) {
+        super(name);
+    }
+
+    public void run() {
+        synchronized (this) {
+            System.out.println(Thread.currentThread().getName()+" call notify()");
+            // 唤醒当前的wait线程
+            notify();
+        }
+    }
+}
+
+public class WaitTest {
+
+    public static void main(String[] args) {
+
+        ThreadA t1 = new ThreadA("t1");
+
+        synchronized(t1) {
+            try {
+                // 启动“线程t1”
+                System.out.println(Thread.currentThread().getName()+" start t1");
+                t1.start();
+
+                // 主线程等待t1通过notify()唤醒。
+                System.out.println(Thread.currentThread().getName()+" wait()");
+                t1.wait();
+
+                System.out.println(Thread.currentThread().getName()+" continue");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+----运行结果----
+main start t1
+main wait()
+t1 call notify()
+main continue
+```
+
+### 2.3.2. wait(long timeout)和notify()
+
+```java
+// WaitTimeoutTest.java的源码
+class ThreadA extends Thread{
+
+    public ThreadA(String name) {
+        super(name);
+    }
+
+    public void run() {
+        System.out.println(Thread.currentThread().getName() + " run ");
+        // 死循环，不断运行。
+        while(true)
+            ;
+    }
+}
+
+public class WaitTimeoutTest {
+
+    public static void main(String[] args) {
+
+        ThreadA t1 = new ThreadA("t1");
+
+        synchronized(t1) {
+            try {
+                // 启动“线程t1”
+                System.out.println(Thread.currentThread().getName() + " start t1");
+                t1.start();
+
+                // 主线程等待t1通过notify()唤醒 或 notifyAll()唤醒，或超过3000ms延时；然后才被唤醒。
+                System.out.println(Thread.currentThread().getName() + " call wait ");
+                t1.wait(3000);
+
+                System.out.println(Thread.currentThread().getName() + " continue");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+----运行结果----
+main start t1
+main call wait 
+t1 run         // 大约3秒之后...输出“main continue”
+main continue
+```
+
+### 2.3.3. wait()和notifyAll()
+
+```java
+public class NotifyAllTest {
+
+    private static Object obj = new Object();
+    public static void main(String[] args) {
+
+        ThreadA t1 = new ThreadA("t1");
+        ThreadA t2 = new ThreadA("t2");
+        ThreadA t3 = new ThreadA("t3");
+        t1.start();
+        t2.start();
+        t3.start();
+
+        try {
+            System.out.println(Thread.currentThread().getName()+" sleep(3000)");
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        synchronized(obj) {
+            // 主线程等待唤醒。
+            System.out.println(Thread.currentThread().getName()+" notifyAll()");
+            obj.notifyAll();
+        }
+    }
+
+    static class ThreadA extends Thread{
+
+        public ThreadA(String name){
+            super(name);
+        }
+
+        public void run() {
+            synchronized (obj) {
+                try {
+                    // 打印输出结果
+                    System.out.println(Thread.currentThread().getName() + " wait");
+
+                    // 唤醒当前的wait线程
+                    obj.wait();
+
+                    // 打印输出结果
+                    System.out.println(Thread.currentThread().getName() + " continue");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+
+----运行结果----
+t1 wait
+main sleep(3000)
+t3 wait
+t2 wait
+main notifyAll()
+t2 continue
+t3 continue
+t1 continue
+```
 
 ## 2.4. 等待线程结束(join)和谦让(yield)
 
