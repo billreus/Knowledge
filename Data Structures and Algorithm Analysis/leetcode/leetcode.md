@@ -18,6 +18,9 @@
     - [832. 翻转图像](#832-翻转图像)
         - [基本思路](#基本思路-2)
         - [改进](#改进-4)
+    - [461. 汉明距离](#461-汉明距离)
+        - [基本思路](#基本思路-3)
+        - [改进](#改进-5)
 
 <!-- /TOC -->
 
@@ -255,6 +258,12 @@ class Solution {
 
 # 数组
 
+转换二进制字符: `String x = Integer.toBinaryString(x);`
+
+长度判断:`String.lengeth(); char.length;`
+
+* length用于计算字符串数组，length()用于字符长度
+
 ## 905. 按奇偶排序数组
 
 ### 基本思路
@@ -364,6 +373,66 @@ class Solution {
             }
         }
         return A;
+    }
+}
+```
+
+## 461. 汉明距离
+
+### 基本思路
+
+1. x与y转换成2进制，并且补位成等长
+2. 遍历比较每一位，累计不同
+
+```java
+class Solution {
+    public int hammingDistance(int x, int y) {
+        String xTwo = Integer.toBinaryString(x);
+        String yTwo = Integer.toBinaryString(y);
+        int xlength = xTwo.length();
+        int ylength = yTwo.length();
+        
+        if(xlength < ylength){                        
+            for(int i=0;i < ylength - xlength;i++)
+                xTwo = "0"+xTwo;                  
+        }
+        else{
+            for(int i=0;i < xlength - ylength;i++)
+                yTwo = "0"+yTwo;     
+        }
+        
+        char[] xc = xTwo.toCharArray();
+        char[] yc = yTwo.toCharArray();
+        //System.out.printf("%s, %s", xTwo, yTwo);
+        int count = 0;
+        for(int i=0; i<xc.length; i++){
+            if(xc[i] != yc[i]){
+                count++;
+            }
+        }
+        return count;
+    }
+}
+```
+
+### 改进
+
+1. 主要核心是异或(^),相同为0，不同为1；
+2. 统计异或以后为1的位；
+
+```java
+class Solution {
+    public int hammingDistance(int x, int y) {
+        int i = x ^ y;
+        int c = 0;
+        while(i > 0){
+            // 最后一位是否为1
+            if((i & 1) == 1){//位与运算，都为1为1
+                c ++;
+            }
+            i = i >> 1;
+        }
+        return c;
     }
 }
 ```
