@@ -21,6 +21,8 @@
     - [461. 汉明距离](#461-汉明距离)
         - [基本思路](#基本思路-3)
         - [改进](#改进-5)
+    - [942. 增减字符串匹配](#942-增减字符串匹配)
+        - [思路](#思路)
 
 <!-- /TOC -->
 
@@ -433,6 +435,37 @@ class Solution {
             i = i >> 1;
         }
         return c;
+    }
+}
+```
+
+## 942. 增减字符串匹配
+
+### 思路
+
+读到I从小到达排列，读到D从大到小排列
+
+```java
+class Solution {
+    public int[] diStringMatch(String S) {
+        int N = S.length();
+        char[] ss = S.toCharArray();
+        int min = 0;
+        int max = S.length();
+        int[] result = new int[N+1];
+        
+        for(int i=0; i < N ; i++){
+            if(ss[i] == 'I'){
+                result[i] = min;
+                min++;
+            }
+            if(ss[i] == 'D'){
+                result[i] = max;
+                max--;
+            }
+        }
+        result[N] = max;
+        return result;
     }
 }
 ```
