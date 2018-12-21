@@ -21,6 +21,8 @@
         - [2.3.2. wait(long timeout)和notify()](#232-waitlong-timeout和notify)
         - [2.3.3. wait()和notifyAll()](#233-wait和notifyall)
     - [2.4. 等待线程结束(join)和谦让(yield)](#24-等待线程结束join和谦让yield)
+        - [2.4.1. join分析](#241-join分析)
+        - [2.4.2. yield分析](#242-yield分析)
     - [2.5. 线程组](#25-线程组)
     - [2.6. 守护线程](#26-守护线程)
     - [2.7. 线程优先级](#27-线程优先级)
@@ -284,7 +286,70 @@ public final native void notify()
 wait()和sleep()的区别在于：
 
 * wait() 是 Object 的方法，而 sleep() 是 Thread 的静态方法；
-* wait() 会释放锁，sleep() 不会。
+* wait() 进入“等待(阻塞)状态”同时会释放锁，sleep() 进入“休眠(阻塞)状态”同时不会释放锁。
+
+sleep()例子：
+
+```java
+public class SleepLockTest{ 
+
+    private static Object obj = new Object();
+
+    public static void main(String[] args){ 
+        ThreadA t1 = new ThreadA("t1"); 
+        ThreadA t2 = new ThreadA("t2"); 
+        t1.start(); 
+        t2.start();
+    } 
+
+    static class ThreadA extends Thread{
+        public ThreadA(String name){ 
+            super(name); 
+        } 
+        public void run(){ 
+            // 获取obj对象的同步锁
+            synchronized (obj) {
+                try {
+                    for(int i=0; i <10; i++){ 
+                        System.out.printf("%s: %d\n", this.getName(), i); 
+                        // i能被4整除时，休眠100毫秒
+                        if (i%4 == 0)
+                            Thread.sleep(100);
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } 
+    } 
+}
+
+---结果---
+t1: 0
+t1: 1
+t1: 2
+t1: 3
+t1: 4
+t1: 5
+t1: 6
+t1: 7
+t1: 8
+t1: 9
+t2: 0
+t2: 1
+t2: 2
+t2: 3
+t2: 4
+t2: 5
+t2: 6
+t2: 7
+t2: 8
+t2: 9
+```
+
+主线程main中启动了两个线程t1和t2。t1和t2在run()会引用同一个对象的同步锁，即synchronized(obj)。在t1运行过程中，虽然它会调用Thread.sleep(100)；但是，t2是不会获取cpu执行权的。因为，t1并没有释放“obj所持有的同步锁”！
+
+* 若我们注释掉synchronized (obj)后再次执行该程序，t1和t2是可以相互切换的。
 
 ### 2.3.1. wait()和notify()示例
 
@@ -460,6 +525,74 @@ public final synchronized void join(long mills) throws InterruptedException
 ```
 
 第一个方法表示无限等待，会一直阻塞当前线程，直到目标线程执行完毕。第二个方法会给出一个最大等待时间，超过时间线程会继续执行下去。
+
+### 2.4.1. join分析
+
+作用：让主线程等待子线程结束后再运行。
+
+```java
+
+// 主线程
+public class Father extends Thread {
+    public void run() {
+        Son s = new Son();
+        s.start();
+        s.join();
+        ...
+    }
+}
+// 子线程
+public class Son extends Thread {
+    public void run() {
+        ...
+    }
+}
+```
+
+Father主线程中，先新建了子线程，再启动子线程并调用join()方法，join后Father主线程会一直等待，直到子线程运行完毕，Father主线程才接着运行。
+
+示例
+
+```java
+// JoinTest.java的源码
+public class JoinTest{ 
+
+    public static void main(String[] args){ 
+        try {
+            ThreadA t1 = new ThreadA("t1"); // 新建“线程t1”
+
+            t1.start();                     // 启动“线程t1”
+            t1.join();                        // 将“线程t1”加入到“主线程main”中，并且“主线程main()会等待它的完成”
+            System.out.printf("%s finish\n", Thread.currentThread().getName()); 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    } 
+
+    static class ThreadA extends Thread{
+
+        public ThreadA(String name){ 
+            super(name); 
+        } 
+        public void run(){ 
+            System.out.printf("%s start\n", this.getName()); 
+
+            // 延时操作
+            for(int i=0; i <1000000; i++)
+               ;
+
+            System.out.printf("%s finish\n", this.getName()); 
+        } 
+    } 
+}
+
+---结果---
+t1 start
+t1 finish
+main finish
+```
+
+### 2.4.2. yield分析
 
 `public static native void yield();`是一个静态方法，会让当前线程让出CPU。一般用于优先级非常低的功能上。
 
