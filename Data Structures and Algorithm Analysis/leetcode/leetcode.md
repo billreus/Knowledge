@@ -258,6 +258,27 @@ class Solution {
 }
 ```
 
+## 机器人是否返回原点
+
+```java
+class Solution {
+    public boolean judgeCircle(String moves) {
+        char[] mmoves = moves.toCharArray();
+        int heng =0;
+        int shu = 0;
+        
+        for(char move:mmoves){
+            if(move == 'R'){heng++;}
+            if(move == 'L'){heng--;}
+            if(move == 'U'){shu++;}
+            if(move == 'D'){shu--;}
+        }
+        if(heng == 0 && shu == 0){return true;}
+        else{return false;}
+    }
+}
+```
+
 # 数组
 
 转换二进制字符: `String x = Integer.toBinaryString(x);`
@@ -469,3 +490,82 @@ class Solution {
     }
 }
 ```
+
+## 922.按奇偶排序数组II
+
+### 思路
+
+创建一个新数组存储，从A判断来的奇偶数
+
+```java
+class Solution {
+    public int[] sortArrayByParityII(int[] A) {
+        int ou = 0;
+        int ji = 1;
+        int[] B = new int[A.length];
+        
+        for(int i = 0; i < A.length; i++){
+            if(A[i]%2 == 0){
+                B[ou] = A[i];
+                ou = ou + 2;
+            }
+            else{
+                B[ji] = A[i];
+                ji = ji + 2;
+            }
+        }
+        return B;
+    }
+}
+```
+
+### 改进
+
+对于`if(A[i]%2 == 0)`优化成`if(A[i] & 1 == 0)`
+
+## 852. 山脉数组的峰顶索引
+
+### 基本思路
+
+遍历找到最大值
+
+```java
+class Solution {
+    public int peakIndexInMountainArray(int[] A) {
+        int max = A[0];
+        int index = 0;
+        
+        for(int i=1;  i<A.length; i++){
+            if(A[i] > A[index]){
+                max = A[i];
+                index = i;
+            }
+        }
+        return index;
+    }
+}
+```
+
+### 改进
+
+二分法
+
+```java
+class Solution {
+    public int peakIndexInMountainArray(int[] A) {
+        return mountainIndex(A,0,A.length - 1);
+    }
+    
+    public static int mountainIndex(int[] A,int l,int r) {
+            int mid = l + (r - l) / 2;
+            if(A[mid] > A[mid - 1] && A[mid] > A[mid + 1])
+                return mid;
+            else if(A[mid] < A[mid + 1])
+                return mountainIndex(A,mid+1,r);
+            else
+                return mountainIndex(A,l,mid);
+        
+    }
+}
+```
+
