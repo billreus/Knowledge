@@ -13,9 +13,10 @@
         - [2.1.2. Callable接口](#212-callable接口)
         - [2.1.3. 继承Thread类](#213-继承thread类)
     - [2.2. 线程中断](#22-线程中断)
-        - [2.2.1. InterruptedException](#221-interruptedexception)
-        - [2.2.2. interrupted()](#222-interrupted)
-        - [2.2.3. sleep()](#223-sleep)
+        - [2.2.1. 终止处于阻塞状态的线程(InterruptedException)](#221-终止处于阻塞状态的线程interruptedexception)
+        - [2.2.2. 终止处于运行状态的线程(interrupted())](#222-终止处于运行状态的线程interrupted)
+        - [2.2.3. 综合使用](#223-综合使用)
+        - [2.2.4. sleep()](#224-sleep)
     - [2.3. 等待(wait)和通知(notify)](#23-等待wait和通知notify)
         - [2.3.1. wait()和notify()示例](#231-wait和notify示例)
         - [2.3.2. wait(long timeout)和notify()](#232-waitlong-timeout和notify)
@@ -191,7 +192,7 @@ public boolean Thread.isInterrupted() //判断是否被中断
 public static boolean Thread.interrupted() //判断是否被中断，并清除当前中断状态
 ```
 
-### 2.2.1. InterruptedException
+### 2.2.1. 终止处于阻塞状态的线程(InterruptedException)
 
 通过调用一个线程的 interrupt() 来中断该线程，如果该线程处于阻塞、限期等待或者无限期等待状态，那么就会抛出 InterruptedException，从而提前结束该线程。但是不能中断 I/O 阻塞和 synchronized 锁阻塞。
 
@@ -223,7 +224,7 @@ public static void main(String[] args) throws InterruptedException {
 }
 ```
 
-### 2.2.2. interrupted()
+### 2.2.2. 终止处于运行状态的线程(interrupted())
 
 如果一个线程的 run() 方法执行一个无限循环，并且没有执行 sleep() 等会抛出 InterruptedException 的操作，那么调用线程的 interrupt() 方法就无法使线程提前结束。
 
@@ -252,7 +253,93 @@ public static void main(String[] args) throws InterruptedException {
 }
 ```
 
-### 2.2.3. sleep()
+### 2.2.3. 综合使用
+
+通用的终止线程形式如下：
+
+```java
+@Override
+public void run() {
+    try {
+        // 1. isInterrupted()保证，只要中断标记为true就终止线程。
+        while (!isInterrupted()) {
+            // 执行任务...
+        }
+    } catch (InterruptedException ie) {  
+        // 2. InterruptedException异常保证，当InterruptedException异常产生时，线程被终止。
+    }
+}
+```
+
+示例：
+
+```java
+// Demo1.java的源码
+class MyThread extends Thread {
+    
+    public MyThread(String name) {
+        super(name);
+    }
+
+    @Override
+    public void run() {
+        try {  
+            int i=0;
+            while (!isInterrupted()) {
+                Thread.sleep(100); // 休眠100ms
+                i++;
+                System.out.println(Thread.currentThread().getName()+" ("+this.getState()+") loop " + i);  
+            }
+        } catch (InterruptedException e) {  
+            System.out.println(Thread.currentThread().getName() +" ("+this.getState()+") catch InterruptedException.");  
+        }
+    }
+}
+
+public class Demo1 {
+
+    public static void main(String[] args) {  
+        try {  
+            Thread t1 = new MyThread("t1");  // 新建“线程t1”
+            System.out.println(t1.getName() +" ("+t1.getState()+") is new.");  
+
+            t1.start();                      // 启动“线程t1”
+            System.out.println(t1.getName() +" ("+t1.getState()+") is started.");  
+
+            // 主线程休眠300ms，然后主线程给t1发“中断”指令。
+            Thread.sleep(300);
+            t1.interrupt();
+            System.out.println(t1.getName() +" ("+t1.getState()+") is interrupted.");
+
+            // 主线程休眠300ms，然后查看t1的状态。
+            Thread.sleep(300);
+            System.out.println(t1.getName() +" ("+t1.getState()+") is interrupted now.");
+        } catch (InterruptedException e) {  
+            e.printStackTrace();
+        }
+    } 
+}
+
+结果：
+t1 (NEW) is new.
+t1 (RUNNABLE) is started.
+t1 (RUNNABLE) loop 1
+t1 (RUNNABLE) loop 2
+t1 (TIMED_WAITING) is interrupted.
+t1 (RUNNABLE) catch InterruptedException.
+t1 (TERMINATED) is interrupted now.
+
+```
+
+说明：
+
+1. 主线程main中通过new MyThread("t1")创建线程t1，之后通过t1.start()启动线程t1。
+2. t1启动之后，会不断的检查它的中断标记，如果中断标记为“false”；则休眠（中断）100ms。
+3. t1休眠之后，会切换到主线程main；主线程再次运行时，会执行t1.interrupt()中断线程t1。t1收到中断指令之后，会将t1的中断标记设置“false”，而且会抛出InterruptedException异常。
+
+* 终止处于阻塞状态的（wait(),sleep()等）线程，捕获异常的代码在while循环内，就算break了，也不会终止当前线程，他只是跳出了while循环，而你的示例代码恰好又没有继续执行的代码，所以是线程是正常终止，而非调用interrupt()方法捕获异常终止的！
+
+### 2.2.4. sleep()
 
 Thread.sleep(millisec) 方法会休眠当前正在执行的线程，millisec 单位为毫秒
 
