@@ -30,6 +30,9 @@
     - [852. 山脉数组的峰顶索引](#852-山脉数组的峰顶索引)
         - [基本思路](#基本思路-4)
         - [改进](#改进-7)
+    - [961. 重复N次元素](#961-重复n次元素)
+        - [基本思路](#基本思路-5)
+        - [改进](#改进-8)
 - [二叉树](#二叉树)
     - [104. 二叉树的最大深度](#104-二叉树的最大深度)
 
@@ -577,6 +580,66 @@ class Solution {
     }
 }
 ```
+
+## 961. 重复N次元素
+
+### 基本思路
+
+1. 对A进行排序，遍历A
+2. 记录重复次数，满足一半就返回；不满足就重置计数
+
+```java
+class Solution {
+    public int repeatedNTimes(int[] A) {
+        Arrays.sort(A);
+        int ret = A[0];
+        int num = 0;
+        
+        for(int i=0; i < A.length; i++){
+            if(A[i] != ret){
+                ret = A[i];
+                num = 1;
+            }
+            else{
+                num++;
+                if(num == A.length/2){
+                    return ret;
+                }
+            }
+        }
+        return ret;
+    }
+}
+```
+
+### 改进
+
+最快速度是使用set，长度为A/2+1，当无法存储时即此为结果
+
+```java
+class Solution {
+    public int repeatedNTimes(int[] A) {
+        Set<Integer> set = new HashSet<>(A.length / 2 + 1);
+        for (int i : A) {
+            if (!set.add(i)) {
+                return i;
+            }
+        }
+        return 0;
+    }
+}
+```
+
+由于有一半数肯定是相同的，只需要排序后判断最后一个数和中间右是否相同，如果相同则后一半都为答案数，如果不同则中间左边一位肯定是。
+
+```java
+public int repeatedNTimes(int[] A) {
+    Arrays.sort(A);
+    return A[A.length / 2] == A[A.length - 1] ? A[A.length - 1] : A[A.length / 2 - 1];
+}
+```
+
+* 此方法速度最慢，只是简洁。
 
 # 二叉树
 
