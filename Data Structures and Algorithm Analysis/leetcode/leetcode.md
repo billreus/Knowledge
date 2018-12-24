@@ -33,8 +33,12 @@
     - [961. 重复N次元素](#961-重复n次元素)
         - [基本思路](#基本思路-5)
         - [改进](#改进-8)
+    - [476. 数字的补救](#476-数字的补救)
 - [二叉树](#二叉树)
     - [104. 二叉树的最大深度](#104-二叉树的最大深度)
+    - [617. 合并二叉树](#617-合并二叉树)
+        - [基本思路](#基本思路-6)
+        - [改进](#改进-9)
 
 <!-- /TOC -->
 
@@ -298,6 +302,10 @@ class Solution {
 长度判断:`String.lengeth(); char.length;`
 
 * length用于计算字符串数组，length()用于字符长度
+
+二进制数最左边的最高位，且高位后面全部补零：`Integer.highestOneBit(num) `
+
+&位与运算，0可以清零，1可以保护
 
 ## 905. 按奇偶排序数组
 
@@ -641,6 +649,21 @@ public int repeatedNTimes(int[] A) {
 
 * 此方法速度最慢，只是简洁。
 
+## 476. 数字的补救
+
+主要注意取反头有补码表示正负
+
+1. highestOneBit(num)最高为置1,-1以后首位为0其它为1。
+2. &保证补码为0不干扰数字
+
+```java
+class Solution {
+    public int findComplement(int num) {
+        return ~num&(Integer.highestOneBit(num)-1);
+    }
+}
+```
+
 # 二叉树
 
 ## 104. 二叉树的最大深度
@@ -660,6 +683,75 @@ public int repeatedNTimes(int[] A) {
 class Solution {
     public int maxDepth(TreeNode root) {
         return root == null ? 0 : (1+ Math.max(maxDepth(root.left), maxDepth(root.right)));
+    }
+}
+```
+
+## 617. 合并二叉树
+
+### 基本思路
+
+1. 判断t1和t2是否为空，给val赋值并赋值
+2. 分别递归t1,t2左节点和t1,t2右节点
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        TreeNode newtree = null;
+        int val = 0;
+        
+        if(t1 != null && t2 != null){
+            val = t1.val + t2.val;
+            newtree = new TreeNode(val);
+            
+            newtree.left = mergeTrees(t1.left, t2.left);
+            newtree.right = mergeTrees(t1.right, t2.right);
+        } else if( t1 != null){
+            newtree = new TreeNode(t1.val);
+            
+            newtree.left = mergeTrees(t1.left, null);
+            newtree.right = mergeTrees(t1.right, null);
+        }else if( t2 != null){
+            newtree = new TreeNode(t2.val);
+            
+            newtree.left = mergeTrees(null, t2.left);
+            newtree.right = mergeTrees(null, t2.right);
+        }else{
+            newtree = null;
+        }
+        return newtree;
+    }
+}
+```
+
+### 改进
+
+无需新建一个树去存放结果，在t1上操作合并递归即可
+
+```java
+class Solution {
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if (t1 == null) {
+            return t2;
+        }
+        if (t2 == null) {
+            return t1;
+        }
+        // 节点的值合并
+        t1.val = t1.val + t2.val;
+        // 继续
+        t1.left =  mergeTrees(t1.left, t2 != null ? t2.left : null);
+        t1.right = mergeTrees(t1.right, t2 != null ? t2.right : null);
+        return t1;
     }
 }
 ```
