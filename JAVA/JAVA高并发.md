@@ -701,6 +701,8 @@ tg.list(); //打印线程组中所有线程信息
 
 ## 2.6. 守护线程
 
+守护线程也就是“后台线程”，一般用来执行后台任务。
+
 ```java
 Thread t = new DaemonT(); //Daemont为线程功能设置的自己写的类
 t.setDamon(true); //线程守护，必须在start之前
@@ -1572,9 +1574,135 @@ public final class Product{ //确保无子类
 
 ## 4.3. 生产者-消费者模式
 
-生产者-消费者模式核心是共享内存缓存区（数据在多线程间共享）。
+生产/消费者问题是个非常典型的多线程问题，涉及到的对象包括“生产者”、“消费者”、“仓库”和“产品”。他们之间的关系如下：
 
-其中BlocKigQueue充当共享内存缓冲区，PCData对象表示一个生产任务，或相关数据。
+1. 生产者仅仅在仓储未满时候生产，仓满则停止生产。
+2. 消费者仅仅在仓储有产品时候才能消费，仓空则等待。
+3. 当消费者发现仓储没产品可消费时候会通知生产者生产。
+4. 生产者在生产出可消费产品时候，应该通知等待的消费者去消费。
+
+使用wait()/notify()方式实现：
+
+```java
+// Demo1.java
+// 仓库
+class Depot {
+    private int capacity;    // 仓库的容量
+    private int size;        // 仓库的实际数量
+
+    public Depot(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+    }
+
+    public synchronized void produce(int val) {
+        try {
+             // left 表示“想要生产的数量”(有可能生产量太多，需多此生产)
+            int left = val;
+            while (left > 0) {
+                // 库存已满时，等待“消费者”消费产品。
+                while (size >= capacity)
+                    wait();
+                // 获取“实际生产的数量”(即库存中新增的数量)
+                // 如果“库存”+“想要生产的数量”>“总的容量”，则“实际增量”=“总的容量”-“当前容量”。(此时填满仓库)
+                // 否则“实际增量”=“想要生产的数量”
+                int inc = (size+left)>capacity ? (capacity-size) : left;
+                size += inc;
+                left -= inc;
+                System.out.printf("%s produce(%3d) --> left=%3d, inc=%3d, size=%3d\n", 
+                        Thread.currentThread().getName(), val, left, inc, size);
+                // 通知“消费者”可以消费了。
+                notifyAll();
+            }
+        } catch (InterruptedException e) {
+        }
+    } 
+
+    public synchronized void consume(int val) {
+        try {
+            // left 表示“客户要消费数量”(有可能消费量太大，库存不够，需多此消费)
+            int left = val;
+            while (left > 0) {
+                // 库存为0时，等待“生产者”生产产品。
+                while (size <= 0)
+                    wait();
+                // 获取“实际消费的数量”(即库存中实际减少的数量)
+                // 如果“库存”<“客户要消费的数量”，则“实际消费量”=“库存”；
+                // 否则，“实际消费量”=“客户要消费的数量”。
+                int dec = (size<left) ? size : left;
+                size -= dec;
+                left -= dec;
+                System.out.printf("%s consume(%3d) <-- left=%3d, dec=%3d, size=%3d\n", 
+                        Thread.currentThread().getName(), val, left, dec, size);
+                notifyAll();
+            }
+        } catch (InterruptedException e) {
+        }
+    }
+
+    public String toString() {
+        return "capacity:"+capacity+", actual size:"+size;
+    }
+} 
+
+// 生产者
+class Producer {
+    private Depot depot;
+    
+    public Producer(Depot depot) {
+        this.depot = depot;
+    }
+
+    // 消费产品：新建一个线程向仓库中生产产品。
+    public void produce(final int val) {
+        new Thread() {
+            public void run() {
+                depot.produce(val);
+            }
+        }.start();
+    }
+}
+
+// 消费者
+class Customer {
+    private Depot depot;
+    
+    public Customer(Depot depot) {
+        this.depot = depot;
+    }
+
+    // 消费产品：新建一个线程从仓库中消费产品。
+    public void consume(final int val) {
+        new Thread() {
+            public void run() {
+                depot.consume(val);
+            }
+        }.start();
+    }
+}
+
+public class Demo1 {  
+    public static void main(String[] args) {  
+        Depot mDepot = new Depot(100);
+        Producer mPro = new Producer(mDepot);
+        Customer mCus = new Customer(mDepot);
+
+        mPro.produce(60);
+        mPro.produce(120);
+        mCus.consume(90);
+        mCus.consume(150);
+        mPro.produce(110);
+    }
+}
+```
+
+* 对于生产方法produce()而言：当仓库满时，生产者线程等待，需要等待消费者消费产品之后，生产线程才能生产；生产者线程生产完产品之后，会通过notifyAll()唤醒同步锁上的所有线程，包括“消费者线程”，即我们所说的“通知消费者进行消费”。
+
+* 对于消费方法consume()而言：当仓库为空时，消费者线程等待，需要等待生产者生产产品之后，消费者线程才能消费；消费者线程消费完产品之后，会通过notifyAll()唤醒同步锁上的所有线程，包括“生产者线程”，即我们所说的“通知生产者进行生产”。
+
+* 同一时间，生产者和消费者线程只能有一个能运行。通过同步锁，实现了对“残酷”的互斥访问。
+
+BlocKigQueue充当共享内存缓冲区，PCData对象表示一个生产任务，或相关数据。
 
 生产者首先构建PCDate对象，并放入BlockingQueue队列中。
 
