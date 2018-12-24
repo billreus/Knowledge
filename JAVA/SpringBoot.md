@@ -2,17 +2,21 @@
 
 ## 层
 
-主要层分为：controller，dao，service
+主要层分为：controller，service，dao.
 
-@Controller：controller层注解
+* controller层与web交互，dao层与数据库交互。model与Aspect层作用于主要层。
 
-@repository：dao层注解
+controller层注解：@Controller
 
-@service：service层注解
+dao层注解：@Maooer @repository（一般不使用，要自己写对应dao的mapper配置文件）
 
-@Aspect：面向切面的AOP层注解
+service层注解：@service
 
-@component：除了三层以外的中立层，例如AOP层
+面向切面的AOP层注解：@Aspect
+
+除了三层以外的中立层：@component
+
+* model无需注解
 
 ## AOP
 
