@@ -1,4 +1,26 @@
-# 注解
+<!-- TOC -->
+
+- [1. 注解](#1-%E6%B3%A8%E8%A7%A3)
+  - [层](#%E5%B1%82)
+- [2. DAO层](#2-dao%E5%B1%82)
+  - [2.1. Java注解](#21-java%E6%B3%A8%E8%A7%A3)
+    - [2.1.1. 插入](#211-%E6%8F%92%E5%85%A5)
+    - [2.1.2. 选择](#212-%E9%80%89%E6%8B%A9)
+    - [2.1.3. 更新](#213-%E6%9B%B4%E6%96%B0)
+  - [2.2. xml配置](#22-xml%E9%85%8D%E7%BD%AE)
+  - [AOP](#aop)
+  - [Request、Response](#requestresponse)
+  - [其它](#%E5%85%B6%E5%AE%83)
+  - [异常](#%E5%BC%82%E5%B8%B8)
+- [AOP](#aop-1)
+- [Log](#log)
+- [request](#request)
+- [response](#response)
+- [error](#error)
+
+<!-- /TOC -->
+
+# 1. 注解
 
 ## 层
 
@@ -6,17 +28,88 @@
 
 * controller层与web交互，dao层与数据库交互。model与Aspect层作用于主要层。
 
-controller层注解：@Controller
+@Controller ：controller层注解
 
-dao层注解：@Maooer @repository（一般不使用，要自己写对应dao的mapper配置文件）
+@Maooer：dao层注解 
 
-service层注解：@service
+@repository ：dao层注解（一般不使用，要自己写对应dao的mapper配置文件）
 
-面向切面的AOP层注解：@Aspect
+@service：service层注解
 
-除了三层以外的中立层：@component
+@Aspect：面向切面的AOP层注解
+
+@component：中立层
 
 * model无需注解
+
+# 2. DAO层
+
+DAO层直接与数据库交互，主要有两种与数据库交互的方法：
+
+1. Java注解
+2. xml配置文件
+
+## 2.1. Java注解
+
+常用注解：
+1. @Insert插入
+2. @Select选择
+3. @Upadate更新
+4. @param命名参数传入sql，与#{}内的参数对应
+
+### 2.1.1. 插入
+
+示例：
+
+```java
+@Insert({"insert into ", TABLE_NAME, " (", INSERT_FIELDS,
+        " ) values (#{title},#{link},#{image},#{likeCount},#{commentCount},#{createdDate},#{userId})"})
+int addNews(News news);
+```
+
+### 2.1.2. 选择
+
+示例：
+
+```java
+@Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, "where id=#{id}"})
+News selectbyId(int id);
+```
+
+### 2.1.3. 更新
+
+示例：
+
+```java
+@Update({"update ", TABLE_NAME, " set like_count=#{likeCount} where id=#{id}"})
+int updateLikeCount(@Param("id")int id,@Param("likeCount")int likeCount);
+```
+
+## 2.2. xml配置
+
+配置模版为：
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nowcode.toutiao.dao.NewsDAO"> <!--相关联的map层-->
+    <sql id="table">news</sql><!--表名-->
+    <sql id="selectFields">id,title, link, image, like_count, comment_count,created_date,user_id</sql><!--列名-->
+    <select id="selectByUserIdAndOffset" resultType="com.nowcode.toutiao.model.News"><!-- -->
+        SELECT
+        <include refid="selectFields"/>
+        FROM
+        <include refid="table"/>
+
+        <if test="userId != 0"><!--判断-->
+            WHERE user_id = #{userId}
+        </if>
+        ORDER BY id DESC<!--排序-->
+        LIMIT #{offset},#{limit}
+    </select>
+</mapper>
+```
 
 ## AOP
 
