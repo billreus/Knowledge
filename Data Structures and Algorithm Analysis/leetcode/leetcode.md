@@ -39,6 +39,9 @@
     - [617. 合并二叉树](#617-合并二叉树)
         - [基本思路](#基本思路-6)
         - [改进](#改进-9)
+    - [226. 翻转二叉树](#226-翻转二叉树)
+- [链表](#链表)
+    - [237. 删除链表中的节点](#237-删除链表中的节点)
 
 <!-- /TOC -->
 
@@ -752,6 +755,57 @@ class Solution {
         t1.left =  mergeTrees(t1.left, t2 != null ? t2.left : null);
         t1.right = mergeTrees(t1.right, t2 != null ? t2.right : null);
         return t1;
+    }
+}
+```
+
+## 226. 翻转二叉树
+
+左右置换，递归左右节点
+
+```java
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode invertTree(TreeNode root) {
+         if (root != null) {
+            TreeNode tmpNode = root.left;
+            root.left = root.right;
+            root.right = tmpNode;
+            invertTree(root.left);
+            invertTree(root.right);
+        }
+        return root;
+    }
+}
+```
+
+# 链表
+
+## 237. 删除链表中的节点
+
+由于不删除结尾节点，所以只需要把删除节点的值和指向用下一个值替代即可
+
+```java
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void deleteNode(ListNode node) {
+        node.val = node.next.val;
+        node.next = node.next.next;
     }
 }
 ```
