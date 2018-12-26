@@ -8,7 +8,11 @@
     - [2.1.2. 选择](#212-%E9%80%89%E6%8B%A9)
     - [2.1.3. 更新](#213-%E6%9B%B4%E6%96%B0)
   - [2.2. xml配置](#22-xml%E9%85%8D%E7%BD%AE)
-  - [AOP](#aop)
+- [3. Service层](#3-service%E5%B1%82)
+  - [3.1. 复写](#31-%E5%A4%8D%E5%86%99)
+  - [3.2. 返回数据](#32-%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE)
+  - [3.3. 对数据进行处理](#33-%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%A4%84%E7%90%86)
+- [AOP](#aop)
   - [Request、Response](#requestresponse)
   - [其它](#%E5%85%B6%E5%AE%83)
   - [异常](#%E5%BC%82%E5%B8%B8)
@@ -111,7 +115,31 @@ int updateLikeCount(@Param("id")int id,@Param("likeCount")int likeCount);
 </mapper>
 ```
 
-## AOP
+# 3. Service层
+
+实现对DAO层数据操作统一命名对象
+
+## 3.1. 复写
+
+@Autowired 注释，它可以对类成员变量、方法及构造函数进行标注，完成自动装配的工作。 通过 @Autowired的使用来消除 set ，get方法。即不用声明和new对象。
+
+## 3.2. 返回数据
+
+Service层主要对DAO层声明的对象进行return封装，便于Controller层调用
+
+例如在2.1.3中更新了数据，在Service中封装为：
+
+```java
+public  int  updateCommentCount(int id,int count){
+        return newsDAO.updateCommentCount(id,count);
+    }
+```
+
+## 3.3. 对数据进行处理
+
+Service层第二个作用是对前端读取上来的数据进行一些处理，处理完再交给DAO层，最后放入数据库。
+
+# AOP
 
 @Before和@After：用于切类动作前后
 
@@ -136,6 +164,10 @@ int updateLikeCount(@Param("id")int id,@Param("likeCount")int likeCount);
 @Exception
 
 @ExceptionHandler： 异常捕获动作，后面使用@ResponseBody自定义动作
+
+
+
+
 
 # AOP
 # Log
