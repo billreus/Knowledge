@@ -15,6 +15,7 @@
     - [344. 反转字符串](#344-反转字符串)
         - [基本思路](#基本思路-1)
         - [改进](#改进-3)
+    - [944. 删列造序](#944-删列造序)
 - [数组](#数组)
     - [905. 按奇偶排序数组](#905-按奇偶排序数组)
         - [基本思路](#基本思路-2)
@@ -44,6 +45,9 @@
         - [基本思路](#基本思路-7)
         - [改进](#改进-10)
     - [226. 翻转二叉树](#226-翻转二叉树)
+    - [590. N叉树的后序遍历](#590-n叉树的后序遍历)
+        - [基本思路](#基本思路-8)
+        - [改进](#改进-11)
 - [链表](#链表)
     - [237. 删除链表中的节点](#237-删除链表中的节点)
 - [智力题](#智力题)
@@ -340,6 +344,27 @@ class Solution {
             }
             return String.valueOf(c);
         }
+}
+```
+
+## 944. 删列造序
+
+```java
+class Solution {
+    public int minDeletionSize(String[] A) {
+        if(A == null || A.length == 0) return 0;
+        int count = 0;
+        for(int i=0; i<A[0].length(); i++){
+            for(int j=0; j<A.length-1; j++){
+                if(A[j].charAt(i) > A[j+1].charAt(i)){
+                    count++;
+                    break;
+                }
+            }
+            
+        }
+        return count;
+    }
 }
 ```
 
@@ -740,6 +765,12 @@ class Solution {
 
 # 二叉树
 
+存放不确定长度数组：`List<Integer> list = new ArrayList<Integer>();`
+
+数组增加：`list.add()`
+
+栈操作:`pop(), isEmpty(), push(), peek()`
+
 ## 104. 二叉树的最大深度
 
 递归遍历
@@ -858,6 +889,78 @@ class Solution {
 }
 ```
 
+## 590. N叉树的后序遍历
+
+
+### 基本思路
+
+建立两个Stack，一个用于把每层放入，再每层弹出给下一个stack和把root交给子节点。下一个stack用于把值传递给list。
+
+```java
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> children;
+
+    public Node() {}
+
+    public Node(int _val,List<Node> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+class Solution {
+    public List<Integer> postorder(Node root) {
+        List<Integer> list = new ArrayList<Integer>();
+        
+        if(root == null) return list;
+        if(root.children == null){
+            list.add(root.val);
+            return list;
+        }
+        
+        Stack<Node> stack = new Stack<Node>();
+        Stack<Node> restack = new Stack<Node>();
+        stack.push(root);
+        while(!stack.isEmpty()){
+            root = stack.pop();
+            restack.push(root);
+            for(int i=0; i<root.children.size(); i++){
+                stack.push(root.children.get(i));
+            }
+        }
+        
+        while(!restack.isEmpty()){
+            list.add(restack.pop().val);
+        }
+        return list;
+    }
+}
+
+```
+
+### 改进
+
+递归思想，遍历root.children并作为node递归。
+
+```java
+class Solution {
+    List<Integer> list = new ArrayList();
+
+    public List<Integer> postorder(Node root) {
+        if (root != null) {
+            for (Node node : root.children) {
+                postorder(node);
+            }
+            list.add(root.val);
+        }
+        return list;
+    }
+}
+```
+
 # 链表
 
 ## 237. 删除链表中的节点
@@ -894,6 +997,4 @@ class Solution {
     }
 }
 ```
-
-
 
