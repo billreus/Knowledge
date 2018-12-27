@@ -12,6 +12,7 @@
   - [3.1. 复写](#31-%E5%A4%8D%E5%86%99)
   - [3.2. 返回数据](#32-%E8%BF%94%E5%9B%9E%E6%95%B0%E6%8D%AE)
   - [3.3. 对数据进行处理](#33-%E5%AF%B9%E6%95%B0%E6%8D%AE%E8%BF%9B%E8%A1%8C%E5%A4%84%E7%90%86)
+- [4. Controller层](#4-controller%E5%B1%82)
 - [AOP](#aop)
   - [Request、Response](#requestresponse)
   - [其它](#%E5%85%B6%E5%AE%83)
@@ -138,6 +139,12 @@ public  int  updateCommentCount(int id,int count){
 ## 3.3. 对数据进行处理
 
 Service层第二个作用是对前端读取上来的数据进行一些处理，处理完再交给DAO层，最后放入数据库。
+
+# 4. Controller层
+
+映射地址使用：@RequestMapping(path={"/dizhi"}, method = {RequestMethod.GET, RequestMethod.POST})
+
+将java对象转为json格式的数据:@ResponseBody
 
 # AOP
 
