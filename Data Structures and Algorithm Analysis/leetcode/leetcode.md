@@ -16,38 +16,42 @@
         - [基本思路](#基本思路-1)
         - [改进](#改进-3)
     - [944. 删列造序](#944-删列造序)
-- [数组](#数组)
-    - [905. 按奇偶排序数组](#905-按奇偶排序数组)
+    - [500. 键盘行](#500-键盘行)
         - [基本思路](#基本思路-2)
         - [改进](#改进-4)
-    - [832. 翻转图像](#832-翻转图像)
+- [数组](#数组)
+    - [905. 按奇偶排序数组](#905-按奇偶排序数组)
         - [基本思路](#基本思路-3)
         - [改进](#改进-5)
-    - [461. 汉明距离](#461-汉明距离)
+    - [832. 翻转图像](#832-翻转图像)
         - [基本思路](#基本思路-4)
         - [改进](#改进-6)
+    - [461. 汉明距离](#461-汉明距离)
+        - [基本思路](#基本思路-5)
+        - [改进](#改进-7)
     - [942. 增减字符串匹配](#942-增减字符串匹配)
         - [思路](#思路)
     - [922.按奇偶排序数组II](#922按奇偶排序数组ii)
         - [思路](#思路-1)
-        - [改进](#改进-7)
-    - [852. 山脉数组的峰顶索引](#852-山脉数组的峰顶索引)
-        - [基本思路](#基本思路-5)
         - [改进](#改进-8)
-    - [961. 重复N次元素](#961-重复n次元素)
+    - [852. 山脉数组的峰顶索引](#852-山脉数组的峰顶索引)
         - [基本思路](#基本思路-6)
         - [改进](#改进-9)
+    - [961. 重复N次元素](#961-重复n次元素)
+        - [基本思路](#基本思路-7)
+        - [改进](#改进-10)
     - [476. 数字的补救](#476-数字的补救)
     - [728. 自然数](#728-自然数)
 - [二叉树](#二叉树)
     - [104. 二叉树的最大深度](#104-二叉树的最大深度)
     - [617. 合并二叉树](#617-合并二叉树)
-        - [基本思路](#基本思路-7)
-        - [改进](#改进-10)
-    - [226. 翻转二叉树](#226-翻转二叉树)
-    - [590. N叉树的后序遍历](#590-n叉树的后序遍历)
         - [基本思路](#基本思路-8)
         - [改进](#改进-11)
+    - [226. 翻转二叉树](#226-翻转二叉树)
+    - [590. N叉树的后序遍历](#590-n叉树的后序遍历)
+        - [基本思路](#基本思路-9)
+        - [改进](#改进-12)
+    - [589. N叉树的前序遍历](#589-n叉树的前序遍历)
 - [链表](#链表)
     - [237. 删除链表中的节点](#237-删除链表中的节点)
 - [智力题](#智力题)
@@ -364,6 +368,87 @@ class Solution {
             
         }
         return count;
+    }
+}
+```
+
+## 500. 键盘行
+
+### 基本思路
+
+1. 创建三个字符串用于存储三行字符
+2. 遍历输入的字符
+3. 以头字符作为依据，遍历每个字符的字母判断是否包含在该行，不再直接跳出
+4. 最后把结果list转换成string
+
+```java
+class Solution {
+    public String[] findWords(String[] words) {
+        String s1 = "qwertyuiop";
+        String s2 = "asdfghjkl";
+        String s3 = "zxcvbnm";
+        String tmp = s1;       
+         List<String> list = new ArrayList<String>();
+        for(String s : words){
+            String ss = s.toLowerCase();
+            char c = ss.charAt(0);
+            if(s1.contains(c+"")){
+                tmp = s1;
+            }
+            else if(s2.contains(c+"")){
+                tmp = s2;
+            }
+            else if(s3.contains(c+"")){
+                tmp = s3;
+            }
+            list.add(s);
+            for(char cs : ss.toCharArray()){
+                if(!tmp.contains(cs+"")){
+                    list.remove(s);
+                    break;
+                }
+            }
+        } 
+        String[] result = new String[list.size()];
+        return list.toArray(result);
+    }
+}
+```
+
+### 改进
+
+不用头字符作为依据，而是在遍历字符时以目标不在三行中的false作为判断，满足三行true条件才加入到list中
+
+```java
+class Solution {
+    public String[] findWords(String[] words) {
+        String s1 = "qwertyuiop";
+        String s2 = "asdfghjkl";
+        String s3 = "zxcvbnm";
+        List<String> list = new LinkedList<>();
+        for(int i = 0; i < words.length; i ++) {
+            String s4 = words[i].toLowerCase();
+            Boolean flag1 = true, flag2 = true, flag3 = true;    
+            for(int j = 0; j < words[i].length(); j ++) {
+                if(s1.indexOf(s4.charAt(j)) == -1) {
+                    flag1 = false;
+                }
+                if(s2.indexOf(s4.charAt(j)) == -1) {
+                    flag2 = false;
+                }
+                if(s3.indexOf(s4.charAt(j)) == -1) {
+                    flag3 = false;
+                }
+            }
+            if(flag1 == true || flag2 == true || flag3 == true) {
+                list.add(words[i]);
+            }
+        }
+        String[] res = new String[list.size()];
+        for(int i = 0; i < list.size(); i ++) {
+            res[i] = list.get(i);
+        }
+        return res;
     }
 }
 ```
@@ -955,6 +1040,27 @@ class Solution {
                 postorder(node);
             }
             list.add(root.val);
+        }
+        return list;
+    }
+}
+```
+
+## 589. N叉树的前序遍历
+
+与后序方法类似，只需要更改list添加数的位置。
+
+```java
+class Solution {
+
+    List<Integer> list = new ArrayList();
+
+    public List<Integer> preorder(Node root) {
+        if (root != null) {
+            list.add(root.val);
+            for (Node node : root.children) {
+                preorder(node);
+            }
         }
         return list;
     }
