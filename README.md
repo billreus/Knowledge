@@ -20,7 +20,7 @@
 
 ## Java :weary:
 
-[Java基础](https://github.com/billreus/Konwledge/blob/master/JAVA/JAVA%E5%9F%BA%E7%A1%80.md)
+[Java基础](https://github.com/billreus/Konwledge/blob/master/Java/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.md)
 
 [Java集合](https://github.com/billreus/Konwledge/blob/master/JAVA/JAVA%E9%9B%86%E5%90%88.md)
 
