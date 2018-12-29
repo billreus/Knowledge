@@ -19,6 +19,7 @@
     - [500. 键盘行](#500-键盘行)
         - [基本思路](#基本思路-2)
         - [改进](#改进-4)
+    - [171. Excel表列序号](#171-excel表列序号)
 - [数组](#数组)
     - [905. 按奇偶排序数组](#905-按奇偶排序数组)
         - [基本思路](#基本思路-3)
@@ -44,6 +45,7 @@
     - [728. 自然数](#728-自然数)
 - [二叉树](#二叉树)
     - [104. 二叉树的最大深度](#104-二叉树的最大深度)
+    - [559. N叉树的最大深度](#559-n叉树的最大深度)
     - [617. 合并二叉树](#617-合并二叉树)
         - [基本思路](#基本思路-8)
         - [改进](#改进-11)
@@ -453,6 +455,28 @@ class Solution {
 }
 ```
 
+## 171. Excel表列序号
+
+题目其实就是转换26进制，26^n*m+26^(n-1)*j+...+26*x, n为字母位数，m,j等为每一位字母与A字母-1的差值。
+
+```java
+class Solution {
+    public int titleToNumber(String s) {
+        char[] ss = s.toCharArray();
+        int n = ss.length-1;
+        int square;
+        int total = 0;
+        
+        for(int i=0; i<ss.length; i++){
+            square = (int)Math.pow(26, n);
+            n--;
+            total += ((int)ss[i]-64)*square;
+        }
+        return total;    
+    }
+}
+```
+
 # 数组
 
 转换二进制字符: `String x = Integer.toBinaryString(x);`
@@ -856,6 +880,8 @@ class Solution {
 
 栈操作:`pop(), isEmpty(), push(), peek()`
 
+N叉树中提取子节点：`root.children.get(i)`
+
 ## 104. 二叉树的最大深度
 
 递归遍历
@@ -874,6 +900,49 @@ class Solution {
     public int maxDepth(TreeNode root) {
         return root == null ? 0 : (1+ Math.max(maxDepth(root.left), maxDepth(root.right)));
     }
+}
+```
+
+## 559. N叉树的最大深度
+
+DFS递归
+
+```java
+class Solution {
+    public int maxDepth(Node root) {
+        if(root == null) return 0;
+        int depth = 0;
+        
+        for(int i=0; i<root.children.size(); i++){
+            depth = Math.max(depth, maxDepth(root.children.get(i)));
+        }
+        return depth+1;
+    }
+}
+```
+
+层次遍历
+
+```java
+public int maxDepth(Node root) {
+    if(root == null)
+        return 0;
+    if(root.children.size() == 0)
+        return 1;
+    int depth = 0;
+    Queue<Node> queue = new LinkedList<Node>();
+    queue.add(root);
+    while(!queue.isEmpty()){
+        int count = queue.size();
+        depth++;
+        while(count > 0){
+            Node node = queue.poll();
+            if(node.children.size() != 0)
+                queue.addAll(node.children);              
+            count--;                
+        }
+    }
+    return depth;        
 }
 ```
 
