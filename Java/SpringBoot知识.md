@@ -43,6 +43,8 @@
 
 @Aspect：面向切面的AOP层注解
 
+@Component: 拦截器层
+
 @component：中立层
 
 * model无需注解
