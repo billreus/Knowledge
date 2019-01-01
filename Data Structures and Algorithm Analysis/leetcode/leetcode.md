@@ -20,39 +20,51 @@
         - [基本思路](#基本思路-2)
         - [改进](#改进-4)
     - [171. Excel表列序号](#171-excel表列序号)
-- [数组](#数组)
-    - [905. 按奇偶排序数组](#905-按奇偶排序数组)
+    - [557. 反转字符串中的单词III](#557-反转字符串中的单词iii)
+    - [821. 字符的最短距离](#821-字符的最短距离)
         - [基本思路](#基本思路-3)
         - [改进](#改进-5)
-    - [832. 翻转图像](#832-翻转图像)
+- [数组](#数组)
+    - [905. 按奇偶排序数组](#905-按奇偶排序数组)
         - [基本思路](#基本思路-4)
         - [改进](#改进-6)
-    - [461. 汉明距离](#461-汉明距离)
+    - [832. 翻转图像](#832-翻转图像)
         - [基本思路](#基本思路-5)
         - [改进](#改进-7)
+    - [461. 汉明距离](#461-汉明距离)
+        - [基本思路](#基本思路-6)
+        - [改进](#改进-8)
     - [942. 增减字符串匹配](#942-增减字符串匹配)
         - [思路](#思路)
     - [922.按奇偶排序数组II](#922按奇偶排序数组ii)
         - [思路](#思路-1)
-        - [改进](#改进-8)
-    - [852. 山脉数组的峰顶索引](#852-山脉数组的峰顶索引)
-        - [基本思路](#基本思路-6)
         - [改进](#改进-9)
-    - [961. 重复N次元素](#961-重复n次元素)
+    - [852. 山脉数组的峰顶索引](#852-山脉数组的峰顶索引)
         - [基本思路](#基本思路-7)
         - [改进](#改进-10)
+    - [961. 重复N次元素](#961-重复n次元素)
+        - [基本思路](#基本思路-8)
+        - [改进](#改进-11)
     - [476. 数字的补救](#476-数字的补救)
     - [728. 自然数](#728-自然数)
+    - [867. 转置矩阵](#867-转置矩阵)
+    - [258. 各位相加](#258-各位相加)
+        - [基本思路](#基本思路-9)
+        - [非递归循环方法](#非递归循环方法)
+    - [908. 最小差值I](#908-最小差值i)
+    - [561. 数组拆分I](#561-数组拆分i)
+        - [基本思想](#基本思想)
+        - [改进](#改进-12)
 - [二叉树](#二叉树)
     - [104. 二叉树的最大深度](#104-二叉树的最大深度)
     - [559. N叉树的最大深度](#559-n叉树的最大深度)
     - [617. 合并二叉树](#617-合并二叉树)
-        - [基本思路](#基本思路-8)
-        - [改进](#改进-11)
+        - [基本思路](#基本思路-10)
+        - [改进](#改进-13)
     - [226. 翻转二叉树](#226-翻转二叉树)
     - [590. N叉树的后序遍历](#590-n叉树的后序遍历)
-        - [基本思路](#基本思路-9)
-        - [改进](#改进-12)
+        - [基本思路](#基本思路-11)
+        - [改进](#改进-14)
     - [589. N叉树的前序遍历](#589-n叉树的前序遍历)
 - [链表](#链表)
     - [237. 删除链表中的节点](#237-删除链表中的节点)
@@ -70,7 +82,7 @@ String s = "abcd";
 char[] ss = s.toCharArray();
 ```
 
-char转换成String:`String.valueOf(ss);`
+转换成String:`String.valueOf(ss);`
 
 String看作字符串，char看作字符
 
@@ -477,6 +489,142 @@ class Solution {
 }
 ```
 
+## 557. 反转字符串中的单词III
+
+```java
+class Solution {
+    public String reverseWords(String s) {
+        char[] ss = s.toCharArray();
+        int N = ss.length;
+        int start = -1;
+        char[] result = new char[N];
+        for(int i=0; i<ss.length; i++){
+            if(ss[i] == ' '){
+                int end = i;                 
+                while(start < i-1){
+                    end--;
+                    start++;
+                    result[start] = ss[end];                    
+                }
+                start++;
+                result[start] = ' ';
+            }
+            if(i==N-1){//最后一个单词的反转
+                int end = i+1;
+                while(start < i){
+                    end--;
+                    start++;
+                    result[start] = ss[end];                    
+                }
+            }
+            
+        }
+        return String.valueOf(result);
+    }
+}
+```
+
+代码优化后：
+
+```java
+class Solution {
+    public String reverseWords(String s) {
+        char[] cl = s.toCharArray();
+        int start = 0;
+        int nextSpace = s.indexOf(' ',start);
+        while(nextSpace != -1) {
+            reverse(cl,start,nextSpace - 1);
+            start = nextSpace + 1;
+            nextSpace = s.indexOf(' ',start);
+        }
+        reverse(cl,start,cl.length - 1);
+        return new String(cl);
+    }
+    
+    public void reverse(char[] cl,int start,int end){
+        while(start < end){
+            char temp = cl[start];
+            cl[start] = cl[end];
+            cl[end] = temp;
+            start ++;
+            end --;
+        }
+    }
+}
+```
+
+## 821. 字符的最短距离
+
+### 基本思路
+
+记录c字符位置，每个字符位置和每个值的距离取最小
+
+```java
+class Solution {
+    public int[] shortestToChar(String S, char C) {
+        char[] s = S.toCharArray();
+        int[] res = new int[s.length];
+        List<Integer> list = new ArrayList<>();        
+        
+        for(int i=0; i<s.length; i++){//记录c字符的位置数组
+            if(s[i] == C){
+                list.add(i);
+            }
+        }
+        
+        for(int j=0; j<s.length; j++){
+            int distance = s.length;
+            for(int l:list){//距离等于每个c字符位置到该点中的最小值
+                distance = Math.min(distance, Math.abs(j-l));
+            }
+            res[j] = distance;
+        }
+        return res;
+    }
+}
+```
+
+### 改进
+
+1. 先处理最左和最右的两个字符，只需要递增即可
+2. 中间区间从两头同时递增
+
+```java
+class Solution {
+    public int[] shortestToChar(String S, char C) {
+        ArrayList<Integer> list = new ArrayList<>();
+            char[] chars = S.toCharArray();
+            int[] res = new int[chars.length];
+            // 记录 目标 位置的下标,得到一个有序数组
+            for (int i = 0; i < chars.length; i++) {
+                if(chars[i] == C){
+                    list.add(i);
+                }
+            }
+            // 最小坐标的左边
+            int step = 0;
+            for (int j = list.get(0); j >= 0; j--) {
+                res[j] = step ++;
+            }
+            // 最大坐标的右边
+            step = 0;
+            for (int j = list.get(list.size()-1); j < chars.length; j++) {
+                res[j] = step ++;
+            }
+            // 从区间两头向中间递增
+            for (int i = 0; i < list.size() - 1; i++) {
+                step = 1;
+                int minIndex = list.get(i) + 1;
+                int maxIndex = list.get(i + 1) - 1;
+                while(minIndex <= maxIndex){
+                    res[minIndex++] = res[maxIndex--] = step++;
+                }
+            }
+            return res;
+    }
+}
+```
+
 # 数组
 
 转换二进制字符: `String x = Integer.toBinaryString(x);`
@@ -871,6 +1019,105 @@ class Solution {
     }
 }
 ```
+
+## 867. 转置矩阵
+
+行列交换即可
+
+```java
+class Solution {
+    public int[][] transpose(int[][] A) {
+        if( A == null) return null;
+        
+        int[][] result = new int[A[0].length][A.length];
+        
+        for(int i=0; i < A[0].length; i++){
+            for(int j=0; j< A.length; j++){
+                result[i][j] = A[j][i];
+            }
+        }
+        return result;
+    }
+}
+```
+
+## 258. 各位相加
+
+### 基本思路
+
+```java
+class Solution {
+    public int addDigits(int num) {
+        int sum = (num/10)+(num%10);//8,1
+        
+        while(sum > 9){
+            sum = addDigits(sum);
+        }
+        return sum;
+    }
+}
+```
+
+### 非递归循环方法
+
+数字根是模9的值,-1+1是因为9,99,999。。。。
+
+```java
+class Solution {
+    public int addDigits(int num) {
+        if(num < 10) {
+            return num;
+        }else {
+            return ((num - 1) % 9) + 1;
+        }
+    }
+}
+```
+
+## 908. 最小差值I
+
+题目转化为MAX-MIN-2x求最小值,其中x为-k<=x<=k.
+
+如果x=k时结果大于0即最小值，小于0即0为最小差值。
+
+```java
+class Solution {
+    public int smallestRangeI(int[] A, int K) {
+        int max=Integer.MIN_VALUE;;
+        int min=Integer.MAX_VALUE;;
+        
+        for(int i : A){
+            max = i > max ? i : max;
+            min = i < min ? i : min;
+        }
+        return Math.max(max-min - Math.abs(2*K), 0);
+    }
+}
+```
+
+## 561. 数组拆分I
+
+### 基本思想
+
+转换为数组从小到大，每间隔一个选取。
+
+```java
+class Solution {
+    public int arrayPairSum(int[] nums) {
+        Arrays.sort(nums);
+        
+        int res = 0;
+        for(int i=0; i<nums.length; i=i+2){
+            res += nums[i];
+        }
+        return res;
+    }
+}
+```
+
+### 改进
+
+可以不使用默认排序改为使用桶排序
 
 # 二叉树
 
