@@ -40,6 +40,12 @@ Java虚拟机在执行程序时会把所管理的内存划分成若干个数据�
 
 现代的垃圾收集器基本都是采用分代收集算法，其主要的思想是针对不同类型的对象采取不同的垃圾回收算法。
 
+所有通过new创建的对象的内存都在堆中分配，其大小可以通过-Xmx和-Xms来控制。堆被划分为新生代和旧生代，新生代又被进一步划分为Eden和Survivor区，最后Survivor由FromSpace和ToSpace组成，结构图如下所示：
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/xin.jpg)
+
+新建的对象都是用新生代分配内存，Eden空间不足的时候，会把存活的对象转移到Survivor中，新生代大小可以由-Xmn来控制，也可以用-XX:SurvivorRatio来控制Eden和Survivor的比例旧生代。
+
 ### 1.1.5. 方法区
 
 与Java堆一样是各个线程共享的内存区域，用于存放已被加载的类信息、常量、静态变量、即时编译器编译后的代码等数据。
@@ -196,3 +202,66 @@ obj = null;
 
 ## 2.4. 垃圾收集器
 
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/huisou.jpg)
+
+HotSpot虚拟机中有7个垃圾收集器，连线表示垃圾收集器可以配合使用
+
+### 2.4.1. Serial收集器
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/serial.jpg)
+
+Serial 翻译为串行，也就是说它以串行的方式执行。
+
+它是单线程的收集器，只会使用一个线程进行垃圾收集工作。
+
+它的优点是简单高效，对于单个 CPU 环境来说，由于没有线程交互的开销，因此拥有最高的单线程收集效率。
+
+### 2.4.2. ParNew收集器
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/parnew.jpg)
+
+它是 Serial 收集器的多线程版本。
+
+是 Server 模式下的虚拟机首选新生代收集器，除了性能原因外，主要是因为除了 Serial 收集器，只有它能与 CMS 收集器配合工作。
+
+默认开启的线程数量与 CPU 数量相同，可以使用 -XX:ParallelGCThreads 参数来设置线程数。
+
+### 2.4.3. Parallel Scavenge收集器
+
+与 ParNew 一样是多线程收集器。
+
+其它收集器关注点是尽可能缩短垃圾收集时用户线程的停顿时间，而它的目标是达到一个可控制的吞吐量，它被称为“吞吐量优先”收集器。这里的
+
+* 吞吐量指 CPU 用于运行用户代码的时间占总时间的比值。高吞吐量则可以高效率地利用 CPU 时间，尽快完成程序的运算任务，适合在后台运算而不需要太多交互的任务。
+
+### 2.4.4. CMS收集器
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/CMS.jpg)
+
+CMS（Concurrent Mark Sweep），Mark Sweep 指的是标记 - 清除算法。
+
+分为以下四个流程：
+
+1. 初始标记：仅仅只是标记一下 GC Roots 能直接关联到的对象，速度很快，需要停顿。
+2. 并发标记：进行 GC Roots Tracing 的过程，它在整个回收过程中耗时最长，不需要停顿。
+3. 重新标记：为了修正并发标记期间因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，需要停顿。
+4. 并发清除：不需要停顿。
+
+缺点：
+1. 吞吐量低。
+2. 无法处理浮动垃圾。（浮动垃圾是指并发清除阶段由于用户线程继续运行而产生的垃圾）
+3. 标记 - 清除算法导致的空间碎片
+
+### 2.4.5. G1收集器
+
+堆被分为新生代和老年代，其它收集器进行收集的范围都是整个新生代或者老年代，而 G1 可以直接对新生代和老年代一起回收。
+
+G1 把堆划分成多个大小相等的独立区域（Region），新生代和老年代不再物理隔离。
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/g1.png)
+
+通过引入 Region 的概念，从而将原来的一整块内存空间划分成多个的小空间，使得每个小空间可以单独进行垃圾回收。通过记录每个 Region 垃圾回收时间以及回收所获得的空间（这两个值是通过过去回收的经验获得），并维护一个优先列表，每次根据允许的收集时间，优先回收价值最大的 Region。
+
+![Image text](https://github.com/billreus/Konwledge/blob/master/picture/G1.jpg)
+
+# 3. 内存分配与回收策略
