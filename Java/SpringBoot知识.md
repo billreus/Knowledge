@@ -35,6 +35,8 @@
 
 @Controller ：controller层注解
 
+@RsetController：controller层返回json，可替代@Controller+@ResponseBody
+
 @Maooer：dao层注解 
 
 @repository ：dao层注解（一般不使用，要自己写对应dao的mapper配置文件）
@@ -178,7 +180,7 @@ Service层第二个作用是对前端读取上来的数据进行一些处理，�
 
 
 
-# AOP
+
 # Log
 logger.info()
 # request
