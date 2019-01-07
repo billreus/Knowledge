@@ -1,3 +1,44 @@
+<!-- TOC -->
+
+- [层](#层)
+    - [Controller](#controller)
+- [扩展](#扩展)
+    - [json接口开发](#json接口开发)
+    - [自定义Filter](#自定义filter)
+    - [自定义Property](#自定义property)
+    - [log配置](#log配置)
+    - [数据库操作](#数据库操作)
+    - [Thymeleaf](#thymeleaf)
+        - [变量表达式](#变量表达式)
+            - [文本打印：](#文本打印)
+            - [for循环](#for循环)
+            - [条件求值](#条件求值)
+        - [URL](#url)
+        - [选择表达式](#选择表达式)
+        - [文字国际化表达式](#文字国际化表达式)
+        - [常用th标签](#常用th标签)
+    - [Redis](#redis)
+        - [Mapper](#mapper)
+        - [XML](#xml)
+        - [使用](#使用)
+
+<!-- /TOC -->
+
+# 层
+
+## Controller
+
+头部声明加函数声明有两种方式:
+1. @Controller + @ResponseBody
+2. @RequestMapping
+
+内部映射地址有两种写法：
+1. @RequestMapping(path = {"/web"}, method = {RequestMethod.GET})，@RequestMapping(path = {"/web"}, method = RequestMethod.POST)
+2. @GetMapping(path = {"/web"}), @PostMapping(path={"/web"}) 
+
+
+# 扩展
+
 ## json接口开发
 
 需要返回json格式的需要配置@Controller+@ResponseBody或者使用@RestController
