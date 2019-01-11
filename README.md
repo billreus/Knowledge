@@ -22,15 +22,15 @@
 
 [Java基础](https://github.com/billreus/Konwledge/blob/master/Java/Java%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86.md)
 
-[Java集合](https://github.com/billreus/Konwledge/blob/master/JAVA/JAVA%E9%9B%86%E5%90%88.md)
+[Java集合](https://github.com/billreus/Konwledge/blob/master/Java/Java%E9%9B%86%E5%90%88%E7%9F%A5%E8%AF%86.md)
 
-[Java高并发](https://github.com/billreus/Konwledge/blob/master/JAVA/JAVA%E9%AB%98%E5%B9%B6%E5%8F%91.md)
+[Java高并发](https://github.com/billreus/Konwledge/blob/master/Java/Java%E9%AB%98%E5%B9%B6%E5%8F%91.md)
 
-[JavaEE基础](https://github.com/billreus/Konwledge/blob/master/JAVA/JAVAEE%E5%9F%BA%E7%A1%80.md)
+[JavaEE基础](https://github.com/billreus/Konwledge/blob/master/Java/JavaEE%E5%9F%BA%E7%A1%80.md)
 
-[SpringBoot](https://github.com/billreus/Konwledge/blob/master/JAVA/SpringBoot.md)
+[SpringBoot](https://github.com/billreus/Konwledge/blob/master/Java/SpringBoot.md)
 
-[设计模式](https://github.com/billreus/Konwledge/blob/master/JAVA/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)
+[设计模式](https://github.com/billreus/Konwledge/blob/master/Java/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.md)
 
 ## Linux :wc:
 
