@@ -1,5 +1,7 @@
 package programme8;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -8,7 +10,7 @@ import java.util.Scanner;
  */
 public class programme8 {
     public static void main(String args[]){
-        int a = 0;
+      /*  int a = 0;
         int n = 0;
         Scanner scanner = new Scanner(System.in);
         System.out.print("输入a的值：");
@@ -24,6 +26,22 @@ public class programme8 {
             out = out + num;
             System.out.print(" + " + num);
         }
-        System.out.print(" = " + out);
+        System.out.print(" = " + out);*/
+
+        List<List<Integer>> res = new ArrayList<>();
+        int[][] array = new int [4][4];
+
+        for(int i=0; i<4; i++){
+            List<Integer> list = new ArrayList<Integer>();
+            for(int j=0; j<=i; j++){//一行
+                if(j == 0 || j == i) {array[i][j] = 1;}
+                else{
+                    array[i][j] = array[i-1][j-1] + array[i-1][j];
+                }
+                list.add(array[i][j]);
+            }
+            res.add(list);
+        }
+        System.out.print(res);
     }
 }

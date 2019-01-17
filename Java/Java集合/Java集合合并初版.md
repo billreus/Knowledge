@@ -7895,7 +7895,7 @@ SortedSet<E>              headSet(E end)
 NavigableSet<E>           descendingSet()
 NavigableSet<E>           headSet(E end, boolean endInclusive)
 SortedSet<E>              subSet(E start, E end)
-NavigableSet<E>           subSet(E start, boolean startInclusive, E end, boolean endInclusive)
+NavigableSet<E>           subSet(E start, ##boolean startInclusive, E end, boolean endInclusive)
 NavigableSet<E>           tailSet(E start, boolean startInclusive)
 SortedSet<E>              tailSet(E start)
 ```

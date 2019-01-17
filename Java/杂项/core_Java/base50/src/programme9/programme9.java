@@ -1,5 +1,7 @@
 package programme9;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /*
@@ -19,22 +21,19 @@ public class programme9 {
             }
         }
 */
-        int res = 0;
-        for(int nums=576; nums<=580; nums++){
-            int count = 0;
-            int num = nums;
-            while(num>0){
-                int bri = num%2;
-                if(bri == 1) count++;
-                num=num/2;
-            }
-            for(int i=2;i<count;i++){
-                if(count%i==0){
-                    break;
-                }
-                if(i==count-1)res++;
+
+        List<Integer> list = new ArrayList<>();
+        int[][] array = new int[3+1][3+1];
+        for(int i=0; i<=3; i++){
+            //List<Integer> list = new ArrayList<>();
+
+            for(int j=0; j<=i; j++){
+                if(i==0 || j==i){array[i][j] = 1;}
+                else{array[i][j] = array[i-1][j-1] + array[i-1][j];}
+                if(i==3){list.add(array[i][j]);}
+                System.out.print(list);
             }
         }
-        System.out.print(res);
+      // System.out.print(list);
     }
 }
