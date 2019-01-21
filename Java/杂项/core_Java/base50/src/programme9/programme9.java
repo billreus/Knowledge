@@ -21,19 +21,20 @@ public class programme9 {
             }
         }
 */
-
-        List<Integer> list = new ArrayList<>();
-        int[][] array = new int[3+1][3+1];
-        for(int i=0; i<=3; i++){
-            //List<Integer> list = new ArrayList<>();
-
-            for(int j=0; j<=i; j++){
-                if(i==0 || j==i){array[i][j] = 1;}
-                else{array[i][j] = array[i-1][j-1] + array[i-1][j];}
-                if(i==3){list.add(array[i][j]);}
-                System.out.print(list);
+        int n=19;
+        while(n!=4 && n!=16 && n!=37 && n!=58 && n!=89 && n!=145 && n!=42 && n!=20){
+            int num = 0;
+            int t=0;
+            while(n!=0){
+                t = n%10;
+                num +=t*t;
+                n/=10;
             }
+            n = num;
         }
-      // System.out.print(list);
+        int res = 0;
+        if(n==1) res=1;
+        else res=2;
+      System.out.print(res);
     }
 }
