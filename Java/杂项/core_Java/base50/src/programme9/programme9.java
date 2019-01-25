@@ -1,6 +1,7 @@
 package programme9;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,20 +22,20 @@ public class programme9 {
             }
         }
 */
-        int n=19;
-        while(n!=4 && n!=16 && n!=37 && n!=58 && n!=89 && n!=145 && n!=42 && n!=20){
-            int num = 0;
-            int t=0;
-            while(n!=0){
-                t = n%10;
-                num +=t*t;
-                n/=10;
+        int[] nums = new int[3];
+        nums[0] = 1;
+        nums[1] =1;
+        nums[2] = 2147483647;
+        int res;
+        int min=Integer.MAX_VALUE;
+        int sum=0;
+        for(int num:nums){
+            if(num<min){
+                min=num;
             }
-            n = num;
+            sum+=num;
         }
-        int res = 0;
-        if(n==1) res=1;
-        else res=2;
+        res = sum - min*nums.length;
       System.out.print(res);
     }
 }
