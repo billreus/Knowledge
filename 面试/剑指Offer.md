@@ -17,11 +17,16 @@
         - [7.斐波那契数列](#7斐波那契数列)
         - [8.跳格子](#8跳格子)
     - [9.变态跳台阶](#9变态跳台阶)
+        - [10.矩形覆盖](#10矩形覆盖)
+    - [位运算](#位运算)
+        - [11.二进制中1的个数](#11二进制中1的个数)
+        - [12.数值的整数次方](#12数值的整数次方)
     - [搜索算法](#搜索算法)
         - [1. 二维数组中的查找](#1-二维数组中的查找)
         - [6.旋转数组的最小数字](#6旋转数组的最小数字)
     - [其它算法](#其它算法)
         - [2.替换空格](#2替换空格)
+        - [13.调整数组顺序死奇数位于偶数前面](#13调整数组顺序死奇数位于偶数前面)
 
 <!-- /TOC -->
 
@@ -253,6 +258,100 @@ public class Solution {
 }
 ```
 
+### 10.矩形覆盖
+
+target <= 0 大矩形为<= 2*0,直接return 0；
+target = 1 大矩形为2*1，只有一种摆放方法，return1；
+target = 2 大矩形为2*2，有两种摆放方法，return2；
+target = n 分为两步考虑：
+* 第一次摆放一块 2*1 的小矩阵，则摆放方法总共为f(target - 1)
+* 第一次摆放一块1*2的小矩阵，则摆放方法总共为f(target-2)
+因为，摆放了一块1*2的小矩阵（用√√表示），对应下方的1*2（用××表示）摆放方法就确定了，所以为f(targte-2)
+
+```java
+public class Solution {
+    public int RectCover(int target) {
+        if(target < 1) return 0;
+        else if(target == 1) return 1;
+        else if(target == 2) return 2;
+        else return RectCover(target-1)+RectCover(target-2);
+    }
+}
+```
+
+## 位运算
+
+### 11.二进制中1的个数
+
+负数向左移位的话最高位补1 ！ 因此需要一点点特殊操作，可以将最高位的符号位1变成0，也就是n & 0x7FFFFFFF，这样就把负数转化成正数了，唯一差别就是最高位由1变成0，因为少了一个1，所以count加1。
+
+如果一个整数不为0，那么这个整数至少有一位是1。如果我们把这个整数减1，那么原来处在整数最右边的1就会变为0，原来在1后面的所有的0都会变成1(如果最右边的1后面还有0的话)。其余所有位将不会受到影响。
+
+举个例子：一个二进制数1100，从右边数起第三位是处于最右边的一个1。减去1后，第三位变成0，它后面的两位0变成了1，而前面的1保持不变，因此得到的结果是1011.我们发现减1的结果是把最右边的一个1开始的所有位都取反了。这个时候如果我们再把原来的整数和减去1之后的结果做与运算，从原来整数最右边一个1那一位开始所有位都会变成0。如1100&1011=1000.也就是说，把一个整数减去1，再和原整数做与运算，会把该整数最右边一个1变成0.那么一个整数的二进制有多少个1，就可以进行多少次这样的操作。
+
+```java
+public class Solution {
+    public int NumberOf1(int n) {
+        int count = 0;
+        if(n<0){//补码
+            n = n & 0x7FFFFFFF;
+            count++;
+        }
+        while(n>0){
+            count++;
+            n = n & (n - 1);
+        }
+        return count;
+    }
+}
+```
+
+### 12.数值的整数次方
+
+基础遍历复杂度n
+
+```java
+public class Solution {
+    public double Power(double base, int exponent) {
+        double res = 1;
+        for(int i=0; i<Math.abs(exponent); i++){
+            res *= base; 
+        }
+        if(exponent < 0){
+            res = 1/res;
+        }
+        return res;
+  }
+}
+```
+
+递归复杂度nlogn
+
+* 当n为偶数，a^n =（a^n/2）*（a^n/2）
+* 当n为奇数，a^n = a^[(n-1)/2] * a^[(n-1)/2] * a
+
+```java
+public class Solution {
+     public static double power(double base, int exponent) {
+            int n = Math.abs(exponent);
+            double result = 0.0;
+            if (n == 0)
+                return 1.0;
+            if (n == 1)
+                return base;
+             
+            result = power(base, n >> 1);//正数移位相当于十进制/2
+            result *= result;
+            if ((n & 1) == 1) // 如果指数n为奇数，则要再乘一次底数base
+                result *= base;
+            if (exponent < 0) // 如果指数为负数，则应该求result的倒数
+                result = 1 / result;
+             
+            return result;
+        }
+}
+```
+
 ## 搜索算法
 
 ### 1. 二维数组中的查找
@@ -343,5 +442,47 @@ public class Solution {
 }
 ```
 
+### 13.调整数组顺序死奇数位于偶数前面
 
+遇到奇数左移一位，类似快排
 
+```java
+public class Solution {
+    public void reOrderArray(int [] array) {
+        int len = array.length;
+        int num = 0;//扫描的基数个数，用于偶数移位
+        for(int i=0; i<len; i++){
+            if(array[i] % 2 == 1){
+                int j = i;
+                while(j > num){
+                    int tmp = array[j];
+                    array[j] = array[j-1];
+                    array[j-1] = tmp;
+                    j--;
+                }
+                num++;
+            }
+        }
+    }
+}
+```
+
+类似插入排序
+
+```java
+public class Solution {
+    public void reOrderArray(int [] array) {
+        for(int i=0;i<array.length;i++){
+            if(array[i]%2==1){//奇
+                int temp=array[i];//存奇
+                int j=i-1;
+                while(j>=0 && array[j]%2==0){//奇且左为偶
+                    array[j+1]=array[j];//放偶
+                    j--;
+                }
+                array[j+1]=temp;//偶全部存放完了，放奇
+            }
+        }
+    }            
+}
+```
