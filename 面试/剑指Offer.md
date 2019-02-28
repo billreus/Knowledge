@@ -8,8 +8,12 @@
 - [数据结构类](#数据结构类)
     - [LinkedList](#linkedlist)
         - [3.从头到尾打印链表](#3从头到尾打印链表)
+        - [14.链表中倒数第k个结点](#14链表中倒数第k个结点)
+        - [15.反转链表](#15反转链表)
+        - [16.合并两个排序的链表](#16合并两个排序的链表)
     - [Tree](#tree)
         - [4.重建二叉树](#4重建二叉树)
+        - [17.树的子结构](#17树的子结构)
     - [Stack & Queue](#stack--queue)
         - [5.用两个栈实现队列](#5用两个栈实现队列)
 - [算法类](#算法类)
@@ -101,6 +105,100 @@ public class Solution {
 }
 ```
 
+### 14.链表中倒数第k个结点
+
+两个指针，先让第一个指针和第二个指针都指向头结点，然后再让第一个指正走(k-1)步，到达第k个节点。然后两个指针同时往后移动，当第一个结点到达末尾的时候，第二个结点所在位置就是倒数第k个节点了
+
+```java
+public class Solution {
+    public ListNode FindKthToTail(ListNode head,int k) {
+        ListNode pre = head;
+        ListNode last = head;
+        if(head == null || k<=0) return null;
+        for(int i=1; i<k; i++){
+            if(last.next != null){
+                last = last.next;
+            }
+            else {return null;}
+        }
+        while(last.next != null){
+            pre = pre.next;
+            last = last.next;
+        }
+        return pre;
+    }
+}
+```
+
+### 15.反转链表
+
+确定三个节点，next用于记录head用于移动，head和pre用于更改链表方向，之后向右移动一位。
+
+```java
+public class Solution {
+    public ListNode ReverseList(ListNode head) {
+        ListNode pre = null;
+        ListNode next = null;
+        while(head != null){
+            next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+}
+```
+
+### 16.合并两个排序的链表
+
+非递归，新建链表指向
+
+```java
+public class Solution {
+    public ListNode Merge(ListNode list1,ListNode list2) {
+        ListNode current = new ListNode(0);//用于输出，头在起点
+        ListNode list = current;
+        while(list1 !=null && list2 != null){
+            if(list1.val >= list2.val){
+                list.next = list2;
+                list2 = list2.next;
+            }
+            else if(list1.val < list2.val){
+                list.next = list1;
+                list1 = list1.next;
+            }
+            list = list.next;
+        }
+        if(list1 == null){
+               list.next = list2;
+        }
+         else if(list2 == null){
+               list.next = list1;
+         }
+        return current.next;
+    }
+}
+```
+
+递归
+```java
+public class Solution {
+    public ListNode Merge(ListNode list1,ListNode list2) {
+        if(list1 == null) return list2;
+        if(list2 == null) return list1;
+        if(list1.val < list2.val){
+            list1.next = Merge(list1.next, list2);
+            return list1;
+        }
+        else{
+            list2.next = Merge(list1, list2.next);
+            return list2;
+        }
+    }
+}
+```
+
 ## Tree
 
 ### 4.重建二叉树
@@ -124,6 +222,51 @@ public class Solution {
             }
         }
         return root;
+    }
+}
+```
+
+### 17.树的子结构
+
+```java
+public class Solution {
+    public static boolean HasSubtree(TreeNode root1, TreeNode root2) {
+        boolean result = false;
+        //当Tree1和Tree2都不为零的时候，才进行比较。否则直接返回false
+        if (root2 != null && root1 != null) {
+            //如果找到了对应Tree2的根节点的点
+            if(root1.val == root2.val){
+                //以这个根节点为为起点判断是否包含Tree2
+                result = doesTree1HaveTree2(root1,root2);
+            }
+            //如果找不到，那么就再去root的左儿子当作起点，去判断时候包含Tree2
+            if (!result) {
+                result = HasSubtree(root1.left,root2);
+            }            
+            //如果还找不到，那么就再去root的右儿子当作起点，去判断时候包含Tree2
+            if (!result) {
+                result = HasSubtree(root1.right,root2);
+               }
+            }
+            //返回结果
+        return result;
+    }
+ 
+    public static boolean doesTree1HaveTree2(TreeNode node1, TreeNode node2{
+        //如果Tree2已经遍历完了都能对应的上，返回true
+        if (node2 == null) {
+            return true;
+        }
+        //如果Tree2还没有遍历完，Tree1却遍历完了。返回false
+        if (node1 == null) {
+            return false;
+        }
+        //如果其中有一个点没有对应上，返回false
+        if (node1.val != node2.val) {  
+                return false;
+        }        
+        //如果根节点对应的上，那么就分别去子节点里面匹配
+        return doesTree1HaveTree2(node1.left,node2.left) && doesTree1HaveTree2(node1.right,node2.right);
     }
 }
 ```
