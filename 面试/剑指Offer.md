@@ -5,17 +5,24 @@
 - [list](#list)
     - [ArrayList](#arraylist)
     - [Stack](#stack)
+    - [Queue](#queue)
 - [数据结构类](#数据结构类)
     - [LinkedList](#linkedlist)
         - [3.从头到尾打印链表](#3从头到尾打印链表)
         - [14.链表中倒数第k个结点](#14链表中倒数第k个结点)
         - [15.反转链表](#15反转链表)
         - [16.合并两个排序的链表](#16合并两个排序的链表)
+        - [19.顺时针打印矩阵](#19顺时针打印矩阵)
     - [Tree](#tree)
         - [4.重建二叉树](#4重建二叉树)
         - [17.树的子结构](#17树的子结构)
+        - [18.二叉树的镜像](#18二叉树的镜像)
+        - [22.从上往下打印二叉树](#22从上往下打印二叉树)
+        - [23.二叉搜索树的后序遍历](#23二叉搜索树的后序遍历)
     - [Stack & Queue](#stack--queue)
         - [5.用两个栈实现队列](#5用两个栈实现队列)
+        - [20.包含min函数的栈](#20包含min函数的栈)
+        - [21.栈的压入、弹出序列](#21栈的压入弹出序列)
 - [算法类](#算法类)
     - [斐波那契数列](#斐波那契数列)
         - [7.斐波那契数列](#7斐波那契数列)
@@ -51,13 +58,20 @@
 ## ArrayList
 
 * add():添加
+* remove(num):删除指定下标值，赋值时等效于队列的弹出
 
 ## Stack
 
 * push()：入栈
 * pop():弹栈
-* peek():栈顶
+* peek():栈顶值
 * empty():是否为空
+
+## Queue
+
+Queue queue = new LinkedList();
+offer():加入队列
+poll():弹出队列
 
 # 数据结构类
 
@@ -199,6 +213,74 @@ public class Solution {
 }
 ```
 
+### 19.顺时针打印矩阵
+
+限制圈
+
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> printMatrix(int [][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int cycle = ((row<col ? row : col)-1)/2+1;
+        ArrayList res = new ArrayList();
+        for(int i=0; i<cycle; i++){
+            for(int j=i; j<col-i; j++){//横向从左往右
+                res.add(matrix[i][j]);
+            }
+            for(int k=i+1; k<row-i; k++){//纵向从上往下
+                res.add(matrix[k][col-1-i]);
+            }
+            for(int m=col-2-i;(m>=i)&&(row-i-1!=i); m--){//横向从右往左,单行只打印一次
+                res.add(matrix[row-1-i][m]);
+            }
+            for(int n=row-2-i; (n>i)&&(col-i-1!=i); n--){//纵向从下往上,单列只打印一次
+                res.add(matrix[n][i]);
+            }
+        }
+        return res;
+    }
+}
+```
+
+纯数组限制版
+
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> printMatrix(int [][] matrix) {
+        int row = matrix.length;
+        int col = matrix[0].length;
+        int left=0, right=col-1, top=0, bottom=row-1;
+        ArrayList res = new ArrayList();
+        while(left <= right && bottom >= top){
+            for(int i=left; i<=right; ++i){
+                res.add(matrix[top][i]);
+            }
+            for(int i=top+1; i<=bottom; ++i){
+                res.add(matrix[i][right]);
+            }
+            if(top != bottom){
+                for(int i=right-1; i>=left; --i){
+                    res.add(matrix[bottom][i]);
+                }
+            }
+            if(right != left){
+                for(int i=bottom-1; i>top; --i){
+                    res.add(matrix[i][left]);
+                }
+            }
+            left++;
+            right--;
+            top++;
+            bottom--;
+        }
+        return res;
+    }
+}
+```
+
 ## Tree
 
 ### 4.重建二叉树
@@ -271,6 +353,102 @@ public class Solution {
 }
 ```
 
+### 18.二叉树的镜像
+
+```java
+public class Solution {
+    public void Mirror(TreeNode root) {
+        TreeNode tmp = null;
+        if(root == null)return;
+        tmp = root.right;
+        root.right = root.left;
+        root.left = tmp;
+        Mirror(root.right);
+        Mirror(root.left);
+    }
+}
+```
+
+### 22.从上往下打印二叉树
+
+用arraylist模拟一个队列来存储相应的TreeNode，用tmp提取节点val，再把左右节点压入队列。
+
+```java
+public class Solution {
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList();
+        ArrayList<TreeNode> queue = new ArrayList();
+        if(root == null) return list;
+        queue.add(root);
+        while( queue.size() != 0){
+            TreeNode tmp = queue.remove(0);
+            if(tmp.left != null){
+                queue.add(tmp.left);
+            }
+            if(tmp.right != null){
+                queue.add(tmp.right);
+            }
+            list.add(tmp.val);
+        }
+        return list;
+    }
+}
+```
+
+使用队列
+
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+public class Solution {
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList();
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();
+        if(root == null) return list;
+        queue.offer(root);
+        while( queue.size() != 0){
+            TreeNode tmp = queue.poll();
+            if(tmp.left != null){
+                queue.offer(tmp.left);
+            }
+            if(tmp.right != null){
+                queue.offer(tmp.right);
+            }
+            list.add(tmp.val);
+        }
+        return list;
+    }
+}
+```
+
+### 23.二叉搜索树的后序遍历
+
+已知条件：后序序列最后一个值为root；二叉搜索树左子树值都比root小，右子树值都比root大。
+
+从最右的root节点开始，从左往右遍历比它小的，再遍历比它大的，遍历完则继续下一个。
+
+```java
+public class Solution {
+    public boolean VerifySquenceOfBST(int [] sequence) {
+        int len = sequence.length;
+        int index = 0;
+        if(len==0)return false;
+        while(len != 1){
+            len -= 1;
+            while(sequence[index] < sequence[len]){
+                index++;
+            }
+            while(sequence[index] > sequence[len]){
+                index++;
+            }
+            if(index < len) return false;
+            index = 0;
+        }
+        return true;
+    }
+}
+```
+
 ## Stack & Queue
 
 ### 5.用两个栈实现队列
@@ -298,6 +476,100 @@ public class Solution {
             }
         }
         return stack2.pop();
+    }
+}
+```
+
+### 20.包含min函数的栈
+
+两个stack一个存数据，一个存每次的最小值
+
+```java
+import java.util.Stack;
+
+public class Solution {
+    
+    Stack<Integer> data = new Stack<Integer>();
+    Stack<Integer> minStack = new Stack<Integer>();
+    
+    public void push(int node) {
+        data.push(node);
+        if(minStack.isEmpty() || node < minStack.peek()){
+            minStack.push(node);
+        }
+        else{
+            minStack.push(minStack.peek());
+        }
+    }
+    
+    public void pop() {
+        minStack.pop();
+        data.pop();
+    }
+    
+    public int top() {
+        return data.peek();
+    }
+    
+    public int min() {
+        return minStack.peek();
+    }
+}
+```
+
+### 21.栈的压入、弹出序列
+
+借用一个辅助的栈，遍历压栈顺序，先讲第一个放入栈中，这里是1，然后判断栈顶元素是不是出栈顺序的第一个元素，这里是4，很显然1≠4，所以我们继续压栈，直到相等以后开始出栈，出栈一个元素，则将出栈顺序向后移动一位，直到不相等，这样循环等压栈顺序遍历完成，如果辅助栈还不为空，说明弹出序列不是该栈的弹出顺序。
+
+```java
+import java.util.ArrayList;
+import java.util.Stack;
+
+public class Solution {
+    public boolean IsPopOrder(int [] pushA,int [] popA) {
+        Stack<Integer> stack = new Stack<Integer>();
+        int j = 0;
+        for(int i=0; i<pushA.length; i++){
+            if(pushA[i] != popA[j]){
+                stack.push(pushA[i]);
+            }
+            else{
+                j++;
+            }
+        }
+        while(j != popA.length){
+            if(popA[j] == stack.pop()) j++;
+            else return false;
+        }
+        if(stack.isEmpty()) return true;
+        else return false;
+    }
+}
+```
+
+优化
+
+```java
+import java.util.ArrayList;
+import java.util.Stack;
+public class Solution {
+    public boolean IsPopOrder(int [] pushA,int [] popA) {
+        if(pushA.length == 0 || popA.length == 0)
+            return false;
+        Stack<Integer> s = new Stack<Integer>();
+        //用于标识弹出序列的位置
+        int popIndex = 0;
+        for(int i = 0; i< pushA.length;i++){
+            s.push(pushA[i]);
+            //如果栈不为空，且栈顶元素等于弹出序列
+            while(!s.empty() &&s.peek() == popA[popIndex]){
+                //出栈
+                s.pop();
+                //弹出序列向后一位
+                popIndex++;
+            }
+        }
+        return s.empty();
     }
 }
 ```
@@ -361,19 +633,19 @@ public class Solution {
 
 2）n = 1时，只有1种跳法，f(1) = 1
 
-3) n = 2时，会有两个跳得方式，一次1阶或者2阶，这回归到了问题（1） ，f(2) = f(2-1) + f(2-2) 
+1) n = 2时，会有两个跳得方式，一次1阶或者2阶，这回归到了问题（1） ，f(2) = f(2-1) + f(2-2) 
 
-4) n = 3时，会有三种跳得方式，1阶、2阶、3阶，
+2) n = 3时，会有三种跳得方式，1阶、2阶、3阶，
 
     那么就是第一次跳出1阶后面剩下：f(3-1);第一次跳出2阶，剩下f(3-2)；第一次3阶，那么剩下f(3-3)
 
     因此结论是f(3) = f(3-1)+f(3-2)+f(3-3)
 
-5) n = n时，会有n中跳的方式，1阶、2阶...n阶，得出结论：
+3) n = n时，会有n中跳的方式，1阶、2阶...n阶，得出结论：
 
     f(n) = f(n-1)+f(n-2)+...+f(n-(n-1)) + f(n-n) => f(0) + f(1) + f(2) + f(3) + ... + f(n-1)
     
-6) 由以上已经是一种结论，但是为了简单，我们可以继续简化：
+4) 由以上已经是一种结论，但是为了简单，我们可以继续简化：
 
     f(n-1) = f(0) + f(1)+f(2)+f(3) + ... + f((n-1)-1) = f(0) + f(1) + f(2) + f(3) + ... + f(n-2)
 
@@ -383,7 +655,7 @@ public class Solution {
 
     f(n) = 2*f(n-1)
 
-7) 得出最终结论,在n阶台阶，一次有1、2、...n阶的跳的方式时，总得跳法为：
+5) 得出最终结论,在n阶台阶，一次有1、2、...n阶的跳的方式时，总得跳法为：
 
               | 1       ,(n=0 ) 
 
@@ -525,6 +797,7 @@ public class Solution {
     }
 }
 ```
+
 ### 6.旋转数组的最小数字
 
 二分查找
