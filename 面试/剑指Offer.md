@@ -13,12 +13,14 @@
         - [15.反转链表](#15反转链表)
         - [16.合并两个排序的链表](#16合并两个排序的链表)
         - [19.顺时针打印矩阵](#19顺时针打印矩阵)
+        - [26.复杂链表的复制](#26复杂链表的复制)
     - [Tree](#tree)
         - [4.重建二叉树](#4重建二叉树)
         - [17.树的子结构](#17树的子结构)
         - [18.二叉树的镜像](#18二叉树的镜像)
         - [22.从上往下打印二叉树](#22从上往下打印二叉树)
         - [23.二叉搜索树的后序遍历](#23二叉搜索树的后序遍历)
+        - [24.二叉树中和为某一值的路径](#24二叉树中和为某一值的路径)
     - [Stack & Queue](#stack--queue)
         - [5.用两个栈实现队列](#5用两个栈实现队列)
         - [20.包含min函数的栈](#20包含min函数的栈)
@@ -59,6 +61,7 @@
 
 * add():添加
 * remove(num):删除指定下标值，赋值时等效于队列的弹出
+* size()：长度(是list的方法，ArrayList没有length)
 
 ## Stack
 
@@ -281,6 +284,44 @@ public class Solution {
 }
 ```
 
+### 26.复杂链表的复制
+
+```java
+public class Solution {
+    public RandomListNode Clone(RandomListNode pHead)
+    {
+        if(pHead == null) {
+            return null;
+        }
+        RandomListNode currentNode = pHead;
+        //*1、遍历链表，复制每个结点，如复制结点A得到A1，将结点A1插到结点A后面；
+        while(currentNode != null){
+            RandomListNode cloneNode = new RandomListNode(currentNode.label);
+            RandomListNode nextNode = currentNode.next;
+            currentNode.next = cloneNode;
+            cloneNode.next = nextNode;
+            currentNode = nextNode;
+        }
+        //2、重新遍历链表，复制老结点的随机指针给新结点，如A1.random = A.random.next;
+        currentNode = pHead;
+        while(currentNode != null){
+            currentNode.next.random = currentNode.random == null ? null : currentNode.random.next; //复制节点指针
+            currentNode = currentNode.next.next;
+        }
+         //3、拆分链表，将链表拆分为原链表和复制后的链表
+        currentNode = pHead;
+        RandomListNode preClone = pHead.next;
+        while(currentNode != null){
+            RandomListNode cloneNode = currentNode.next;
+            currentNode.next = cloneNode.next;
+            cloneNode.next = cloneNode.next == null ? null : cloneNode.next.next;
+            currentNode = currentNode.next;
+        }
+        return preClone;
+    }
+}
+```
+
 ## Tree
 
 ### 4.重建二叉树
@@ -445,6 +486,28 @@ public class Solution {
             index = 0;
         }
         return true;
+    }
+}
+```
+
+### 24.二叉树中和为某一值的路径
+
+```java
+public class Solution {
+    ArrayList<Integer> list = new ArrayList<>();
+    ArrayList<ArrayList<Integer>> allList = new ArrayList<ArrayList<Integer>>();
+    
+    public ArrayList<ArrayList<Integer>> FindPath(TreeNode root,int target) {
+        if(root == null) return allList;
+        list.add(root.val);
+        target -= root.val;
+        if(target == 0 && root.right == null && root.left == null){
+            allList.add(new ArrayList<Integer>(list));
+        }
+        FindPath(root.left, target);
+        FindPath(root.right, target);
+        list.remove(list.size() - 1);//退回上一个路径
+        return allList;
     }
 }
 ```
