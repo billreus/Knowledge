@@ -2,6 +2,7 @@
 
 - [字符串](#字符串)
     - [StringBuffer](#stringbuffer)
+    - [String](#string)
 - [list](#list)
     - [ArrayList](#arraylist)
     - [Stack](#stack)
@@ -14,6 +15,7 @@
         - [16.合并两个排序的链表](#16合并两个排序的链表)
         - [19.顺时针打印矩阵](#19顺时针打印矩阵)
         - [26.复杂链表的复制](#26复杂链表的复制)
+        - [36.两个链表的第一个公共结点](#36两个链表的第一个公共结点)
     - [Tree](#tree)
         - [4.重建二叉树](#4重建二叉树)
         - [17.树的子结构](#17树的子结构)
@@ -21,11 +23,14 @@
         - [22.从上往下打印二叉树](#22从上往下打印二叉树)
         - [23.二叉搜索树的后序遍历](#23二叉搜索树的后序遍历)
         - [24.二叉树中和为某一值的路径](#24二叉树中和为某一值的路径)
+        - [26.二叉搜索树与双向链表](#26二叉搜索树与双向链表)
     - [Stack & Queue](#stack--queue)
         - [5.用两个栈实现队列](#5用两个栈实现队列)
         - [20.包含min函数的栈](#20包含min函数的栈)
         - [21.栈的压入、弹出序列](#21栈的压入弹出序列)
 - [算法类](#算法类)
+    - [Hash](#hash)
+        - [34.第一个只出现一次的字符](#34第一个只出现一次的字符)
     - [斐波那契数列](#斐波那契数列)
         - [7.斐波那契数列](#7斐波那契数列)
         - [8.跳格子](#8跳格子)
@@ -37,9 +42,18 @@
     - [搜索算法](#搜索算法)
         - [1. 二维数组中的查找](#1-二维数组中的查找)
         - [6.旋转数组的最小数字](#6旋转数组的最小数字)
+    - [排序](#排序)
+        - [29.最小的K个数](#29最小的k个数)
+        - [35.数组中的逆序对](#35数组中的逆序对)
+    - [动态规划](#动态规划)
+        - [30.连续子数组的最大和](#30连续子数组的最大和)
     - [其它算法](#其它算法)
         - [2.替换空格](#2替换空格)
         - [13.调整数组顺序死奇数位于偶数前面](#13调整数组顺序死奇数位于偶数前面)
+        - [28.数组中出现次数超过一半的数字](#28数组中出现次数超过一半的数字)
+        - [31.整数中1出现的次数](#31整数中1出现的次数)
+        - [32.把数组排成最小的数](#32把数组排成最小的数)
+        - [33.丑数](#33丑数)
 
 <!-- /TOC -->
 
@@ -54,6 +68,13 @@
 * substring(start, end):截取
 * delete(start, end):删除
 * indexOf(words, start):查找
+
+## String
+
+* charAt(num):第num个字符
+* length()
+* Object.toString():Object转换为字符串，null会报出异常
+* String.valueOf(Object)：Object转化成字符串，null也会被存
 
 # list
 
@@ -322,6 +343,25 @@ public class Solution {
 }
 ```
 
+### 36.两个链表的第一个公共结点
+
+设 A 的长度为 a + c，B 的长度为 b + c，其中 c 为尾部公共部分长度，可知 a + c + b = b + c + a。
+
+当访问链表 A 的指针访问到链表尾部时，令它从链表 B 的头部重新开始访问链表 B；同样地，当访问链表 B 的指针访问到链表尾部时，令它从链表 A 的头部重新开始访问链表 A。这样就能控制访问 A 和 B 两个链表的指针能同时访问到交点。
+
+```java
+public class Solution {
+    public ListNode FindFirstCommonNode(ListNode pHead1, ListNode pHead2) {
+         ListNode p1 = pHead1, p2 = pHead2;
+         while(p1!=p2){
+             p1 = (p1 == null) ? pHead2 : p1.next;
+             p2 = (p2 == null) ? pHead1 : p2.next;
+         }
+        return p1;
+    }
+}
+```
+
 ## Tree
 
 ### 4.重建二叉树
@@ -512,6 +552,86 @@ public class Solution {
 }
 ```
 
+### 26.二叉搜索树与双向链表
+
+```java
+//递归调用 左 根 右 遍历
+public class Solution {
+     //双向链表的左边头结点和右边头节点
+    TreeNode leftHead = null;
+    TreeNode rightHead = null;
+    public TreeNode Convert(TreeNode pRootOfTree) {
+         //递归调用叶子节点的左右节点返回null
+        if(pRootOfTree==null) return null;
+          //第一次运行时，它会使最左边叶子节点为链表第一个节点
+        Convert(pRootOfTree.left);
+        if(rightHead==null){
+            leftHead= rightHead = pRootOfTree;
+        }else{
+            //把根节点插入到双向链表右边，rightHead向后移动
+           rightHead.right = pRootOfTree;
+           pRootOfTree.left = rightHead;
+           rightHead = pRootOfTree;
+        }
+         //把右叶子节点也插入到双向链表（rightHead已确定，直接插入）
+        Convert(pRootOfTree.right);
+         //返回左边头结点
+        return leftHead;
+    }
+}
+```
+
+### 38.二叉树的深度
+
+递归
+
+```java
+import java.lang.Math;
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if(root != null){
+            int left = TreeDepth(root.left);
+            int right = TreeDepth(root.right);
+            return Math.max(left, right)+1;
+        }
+        else{
+            return 0;
+        }
+    }
+}
+```
+
+层次遍历
+
+```java
+import java.util.LinkedList;
+import java.util.Queue;
+public class Solution {
+    public int TreeDepth(TreeNode root) {
+        if(root==null) return 0;
+        TreeNode current;  //记录当前节点
+        Queue<TreeNode> queue = new LinkedList<TreeNode>();  //构造辅助队列
+        int cur,width; //cur记录访问到当前层的第几个,widtd为当前层的宽度
+        int deep=0; //初始深度为0；
+        queue.offer(root);//头结点入队列
+        while(!queue.isEmpty()){//队列不空 循环记录深度
+            cur=0; //新的一层cur赋为0
+            width=queue.size();//当前队列里的节点即为该层的所有节点
+            while(cur<width){//循环访问该层的所有节点 
+                current=queue.poll();//访问队列的头
+                if(current.left!=null)//左节点不空，左节点入队列
+                    queue.offer(current.left);
+                if(current.right!=null)//右节点不空，右节点入队列
+                    queue.offer(current.right);
+                cur++;//访问完当前节点后cur++
+            }
+            deep++;//访问完一层，层数++;
+        }
+        return deep;
+    }
+}
+```
+
 ## Stack & Queue
 
 ### 5.用两个栈实现队列
@@ -638,6 +758,57 @@ public class Solution {
 ```
 
 # 算法类
+
+## Hash
+
+### 34.第一个只出现一次的字符
+
+使用数组方法
+
+```java
+public class Solution {
+    public int FirstNotRepeatingChar(String str) {
+        int[] count = new int[82];
+        char[] c = str.toCharArray();
+        for(char eng:c){
+            count[eng-'A']+= 1;
+        }
+        for(int i=0; i<c.length; i++){
+            if(count[c[i]-'A'] == 1)
+                return i;
+        }
+        return -1;
+    }
+}
+```
+
+使用HashMap
+
+```java
+import java.util.HashMap;
+public class Solution {
+   HashMap<Character, Integer> map = new HashMap<>();
+ 
+    public int FirstNotRepeatingChar(String str) {
+        if (str==null)return -1;
+        int length = str.length();
+        for(int i = 0;i<length;i++) {
+             
+            if(map.containsKey(str.charAt(i))){
+                int value = map.get(str.charAt(i));//取值
+                map.put(str.charAt(i),value+1);
+            }else{
+                map.put(str.charAt(i),1);
+            }
+        }
+     for(int i = 0;i<length;i++){
+         if(map.get(str.charAt(i))==1)
+             return i;
+        }
+        return -1;  
+    }
+}
+```
 
 ## 斐波那契数列
 
@@ -890,6 +1061,172 @@ public static int minNumberInRotateArray(int[] array) {
 
 ```
 
+### 37.数字在排序数组中出现的次数
+
+二分查找
+
+```java
+public class Solution {
+    
+    public int GetNumberOfK(int [] array , int k) {
+        int first = firstFind(array, 0, array.length-1, k);
+        int last = endFind(array, 0, array.length-1, k);
+        if(first != -1 && last != -1)
+            return last-first+1;
+        return 0;
+    }
+    public int firstFind(int [] num, int left, int right, int k){//递归
+        if(left > right) return -1;//没在数组中出现的数值
+        int mid = left + (right - left)/2;
+        if(num[mid] > k)
+            return firstFind(num, left, mid-1, k);
+        else if(num[mid] < k)
+            return firstFind(num, mid+1, right, k);
+        else if(mid-1>=0 && num[mid-1] == k)//如果mid==k且左边还有相同数字
+            return firstFind(num, left, mid-1, k);
+        else
+            return mid;
+    }
+    public int endFind(int [] num, int left, int right, int k){//循环写法
+        int len = num.length;
+        int mid = left + (right - left)/2;
+        while(left<=right){
+            if(num[mid] > k)
+                right = mid - 1;
+            else if(num[mid] < k)
+                left = mid + 1;
+            else if(mid+1<len && num[mid+1] == k)
+                left = mid + 1;
+            else{
+                return mid;
+            }
+            mid = left + (right - left)/2;
+        }
+        return -1;
+    }
+}
+```
+
+## 排序
+
+### 29.最小的K个数
+
+堆排序
+
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> GetLeastNumbers_Solution(int [] input, int k) {
+        ArrayList<Integer> list=new ArrayList<Integer>();
+        //检查输入的特殊情况
+        if(input==null || input.length<=0 || input.length<k){
+            return list;
+        }
+        //构建最大堆
+        for(int len=k/2-1; len>=0; len--){
+            adjustMaxHeapSort(input,len,k-1);
+        }
+        //从第k个元素开始分别与最大堆的最大值做比较，如果比最大值小，则替换并调整堆。
+        //最终堆里的就是最小的K个数。
+        int tmp;
+        for(int i=k; i<input.length; i++){
+            if(input[i]<input[0]){
+                tmp=input[0];
+                input[0]=input[i];
+                input[i]=tmp;
+                adjustMaxHeapSort(input,0,k-1);
+            }
+        }
+        for(int j=0; j<k; j++){
+            list.add(input[j]);
+        }
+        return list;
+    }
+     
+    public void adjustMaxHeapSort(int[] input, int pos, int length){
+        int temp;
+        int child;
+        for(temp=input[pos]; 2*pos+1<=length; pos=child){
+            child=2*pos+1;
+            if(child<length && input[child]<input[child+1]){
+                child++;
+            }
+            if(input[child]>temp){
+                input[pos]=input[child];
+            }else{
+                break;
+            }
+        }
+        input[pos]=temp;
+    }
+}
+```
+
+### 35.数组中的逆序对
+
+归并排序，每次左边比右边小时记录左边的个数。
+
+```java
+public class Solution {
+    private long count = 0;
+    private int[] tmp;
+    public int InversePairs(int [] array) {
+        tmp = new int[array.length];
+        mergeSort(array, 0, array.length-1);
+        return (int)(count%1000000007);
+    }
+    
+    private void mergeSort(int[] nums, int left, int right){
+        if(right - left < 1)
+            return;
+        int mid = left+(right-left)/2;
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid+1, right);
+        merge(nums, left, mid, right);
+    }
+    private void merge(int[] nums, int left, int mid, int right){
+        int leftIndex = left, rightIndex = mid+1, tmpIndex = left;
+        while(leftIndex <= mid || rightIndex <= right){
+            if(leftIndex > mid)//左边都放完了
+                tmp[tmpIndex] = nums[rightIndex++];
+            else if(rightIndex > right)//右边都放完了
+                tmp[tmpIndex] = nums[leftIndex++];
+            else if(nums[leftIndex]< nums[rightIndex])//左小放左
+                tmp[tmpIndex] = nums[leftIndex++];
+            else{//右小放右
+                tmp[tmpIndex] = nums[rightIndex++];
+                this.count += mid - leftIndex + 1;
+                //说明左边leftIndex开始每个数都比右边rightIndex大
+            }
+            tmpIndex++;
+        }
+        for(tmpIndex = left; tmpIndex<=right; tmpIndex++){
+            nums[tmpIndex] = tmp[tmpIndex];
+        }
+    }
+}
+```
+
+## 动态规划
+
+### 30.连续子数组的最大和
+
+累加左边的数，当小于零0即代表左边没有作用，抛去。
+
+```java
+public class Solution {
+    public int FindGreatestSumOfSubArray(int[] array) {
+        int sum = array[0];
+        int tmpSum = array[0];
+        for(int i=1; i<array.length; i++){
+            tmpSum = (tmpSum > 0) ? tmpSum + array[i] :array[i];
+            sum = (sum > tmpSum) ? sum : tmpSum;
+        }
+        return sum;
+    }
+}
+```
+
 ## 其它算法
 
 ### 2.替换空格
@@ -963,5 +1300,199 @@ public class Solution {
             }
         }
     }            
+}
+```
+
+### 28.数组中出现次数超过一半的数字
+
+数组排序后，如果符合条件的数存在，则一定是数组中间那个数。（比如：1，2，2，2，3；或2，2，2，3，4；或2，3，4，4，4等等）
+
+```java
+class Solution {
+public:
+    int MoreThanHalfNum_Solution(vector<int> numbers)
+    {
+        // 因为用到了sort，时间复杂度O(NlogN)，并非最优
+        if(numbers.empty()) return 0;
+         
+        sort(numbers.begin(),numbers.end()); // 排序，取数组中间那个数
+        int middle = numbers[numbers.size()/2];
+         
+        int count=0; // 出现次数
+        for(int i=0;i<numbers.size();++i)
+        {
+            if(numbers[i]==middle) ++count;
+        }
+         
+        return (count>numbers.size()/2) ? middle :  0;
+    }
+};
+```
+
+如果有符合条件的数字，则它出现的次数比其他所有数字出现的次数和还要多。
+在遍历数组时保存两个值：一是数组中一个数字，一是次数。遍历下一个数字时，若它与之前保存的数字相同，则次数加1，否则次数减1；若次数为0，则保存下一个数字，并将次数置为1。遍历结束后，所保存的数字即为所求。然后再判断它是否符合条件即可。
+
+```java
+public class Solution {
+    public int MoreThanHalfNum_Solution(int [] array) {
+        int num = array[0];
+        int count = 1;
+        for(int i=1; i<array.length; i++){
+            if(count == 0){
+                num = array[i];
+                count = 1;
+            }
+            if(num == array[i]){
+                count++;
+            }
+            else{
+                count--;
+            }
+        }
+        count = 0;
+        for(int i=0; i<array.length; i++){
+            if(num == array[i])
+                count++;
+        }
+        if(count>array.length/2)
+            return num;
+        else
+            return 0;
+    }
+}
+```
+
+### 31.整数中1出现的次数
+
+暴力字符串法
+
+```java
+public class Solution {
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int count = 0;
+        StringBuffer s = new StringBuffer();
+        for(int i=1; i<n+1; i++){
+            s.append(i);
+        }
+        String str = s.toString();
+        for(int i=0; i<str.length(); i++){
+            if(str.charAt(i) == '1')
+                count++;
+        }
+        return count;
+    }
+}
+```
+
+1. 设N = abcde ,其中abcde分别为十进制中各位上的数字。
+如果要计算百位上1出现的次数，它要受到3方面的影响：百位上的数字，百位以下（低位）的数字，百位以上（高位）的数字。
+① 如果百位上数字为0，百位上可能出现1的次数由更高位决定。比如：12013，则可以知道百位出现1的情况可能是：100~199，1100~1199,2100~2199，，...，11100~11199，一共1200个。可以看出是由更高位数字（12）决定，并且等于更高位数字（12）乘以 当前位数（100）。
+2. 如果百位上数字为1，百位上可能出现1的次数不仅受更高位影响还受低位影响。比如：12113，则可以知道百位受高位影响出现的情况是：100~199，1100~1199,2100~2199，，....，11100~11199，一共1200个。和上面情况一样，并且等于更高位数字（12）乘以 当前位数（100）。但同时它还受低位影响，百位出现1的情况是：12100~12113,一共114个，等于低位数字（113）+1。
+3. 如果百位上数字大于1（2~9），则百位上出现1的情况仅由更高位决定，比如12213，则百位出现1的情况是：100~199,1100~1199，2100~2199，...，11100~11199,12100~12199,一共有1300个，并且等于更高位数字+1（12+1）乘以当前位数（100）。
+
+从个位开始按照此规律判断即可。
+
+```java
+public class Solution {
+    public int NumberOf1Between1AndN_Solution(int n) {
+        int count = 0;
+        int index = 1;
+        int current, left, right;
+        while((n/index)!=0){
+            current = n/index%10; //当前位
+            left = n/index/10;//左边高位
+            right = n-(n/index)*index;//右边低位
+            if(current == 0){//1
+                count += left * index;
+            }
+            else if(current == 1){//2
+                count += left * index + right + 1;
+            }
+            else{//3
+                count += (left + 1)* index;
+            }
+            index = index * 10;
+        }
+        return count;
+    }
+}
+```
+
+### 32.把数组排成最小的数
+
+ * 排序规则如下：
+ * 若ab > ba 则 a > b，
+ * 若ab < ba 则 a < b，
+ * 若ab = ba 则 a = b；
+ * 解释说明：
+ * 比如 "3" < "31"但是 "331" > "313"，所以要将二者拼接起来进行比较
+
+```java
+public class Solution {
+    public String PrintMinNumber(int [] numbers) {
+        String str = "";
+        for (int i=0; i<numbers.length; i++){
+            for (int j=i+1; j<numbers.length; j++){
+                int a = Integer.valueOf(numbers[i]+""+numbers[j]);
+                int b = Integer.valueOf(numbers[j]+""+numbers[i]);
+                if (a > b){
+                    int t = numbers[i];
+                    numbers[i] = numbers[j];
+                    numbers[j] = t;
+                }
+                 
+            }
+        }
+        for (int i = 0; i < numbers.length; i++) {
+            str += String.valueOf(numbers[i]);
+        }
+        return str;
+    }
+}
+```
+
+```java
+public String PrintMinNumber(int [] numbers) {
+        if(numbers == null || numbers.length == 0) return "";
+        int len = numbers.length;
+        String[] str = new String[len];
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < len; i++){
+            str[i] = String.valueOf(numbers[i]);
+        }
+        Arrays.sort(str,new Comparator<String>(){
+            @Override
+            public int compare(String s1, String s2) {
+                String c1 = s1 + s2;
+                String c2 = s2 + s1;
+                return c1.compareTo(c2);
+            }
+        });
+        for(int i = 0; i < len; i++){
+            sb.append(str[i]);
+        }
+        return sb.toString();
+    }
+```
+
+### 33.丑数
+
+p = 2 ^ a * 3 ^ b * 5 ^ c
+
+```java
+public class Solution {
+    public int GetUglyNumber_Solution(int index) {
+        if(index<7)return index;
+        int[] res = new int[index]; 
+        int a=0,b=0,c=0;
+        res[0] = 1;
+        for(int i=1; i<index; i++){
+            res[i] = Math.min(res[a]*2, Math.min(res[b]*3, res[c]*5));
+            if(res[i] == res[a]*2) a++;
+            if(res[i] == res[b]*3) b++;
+            if(res[i] == res[c]*5) c++;
+        }
+        return res[index-1];
+    }
 }
 ```
