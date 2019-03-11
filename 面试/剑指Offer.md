@@ -24,10 +24,12 @@
         - [23.二叉搜索树的后序遍历](#23二叉搜索树的后序遍历)
         - [24.二叉树中和为某一值的路径](#24二叉树中和为某一值的路径)
         - [26.二叉搜索树与双向链表](#26二叉搜索树与双向链表)
+        - [38.二叉树的深度](#38二叉树的深度)
     - [Stack & Queue](#stack--queue)
         - [5.用两个栈实现队列](#5用两个栈实现队列)
         - [20.包含min函数的栈](#20包含min函数的栈)
         - [21.栈的压入、弹出序列](#21栈的压入弹出序列)
+        - [39.平衡二叉树](#39平衡二叉树)
 - [算法类](#算法类)
     - [Hash](#hash)
         - [34.第一个只出现一次的字符](#34第一个只出现一次的字符)
@@ -39,9 +41,11 @@
     - [位运算](#位运算)
         - [11.二进制中1的个数](#11二进制中1的个数)
         - [12.数值的整数次方](#12数值的整数次方)
+        - [40.数组中只出现一次的数字](#40数组中只出现一次的数字)
     - [搜索算法](#搜索算法)
         - [1. 二维数组中的查找](#1-二维数组中的查找)
         - [6.旋转数组的最小数字](#6旋转数组的最小数字)
+        - [37.数字在排序数组中出现的次数](#37数字在排序数组中出现的次数)
     - [排序](#排序)
         - [29.最小的K个数](#29最小的k个数)
         - [35.数组中的逆序对](#35数组中的逆序对)
@@ -54,6 +58,10 @@
         - [31.整数中1出现的次数](#31整数中1出现的次数)
         - [32.把数组排成最小的数](#32把数组排成最小的数)
         - [33.丑数](#33丑数)
+        - [41.和为S的连续正数序列(滑动窗口思想)](#41和为s的连续正数序列滑动窗口思想)
+        - [42.和为S的两个数字(双指针思想)](#42和为s的两个数字双指针思想)
+        - [43.左旋转字符串](#43左旋转字符串)
+        - [44.翻转单词顺序列](#44翻转单词顺序列)
 
 <!-- /TOC -->
 
@@ -75,6 +83,7 @@
 * length()
 * Object.toString():Object转换为字符串，null会报出异常
 * String.valueOf(Object)：Object转化成字符串，null也会被存
+* str.trim():去空格
 
 # list
 
@@ -757,6 +766,48 @@ public class Solution {
 }
 ```
 
+### 39.平衡二叉树
+
+遍历每个结点，借助一个获取树深度的递归函数，根据该结点的左右子树高度差判断是否平衡，然后递归地对左右子树进行判断。
+
+```java
+public classSolution {
+    public boolean IsBalanced_Solution(TreeNode root) {
+        if(root == null) {
+            return true;
+        }
+        return Math.abs(maxDepth(root.left) - maxDepth(root.right)) <= 1 &&
+            IsBalanced_Solution(root.left) && IsBalanced_Solution(root.right);
+    }
+      
+    private int maxDepth(TreeNode root) {
+        if(root == null) {
+            return 0;
+        }
+        return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    }
+}
+```
+
+如果改为从下往上遍历，如果子树是平衡二叉树，则返回子树的高度；如果发现子树不是平衡二叉树，则直接停止遍历，这样至多只对每个结点访问一次。
+
+```java
+public class Solution {
+    public boolean IsBalanced_Solution(TreeNode root) {
+        return getDepth(root) != -1;
+    }
+     
+    private int getDepth(TreeNode root) {
+        if (root == null) return 0;
+        int left = getDepth(root.left);
+        if (left == -1) return -1;
+        int right = getDepth(root.right);
+        if (right == -1) return -1;
+        return Math.abs(left - right) > 1 ? -1 : 1 + Math.max(left, right);
+    }
+}
+```
+
 # 算法类
 
 ## Hash
@@ -998,6 +1049,52 @@ public class Solution {
              
             return result;
         }
+}
+```
+
+### 40.数组中只出现一次的数字
+
+位运算中异或的性质：两个相同数字异或=0，一个数和0异或还是它本身。
+
+当只有一个数出现一次时，我们把数组中所有的数，依次异或运算，最后剩下的就是落单的数，因为成对儿出现的都抵消了。
+
+依照这个思路，我们来看两个数（我们假设是AB）出现一次的数组。我们首先还是先异或，剩下的数字肯定是A、B异或的结果，这个结果的二进制中的1，表现的是A和B的不同的位。我们就取第一个1所在的位数，假设是第3位，接着把原数组分成两组，分组标准是第3位是否为1。如此，相同的数肯定在一个组，因为相同数字所有位都相同，而不同的数，肯定不在一组。然后把这两个组按照最开始的思路，依次异或，剩余的两个结果就是这两个只出现一次的数字。
+
+```java
+public class Solution {
+    public void FindNumsAppearOnce(int[] array, int[] num1, int[] num2)    {
+        int length = array.length;
+        if(length == 2){
+            num1[0] = array[0];
+            num2[0] = array[1];
+            return;
+        }
+        int bitResult = 0;
+        for(int i = 0; i < length; ++i){
+            bitResult ^= array[i];
+        }
+        int index = findFirst1(bitResult);
+        for(int i = 0; i < length; ++i){
+            if(isBit1(array[i], index)){
+                num1[0] ^= array[i];
+            }else{
+                num2[0] ^= array[i];
+            }
+        }
+    }
+     
+    private int findFirst1(int bitResult){
+        int index = 0;
+        while(((bitResult & 1) == 0) && index < 32){
+            bitResult >>= 1;
+            index++;
+        }
+        return index;
+    }
+     
+    private boolean isBit1(int target, int index){
+        return ((target >> index) & 1) == 1;
+    }
 }
 ```
 
@@ -1493,6 +1590,136 @@ public class Solution {
             if(res[i] == res[c]*5) c++;
         }
         return res[index-1];
+    }
+}
+```
+
+### 41.和为S的连续正数序列(滑动窗口思想)
+
+有一个窗口，窗口的左右两边就是两个指针，我们根据窗口内值之和来确定窗口的位置和宽度。
+
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<ArrayList<Integer> > FindContinuousSequence(int sum) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
+        
+        int start=1, end=2;
+        while(end > start){
+            int num = (start + end)*(end - start + 1)/2;
+            if(num<sum){
+                end++;
+            }
+            else if(num>sum){
+                start++;
+            }
+            else{
+                ArrayList<Integer> list = new ArrayList<>();
+                for(int i=start; i<=end; i++){
+                    list.add(i);
+                }
+                res.add(list);
+                start++;
+            }
+        }
+        return res;
+    }
+}
+```
+
+### 42.和为S的两个数字(双指针思想)
+
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        int left=0, right=array.length-1;
+        ArrayList<Integer> list = new ArrayList<>();
+        while(left<right){
+            int count = array[left] + array[right];
+            if(count>sum){
+                right--;
+            }
+            else if(count<sum){
+                left++;
+            }
+            else {
+                list.add(array[left]);
+                list.add(array[right]);
+                break;
+            }
+        }
+        return list;
+    }
+}
+```
+
+### 43.左旋转字符串
+
+暴力思路
+
+```java
+public class Solution {
+    public String LeftRotateString(String str,int n) {
+        StringBuffer res = new StringBuffer();
+        if(str.length() == 0) return "";
+        for(int i=n; i<str.length(); i++){
+            res.append(str.charAt(i));
+        }
+        for(int i=0; i<n; i++){
+            res.append(str.charAt(i));
+        }
+        return res.toString();
+    }
+}
+```
+
+通过翻转0到n-1，n到最右，再全部反转，可以得到结果
+
+```java
+public class Solution {
+    public String LeftRotateString(String str,int n) {
+        char[] chars = str.toCharArray();        
+        if(chars.length < n) return "";
+        reverse(chars, 0, n-1);
+        reverse(chars, n, chars.length-1);
+        reverse(chars, 0, chars.length-1);
+        StringBuilder sb = new StringBuilder(chars.length);
+        for(char c:chars){
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+     
+    public void reverse(char[] chars,int low,int high){
+        char temp;
+        while(low<high){
+            temp = chars[low];
+            chars[low] = chars[high];
+            chars[high] = temp;
+            low++;
+            high--;
+        }
+    }
+}
+```
+
+### 44.翻转单词顺序列
+
+```java
+public class Solution {
+    public String ReverseSentence(String str) {
+        if(str.trim().equals("")){
+            return str;
+        }
+        String[] a = str.split(" ");
+        StringBuffer res = new StringBuffer();
+        for(int i=a.length-1; i>=0; i--){
+            res.append(a[i]);
+            if(i>0)
+                res.append(" ");
+        }
+        return res.toString();
     }
 }
 ```
