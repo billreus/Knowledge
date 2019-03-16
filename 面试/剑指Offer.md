@@ -16,6 +16,8 @@
         - [19.顺时针打印矩阵](#19顺时针打印矩阵)
         - [26.复杂链表的复制](#26复杂链表的复制)
         - [36.两个链表的第一个公共结点](#36两个链表的第一个公共结点)
+        - [55.链表中环的入口节点](#55链表中环的入口节点)
+        - [54.删除链表中重复的数](#54删除链表中重复的数)
     - [Tree](#tree)
         - [4.重建二叉树](#4重建二叉树)
         - [17.树的子结构](#17树的子结构)
@@ -25,6 +27,10 @@
         - [24.二叉树中和为某一值的路径](#24二叉树中和为某一值的路径)
         - [26.二叉搜索树与双向链表](#26二叉搜索树与双向链表)
         - [38.二叉树的深度](#38二叉树的深度)
+        - [57.二叉树的下一个结点](#57二叉树的下一个结点)
+        - [58.对称的二叉树](#58对称的二叉树)
+        - [59.3按之字形顺序打印二叉树](#593按之字形顺序打印二叉树)
+        - [60.把二叉树打印成多行](#60把二叉树打印成多行)
     - [Stack & Queue](#stack--queue)
         - [5.用两个栈实现队列](#5用两个栈实现队列)
         - [20.包含min函数的栈](#20包含min函数的栈)
@@ -36,12 +42,13 @@
     - [斐波那契数列](#斐波那契数列)
         - [7.斐波那契数列](#7斐波那契数列)
         - [8.跳格子](#8跳格子)
-    - [9.变态跳台阶](#9变态跳台阶)
+        - [9.变态跳台阶](#9变态跳台阶)
         - [10.矩形覆盖](#10矩形覆盖)
     - [位运算](#位运算)
         - [11.二进制中1的个数](#11二进制中1的个数)
         - [12.数值的整数次方](#12数值的整数次方)
         - [40.数组中只出现一次的数字](#40数组中只出现一次的数字)
+        - [48.不用加减乘除做加法](#48不用加减乘除做加法)
     - [搜索算法](#搜索算法)
         - [1. 二维数组中的查找](#1-二维数组中的查找)
         - [6.旋转数组的最小数字](#6旋转数组的最小数字)
@@ -62,6 +69,15 @@
         - [42.和为S的两个数字(双指针思想)](#42和为s的两个数字双指针思想)
         - [43.左旋转字符串](#43左旋转字符串)
         - [44.翻转单词顺序列](#44翻转单词顺序列)
+        - [45.扑克牌顺子](#45扑克牌顺子)
+        - [46.孩子们的游戏](#46孩子们的游戏)
+        - [47.求1+2+3...+n](#47求123n)
+        - [48.把字符串转化成整数](#48把字符串转化成整数)
+        - [50.数组中重复的数字](#50数组中重复的数字)
+        - [51.构建乘积数组](#51构建乘积数组)
+        - [52.正则表达式匹配](#52正则表达式匹配)
+        - [53.表示数值的字符串](#53表示数值的字符串)
+        - [54.字符流中第一个不重复的字符](#54字符流中第一个不重复的字符)
 
 <!-- /TOC -->
 
@@ -371,6 +387,91 @@ public class Solution {
 }
 ```
 
+### 55.链表中环的入口节点
+
+第一步，找环中相汇点。分别用p1，p2指向链表头部，p1每次走一步，p2每次走二步，直到p1==p2找到在环中的相汇点。
+
+第二步，找环的入口。接上步，当p1==p2时，p2所经过节点数为2x,p1所经过节点数为x,设环中有n个节点,p2比p1多走一圈有2x=n+x; n=x;可以看出p1实际走了一个环的步数，再让p2指向链表头部，p1位置不变，p1,p2每次走一步直到p1==p2; 此时p1指向环的入口。
+
+```java
+public class Solution {
+    public ListNode EntryNodeOfLoop(ListNode pHead){
+        if(pHead == null || pHead.next == null)
+            return null;
+        ListNode list = pHead;
+        ListNode list2 = pHead;
+        while(true){
+            list = list.next;
+            list2 = list2.next.next;
+            if(list == list2){
+                list2 = pHead;
+                while(list != list2){
+                    list = list.next;
+                    list2 = list2.next;
+                }
+                return list;
+            }
+        }
+    }
+}
+```
+
+### 54.删除链表中重复的数
+
+非递归：1. 首先添加一个头节点，以方便碰到第一个，第二个节点就相同的情况
+
+2.设置 pre ，last 指针， pre指针指向当前确定不重复的那个节点，而last指针相当于工作指针，一直往后面搜索。
+
+```java
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead) {
+        if (pHead==null || pHead.next==null){return pHead;}
+        ListNode Head = new ListNode(0);
+        Head.next = pHead;
+        ListNode pre  = Head;
+        ListNode last = Head.next;
+        while (last!=null){
+            if(last.next!=null && last.val == last.next.val){
+            // 找到最后的一个相同节点
+            while (last.next!=null && last.val == last.next.val){
+                last = last.next;
+            }
+            pre.next = last.next;//删除重复
+            last = last.next;
+            }
+            else{
+                pre = pre.next;
+                last = last.next;
+            }
+        }
+        return Head.next;  
+    }
+}
+```
+
+递归
+
+```java
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead) {
+        if (pHead == null || pHead.next == null) { // 只有0个或1个结点，则返回
+            return pHead;
+        }
+        if (pHead.val == pHead.next.val) { // 当前结点是重复结点
+            ListNode pNode = pHead.next;
+            while (pNode != null && pNode.val == pHead.val) {
+                // 跳过值与当前结点相同的全部结点,找到第一个与当前结点不同的结点
+                pNode = pNode.next;
+            }
+            return deleteDuplication(pNode); // 从第一个与当前结点不同的结点开始递归
+        } else { // 当前结点不是重复结点
+            pHead.next = deleteDuplication(pHead.next); // 保留当前结点，从下一个结点开始递归
+            return pHead;
+        }
+    }
+}
+```
+
 ## Tree
 
 ### 4.重建二叉树
@@ -638,6 +739,147 @@ public class Solution {
         }
         return deep;
     }
+}
+```
+
+### 57.二叉树的下一个结点
+
+1. 二叉树为空，则返回空；
+2. 节点右孩子存在，则设置一个指针从该节点的右孩子出发，一直沿着指向左子结点的指针找到的叶子节点即为下一个节点；
+3. 节点不是根节点。如果该节点是其父节点的左孩子，则返回父节点；否则继续向上遍历其父节点的父节点，重复之前的判断，返回结果。
+
+```java
+public class Solution {
+    public TreeLinkNode GetNext(TreeLinkNode pNode)
+    {
+        if(pNode == null)
+            return null;
+        if(pNode.right != null){
+            pNode = pNode.right;
+            while(pNode.left != null){
+                pNode = pNode.left;
+            }
+            return pNode;
+        }
+        while(pNode.next != null){
+            TreeLinkNode root = pNode.next;
+            if(root.left == pNode)
+                return root;
+            pNode = pNode.next;
+        }
+        return null;
+    }
+}
+```
+
+### 58.对称的二叉树
+
+递归：
+1. 只要pRoot.left和pRoot.right是否对称即可
+2. 左右节点的值相等且对称子树left.left， right.right ;left.rigth,right.left也对称
+
+```java
+public class Solution {
+    boolean isSymmetrical(TreeNode pRoot)
+    {
+        if(pRoot == null) return true;
+        return compareTree(pRoot.left, pRoot.right);
+    }
+    private boolean compareTree(TreeNode left, TreeNode right){
+        if(left == null && right == null) return true;
+        if(left == null || right == null) return false;
+        return compareTree(left.left, right.right) && compareTree(left.right, right.left) && (left.val == right.val);
+    }
+}
+```
+
+非递归使用stack来保存成对的节点:
+1. 出栈的时候也是成对成对的 ，
+    1. 若都为空，继续；
+    2. 一个为空，返回false;
+    3. 不为空，比较当前值，值不等，返回false；
+2. 确定入栈顺序，每次入栈都是成对成对的，如left.left，right.right;left.rigth,right.left
+
+```java
+boolean isSymmetricalDFS(TreeNode pRoot){
+    if(pRoot == null) return true;
+    Stack<TreeNode> s = new Stack<>();
+    s.push(pRoot.left);
+    s.push(pRoot.right);
+    while(!s.empty()) {
+        TreeNode right = s.pop();//成对取出
+        TreeNode left = s.pop();
+        if(left == null && right == null) continue;
+        if(left == null || right == null) return false;
+        if(left.val != right.val) return false;
+        //成对插入
+        s.push(left.left);
+        s.push(right.right);
+        s.push(left.right);
+        s.push(right.left);
+    }
+    return true;
+}
+```
+
+### 59.3按之字形顺序打印二叉树
+
+```java
+public ArrayList<ArrayList<Integer>> Print(TreeNode pRoot) {
+    ArrayList<ArrayList<Integer>> ret = new ArrayList<>();
+    Queue<TreeNode> queue = new LinkedList<>();
+    queue.add(pRoot);
+    boolean reverse = false;
+    while (!queue.isEmpty()) {
+        ArrayList<Integer> list = new ArrayList<>();
+        int cnt = queue.size();
+        while (cnt-- > 0) {
+            TreeNode node = queue.poll();
+            if (node == null)
+                continue;
+            list.add(node.val);
+            queue.add(node.left);
+            queue.add(node.right);
+        }
+        if (reverse)
+            Collections.reverse(list);
+        reverse = !reverse;
+        if (list.size() != 0)
+            ret.add(list);
+    }
+    return ret;
+}
+```
+
+### 60.把二叉树打印成多行
+
+```java
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+public class Solution {
+    ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(pRoot);
+        while(!queue.isEmpty()){
+            ArrayList<Integer> list = new ArrayList<>();
+            int len = queue.size();
+            while(len-->0){
+                TreeNode node = queue.poll();//取值
+                if(node == null)
+                    continue;
+                list.add(node.val);
+                queue.add(node.left);
+                queue.add(node.right);
+            }
+            if(list.size() != 0){
+                res.add(list);
+            }
+        }
+        return res;
+    }
+    
 }
 ```
 
@@ -912,7 +1154,7 @@ public class Solution {
 }
 ```
 
-## 9.变态跳台阶
+### 9.变态跳台阶
 
 1）这里的f(n) 代表的是n个台阶有一次1,2,...n阶的 跳法数。
 
@@ -1094,6 +1336,28 @@ public class Solution {
      
     private boolean isBit1(int target, int index){
         return ((target >> index) & 1) == 1;
+    }
+}
+```
+
+### 48.不用加减乘除做加法
+
+第一步：相加各位的值，不算进位，得到010，二进制每位相加就相当于各位做异或操作，101^111=010。
+
+第二步：计算进位值，得到1010，相当于各位做与操作得到101，再向左移一位得到1010，(101&111)<<1=1010。
+
+第三步重复上述两步， 各位相加 010^1010=1000，进位值为100=(010&1010)<<1。
+继续重复上述两步：1000^100 = 1100，进位值为0，跳出循环，1100为最终结果。
+
+```java
+public class Solution {
+    public int Add(int num1,int num2) {
+        while (num2!=0) {
+            int temp = num1^num2;//不带进位的相加
+            num2 = (num1&num2)<<1;//进位
+            num1 = temp;
+        }
+        return num1;
     }
 }
 ```
@@ -1720,6 +1984,257 @@ public class Solution {
                 res.append(" ");
         }
         return res.toString();
+    }
+}
+```
+
+### 45.扑克牌顺子
+
+1. max - min <5
+2. 除0外没有重复的数字(牌)
+3. 数组长度为5
+
+```java
+public class Solution {
+    public boolean isContinuous(int [] numbers) {
+        int len = numbers.length;
+        int max = -1;
+        int min = 14;
+        int[] sim = new int[14];
+        if(len <5) return false;
+        for(int i=0; i<len; i++){
+            sim[numbers[i]]++;
+            if(numbers[i] == 0) continue;
+            if(sim[numbers[i]]>1) return false;
+            min = Math.min(min, numbers[i]);
+            max = Math.max(max, numbers[i]);
+        }
+        if(max - min>=5)
+            return false;
+        else
+            return true;
+    }
+}
+```
+
+### 46.孩子们的游戏
+
+```java
+public class Solution {
+    public int LastRemaining_Solution(int n, int m) {
+        if(n<1 || m<1) return -1;
+        int[] array = new int[n];
+        int count = n, step=0, i=-1;
+        while(count>0){
+            i++;
+            if(i == n) i = 0;//走到最后归0从头开始
+            if(array[i] == -1)continue;
+            step++;
+            if(step == m){
+                step = 0;//重新记步
+                array[i] = -1;//对应下标-1
+                count--;//找到一个总数减一
+            }
+        }
+        return i;
+    }
+}
+```
+
+### 47.求1+2+3...+n
+
+短路定理，&&前面为假后面不执行，由此后面使用递归
+
+```java
+public class Solution {
+    public int Sum_Solution(int n) {
+        int sum = n;
+        boolean stop = sum>0 && (sum += Sum_Solution(n-1))>0;
+        return sum;
+    }
+}
+```
+
+### 48.把字符串转化成整数
+
+1. 异常输入和0输入的区分，设置一个全局变量
+2. 正负号的处理
+3. 溢出处理
+
+```java
+public class Solution {
+    public int StrToInt(String str) {
+        boolean state = true;
+        char[] s = str.toCharArray();
+        int sum = 0;
+        for(int i=0; i<s.length; i++){
+            if(s[i] == '+')
+                continue;
+            else if(s[i] == '-'){
+                state = false;
+                continue;
+            }
+            else if(s[i] < '0' || s[i] > '9'){
+                return 0;
+            }
+            sum = sum*10+(int)(s[i]-'0');
+            if((!state&&sum>Integer.MAX_VALUE)||(state&&sum<Integer.MIN_VALUE)){
+                sum=0;
+                break;
+            }
+            
+        }
+        if(sum == 0)return 0;
+        return state == true ? sum : -sum;
+    }
+}
+```
+
+### 50.数组中重复的数字
+
+对于这种数组元素在 [0, n-1] 范围内的问题，可以将值为 i 的元素调整到第 i 个位置上进行求解。
+
+以 (2, 3, 1, 0, 2, 5) 为例，遍历到位置 4 时，该位置上的数为 2，但是第 2 个位置上已经有一个 2 的值了，因此可以知道 2 重复：
+
+```java
+public class Solution {
+    public boolean duplicate(int numbers[],int length,int [] duplication) {
+        if(numbers == null || length < 0) return false;
+        for(int i=0; i<length; i++){
+            while(numbers[i] != i){
+                if(numbers[i] == numbers[numbers[i]]){
+                    duplication[0] = numbers[i];
+                    return true;
+                }
+                swap(numbers, i, numbers[i]);
+            }
+        }
+        return false;
+    }
+    public void swap(int num[], int i, int j){
+        int temp = num[i];
+        num[i] = num[j];
+        num[j] = temp;
+    }
+}
+```
+
+### 51.构建乘积数组
+
+B[0] = A[1] * A[2] * A[3] * A[4] *....*A[n-1] ;（没有A[0]）
+B[1]= A[0] * A[2] * A[3] * A[4] *....*A[n-1] ;（没有A[1]）
+B[2] = A[0] * A[1] * A[3] * A[4] *....*A[n-1] ;（没有A[2]）
+
+可以划分成上下三角，先乘下三角，再乘上三角
+
+```java
+import java.util.ArrayList;
+public class Solution {
+    public int[] multiply(int[] A) {
+        int len = A.length;
+        int[] B = new int[len];
+        B[0] = 1;
+        for(int i=1; i<len; i++){
+            B[i] = B[i-1] * A[i-1];
+        }
+        int tmp = 1;
+        for(int i=len-2; i>=0; i--){
+            tmp = tmp*A[i+1];
+            B[i] = B[i]*tmp;
+        }
+        return B;
+    }
+}
+```
+
+### 52.正则表达式匹配
+
+```java
+public class Solution {
+    public boolean match(char[] str, char[] pattern) {
+    if (str == null || pattern == null) {
+        return false;
+    }
+    int strIndex = 0;
+    int patternIndex = 0;
+    return matchCore(str, strIndex, pattern, patternIndex);
+}
+  
+    public boolean matchCore(char[] str, int strIndex, char[] pattern, int patternIndex) {
+        //有效性检验：str到尾，pattern到尾，匹配成功
+        if (strIndex == str.length && patternIndex == pattern.length) {
+            return true;
+        }
+        //pattern先到尾，匹配失败
+        if (strIndex != str.length && patternIndex == pattern.length) {
+            return false;
+        }
+        //模式第2个是*，且字符串第1个跟模式第1个匹配,分3种匹配模式
+        if (patternIndex + 1 < pattern.length && pattern[patternIndex + 1] == '*') {
+            if ((strIndex != str.length && pattern[patternIndex] == str[strIndex]) || (pattern[patternIndex] == '.' && strIndex != str.length)) {
+                return matchCore(str, strIndex, pattern, patternIndex + 2)//匹配0个字符,模式后移2
+                    || matchCore(str, strIndex + 1, pattern, patternIndex + 2)//匹配1个字符,字符串移一个字符，模式移2
+                    || matchCore(str, strIndex + 1, pattern, patternIndex);//*匹配1个，检验是否下一个依旧匹配
+            } 
+            else {//str最后一个字符如果对应下一位pattern是*时
+                return matchCore(str, strIndex, pattern, patternIndex + 2);
+            }
+        }
+        //模式第2个不是*，且字符串第1个跟模式第1个匹配，则都后移1位，否则直接返回false
+        if ((strIndex != str.length && pattern[patternIndex] == str[strIndex]) || (pattern[patternIndex] == '.' && strIndex != str.length)) {
+            return matchCore(str, strIndex + 1, pattern, patternIndex + 1);
+        }
+        return false；
+    }
+}
+```
+
+### 53.表示数值的字符串
+
+```java
+public class Solution {
+    public boolean isNumeric(char[] str) {
+        String string = String.valueOf(str);
+        return string.matches("[\\+\\-]?\\d*(\\.\\d+)?([eE][\\+\\-]?\\d+)?");
+    }
+}
+/*
+以下对正则进行解释:
+[\\+\\-]?            -> 正或负符号出现与否
+\\d*                 -> 整数部分是否出现，如-.34 或 +3.34均符合
+(\\.\\d+)?           -> 如果出现小数点，那么小数点后面必须有数字；
+                        否则一起不出现
+([eE][\\+\\-]?\\d+)? -> 如果存在指数部分，那么e或E肯定出现，+或-可以不出现，
+                        紧接着必须跟着整数；或者整个部分都不出现
+*/
+```
+
+### 54.字符流中第一个不重复的字符
+
+```java
+public class Solution {
+    //Insert one char from stringstream
+    int[] table = new int[256];
+    StringBuffer str = new StringBuffer();
+    public void Insert(char ch)
+    {
+        str.append(ch);
+        if(table[ch] == 0){
+            table[ch] = 1;
+        }
+        else{
+            table[ch]++;
+        }
+    }
+    //return the first appearence once char in current stringstream
+    public char FirstAppearingOnce()
+    {
+        char[] s = str.toString().toCharArray(); 
+        for(char ss:s){
+            if(table[ss] == 1)
+                return ss;
+        }
+        return '#';
     }
 }
 ```
