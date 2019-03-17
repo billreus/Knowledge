@@ -5,6 +5,7 @@
     - [String](#string)
 - [list](#list)
     - [ArrayList](#arraylist)
+    - [LinkList](#linklist)
     - [Stack](#stack)
     - [Queue](#queue)
 - [数据结构类](#数据结构类)
@@ -31,6 +32,8 @@
         - [58.对称的二叉树](#58对称的二叉树)
         - [59.3按之字形顺序打印二叉树](#593按之字形顺序打印二叉树)
         - [60.把二叉树打印成多行](#60把二叉树打印成多行)
+        - [60.序列化二叉树](#60序列化二叉树)
+        - [61.二叉搜索树的第k个节点](#61二叉搜索树的第k个节点)
     - [Stack & Queue](#stack--queue)
         - [5.用两个栈实现队列](#5用两个栈实现队列)
         - [20.包含min函数的栈](#20包含min函数的栈)
@@ -58,6 +61,7 @@
         - [35.数组中的逆序对](#35数组中的逆序对)
     - [动态规划](#动态规划)
         - [30.连续子数组的最大和](#30连续子数组的最大和)
+        - [62.滑动窗口](#62滑动窗口)
     - [其它算法](#其它算法)
         - [2.替换空格](#2替换空格)
         - [13.调整数组顺序死奇数位于偶数前面](#13调整数组顺序死奇数位于偶数前面)
@@ -78,6 +82,8 @@
         - [52.正则表达式匹配](#52正则表达式匹配)
         - [53.表示数值的字符串](#53表示数值的字符串)
         - [54.字符流中第一个不重复的字符](#54字符流中第一个不重复的字符)
+        - [63.矩阵中的路径](#63矩阵中的路径)
+        - [64.机器人](#64机器人)
 
 <!-- /TOC -->
 
@@ -108,6 +114,15 @@
 * add():添加
 * remove(num):删除指定下标值，赋值时等效于队列的弹出
 * size()：长度(是list的方法，ArrayList没有length)
+
+## LinkList
+
+* getFist()：获取头，链表为空报出异常
+* peekFist():获取头，链表为空返回null
+* getLast()
+* peekLast()
+* removeFist():获取并删除头
+* removeLast()
 
 ## Stack
 
@@ -883,6 +898,69 @@ public class Solution {
 }
 ```
 
+### 60.序列化二叉树
+
+字符串形式的二叉树表现为空节点"#"，
+
+例如:"1,2,3,4,5,#,7,"
+
+```java
+public class Solution {
+    int index = -1;
+    String Serialize(TreeNode root) {
+        StringBuffer sb = new StringBuffer();
+        if(root == null){
+            sb.append("#,");
+            return sb.toString();
+        }
+        sb.append(root.val+",");
+        sb.append(Serialize(root.left));
+        sb.append(Serialize(root.right));
+        return sb.toString();
+  }
+    TreeNode Deserialize(String str) {
+        index++;
+        int len = str.length();
+        if(index >= len){
+            return null;
+        }
+        String[] s = str.split(",");
+        TreeNode node = null;
+        if(!s[index].equals("#")){
+            node = new TreeNode(Integer.valueOf(s[index]));
+            node.left = Deserialize(str);
+            node.right = Deserialize(str);
+        }
+        return node;
+  }
+}
+```
+
+### 61.二叉搜索树的第k个节点
+
+中序遍历
+
+```java
+public class Solution {
+    int num = 0;
+    TreeNode KthNode(TreeNode pRoot, int k)
+    {
+        if(pRoot != null){
+            TreeNode node = KthNode(pRoot.left, k);
+            if(node != null)//如果是空等于pRoot还是原来节点
+                return node;
+            num++;
+            if(num == k)
+                return pRoot;
+            node = KthNode(pRoot.right, k);
+            if(node != null)
+                return node;
+        }
+        return null;
+    }
+}
+```
+
 ## Stack & Queue
 
 ### 5.用两个栈实现队列
@@ -1588,6 +1666,55 @@ public class Solution {
 }
 ```
 
+### 62.滑动窗口
+
+暴力求解
+
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> maxInWindows(int [] num, int size)
+    {    
+        
+        ArrayList list = new ArrayList();
+        if(size<=0) return list;
+        for(int i=0; i<num.length-size+1; i++){
+            int max = num[i];
+            for(int j=i; j<i+size; j++){
+                max = Math.max(max, num[j]);
+            }
+            list.add(max);
+        }
+        return list;
+    }
+}
+```
+
+```java
+import java.util.*;
+public class Solution {
+    public ArrayList<Integer> maxInWindows(int [] num, int size)
+    {    
+        if (num == null || num.length == 0 || size <= 0 || num.length < size) {
+            return new ArrayList<Integer>();
+        }
+        ArrayList<Integer> res = new ArrayList<>();
+        LinkedList<Integer> link = new LinkedList<>();
+        for(int i = 0; i<num.length; i++){
+            while(!link.isEmpty() && num[link.peekLast()]<num[i]){
+                link.pollLast();
+            }//与queue队列中最后一个数比大小(&&需要注意前后条件的顺序)
+            link.addLast(i);
+            if(link.peekFirst() == i-size)//判断有无过期
+                link.pollFirst();
+            if(i>=size-1)
+                res.add(num[link.peekFirst()]);
+        }
+        return res;
+    }
+}
+```
+
 ## 其它算法
 
 ### 2.替换空格
@@ -2235,6 +2362,73 @@ public class Solution {
                 return ss;
         }
         return '#';
+    }
+}
+```
+
+### 63.矩阵中的路径
+
+回朔算法
+
+```java
+public class Solution {
+    public boolean hasPath(char[] matrix, int rows, int cols, char[] str)
+    {
+        boolean[] walked = new boolean[matrix.length];
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<cols; j++){
+                if(judge(matrix, i, j, rows, cols, str, walked, 0))
+                    return true;
+            }
+        }
+        return false;
+    }
+    private boolean judge(char[] matrix, int i, int j, int rows, int cols, char[] str, boolean[] walked, int k){
+        //寻找失败条件
+        int index = i*cols+j;
+        if(i<0 || j<0 || i>=rows || j>=cols || matrix[index] != str[k] || walked[index])
+            return false;
+        if(k == str.length-1)
+            return true;
+        walked[index] = true;
+        if(judge(matrix, i-1, j, rows, cols, str, walked, k+1)||
+            judge(matrix, i+1, j, rows, cols, str, walked, k+1)||
+            judge(matrix, i, j+1, rows, cols, str, walked, k+1)||
+            judge(matrix, i, j-1, rows, cols, str, walked, k+1))
+            return true;
+        //走到此代表此路不通
+        walked[index] = false;
+        return false;
+    }
+
+}
+```
+
+### 64.机器人
+
+```java
+public class Solution {
+    public int movingCount(int threshold, int rows, int cols)
+    {
+        boolean[][] walked = new boolean[rows][cols];
+        return find(threshold, rows, cols, 0, 0, walked);
+    }
+    public int find(int threshold, int rows, int cols, int i, int j, boolean[][] walked){
+        if(i<0 || j<0 || i>=rows || j>=cols || walked[i][j] || bitsum(i)+bitsum(j)>threshold)
+            return 0;
+        walked[i][j] = true;
+        return find(threshold, rows, cols, i+1, j, walked) +
+          find(threshold, rows, cols, i-1, j, walked)+
+          find(threshold, rows, cols, i, j+1, walked)+
+          find(threshold, rows, cols, i, j-1, walked)+1;
+    }
+    public int bitsum(int i){
+        int sum =0;
+        while(i != 0){
+            sum += i%10;
+            i /= 10;
+        }
+        return sum;
     }
 }
 ```
