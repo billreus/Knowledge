@@ -53,6 +53,7 @@
         - [40.数组中只出现一次的数字](#40数组中只出现一次的数字)
         - [48.不用加减乘除做加法](#48不用加减乘除做加法)
     - [搜索算法](#搜索算法)
+        - [50.数组中重复的数字](#50数组中重复的数字)
         - [1. 二维数组中的查找](#1-二维数组中的查找)
         - [6.旋转数组的最小数字](#6旋转数组的最小数字)
         - [37.数字在排序数组中出现的次数](#37数字在排序数组中出现的次数)
@@ -77,7 +78,6 @@
         - [46.孩子们的游戏](#46孩子们的游戏)
         - [47.求1+2+3...+n](#47求123n)
         - [48.把字符串转化成整数](#48把字符串转化成整数)
-        - [50.数组中重复的数字](#50数组中重复的数字)
         - [51.构建乘积数组](#51构建乘积数组)
         - [52.正则表达式匹配](#52正则表达式匹配)
         - [53.表示数值的字符串](#53表示数值的字符串)
@@ -102,6 +102,7 @@
 ## String
 
 * charAt(num):第num个字符
+* object.toCharArray():转化成字符
 * length()
 * Object.toString():Object转换为字符串，null会报出异常
 * String.valueOf(Object)：Object转化成字符串，null也会被存
@@ -114,6 +115,7 @@
 * add():添加
 * remove(num):删除指定下标值，赋值时等效于队列的弹出
 * size()：长度(是list的方法，ArrayList没有length)
+* get(index)：返回该索引值的元素
 
 ## LinkList
 
@@ -1442,6 +1444,35 @@ public class Solution {
 
 ## 搜索算法
 
+### 50.数组中重复的数字
+
+对于这种数组元素在 [0, n-1] 范围内的问题，可以将值为 i 的元素调整到第 i 个位置上进行求解。
+
+以 (2, 3, 1, 0, 2, 5) 为例，遍历到位置 4 时，该位置上的数为 2，但是第 2 个位置上已经有一个 2 的值了，因此可以知道 2 重复：
+
+```java
+public class Solution {
+    public boolean duplicate(int numbers[],int length,int [] duplication) {
+        if(numbers == null || length < 0) return false;
+        for(int i=0; i<length; i++){
+            while(numbers[i] != i){
+                if(numbers[i] == numbers[numbers[i]]){
+                    duplication[0] = numbers[i];
+                    return true;
+                }
+                swap(numbers, i, numbers[i]);
+            }
+        }
+        return false;
+    }
+    public void swap(int num[], int i, int j){
+        int temp = num[i];
+        num[i] = num[j];
+        num[j] = temp;
+    }
+}
+```
+
 ### 1. 二维数组中的查找
 
 遍历复杂度过高，采取的方法是先用右上角的数比较，如果右上角的数大了就左移一列，如果小了就下移一行。
@@ -2217,34 +2248,7 @@ public class Solution {
 }
 ```
 
-### 50.数组中重复的数字
 
-对于这种数组元素在 [0, n-1] 范围内的问题，可以将值为 i 的元素调整到第 i 个位置上进行求解。
-
-以 (2, 3, 1, 0, 2, 5) 为例，遍历到位置 4 时，该位置上的数为 2，但是第 2 个位置上已经有一个 2 的值了，因此可以知道 2 重复：
-
-```java
-public class Solution {
-    public boolean duplicate(int numbers[],int length,int [] duplication) {
-        if(numbers == null || length < 0) return false;
-        for(int i=0; i<length; i++){
-            while(numbers[i] != i){
-                if(numbers[i] == numbers[numbers[i]]){
-                    duplication[0] = numbers[i];
-                    return true;
-                }
-                swap(numbers, i, numbers[i]);
-            }
-        }
-        return false;
-    }
-    public void swap(int num[], int i, int j){
-        int temp = num[i];
-        num[i] = num[j];
-        num[j] = temp;
-    }
-}
-```
 
 ### 51.构建乘积数组
 
