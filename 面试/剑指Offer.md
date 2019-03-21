@@ -98,6 +98,7 @@
 * substring(start, end):截取
 * delete(start, end):删除
 * indexOf(words, start):查找
+* str.setCharAt(num, char):第num个字符替换
 
 ## String
 
@@ -166,7 +167,7 @@ public class Solution {
 }
 ```
 
-使用递归
+使用递归先把链表递归到尾，再添加到list中往回return
 
 ```java
 import java.util.ArrayList;
@@ -181,6 +182,29 @@ public class Solution {
             list.add(preNode.val);
         }
         return list;
+    }
+}
+```
+
+头插法：用一个头结点指向listnode，每个next都往二者之间插入
+
+```java
+public class Solution {
+    public ArrayList<Integer> printListFromTailToHead(ListNode listNode) {
+        ListNode head = new ListNode(-1);
+        while(listNode != null){
+            ListNode nextNode = listNode.next;
+            listNode.next = head.next;//切断指向空
+            head.next = listNode;//指向listnode
+            listNode = nextNode;//listnode走向下一个
+        }
+        ArrayList<Integer> = new ArrayList<>();
+        head = head.next;//等于把空的头走掉
+        while(head!=null){
+            res.add(head.val);
+            head = head.next;
+        }
+        return res;
     }
 }
 ```
@@ -1774,6 +1798,33 @@ public class Solution {
         }
         return res.toString();
     }
+}
+```
+
+不添加新StringBuffer的方法:先计算空格数，没一个就在末尾添加两个空格。再用两个指针一个指向现在的尾，一个指向原来的尾，当前面读到空格后面的指针就依次输入02%，没读到空格时就输入前指针的值。
+
+```java
+public class Solution{
+    public String replaceSpace(StringBuffer str){
+        int p1 = str.length()-1;
+        for(int i=0; i<=p1; i++){
+            if(str.charAt(i) == ' ')
+                str.append("  ");
+        }
+        int p2 = str.length()-1;
+        while(p1>0 && p1<p2){
+            char c = str.charAt(p1);
+            if(c == ' '){
+                str.setCharAt(p2--, '0');
+                str.setCharAt(p2--, '2');
+                str.setCharAt(p2--, '%');
+            }
+            else{
+                str.setCharAt(p2--, c);
+            }
+        }
+        return str;
+    } 
 }
 ```
 
