@@ -21,6 +21,7 @@
         - [54.删除链表中重复的数](#54删除链表中重复的数)
     - [Tree](#tree)
         - [4.重建二叉树](#4重建二叉树)
+        - [57.二叉树的下一个结点](#57二叉树的下一个结点)
         - [17.树的子结构](#17树的子结构)
         - [18.二叉树的镜像](#18二叉树的镜像)
         - [22.从上往下打印二叉树](#22从上往下打印二叉树)
@@ -28,7 +29,6 @@
         - [24.二叉树中和为某一值的路径](#24二叉树中和为某一值的路径)
         - [26.二叉搜索树与双向链表](#26二叉搜索树与双向链表)
         - [38.二叉树的深度](#38二叉树的深度)
-        - [57.二叉树的下一个结点](#57二叉树的下一个结点)
         - [58.对称的二叉树](#58对称的二叉树)
         - [59.3按之字形顺序打印二叉树](#593按之字形顺序打印二叉树)
         - [60.把二叉树打印成多行](#60把二叉树打印成多行)
@@ -540,6 +540,36 @@ public class Solution {
 }
 ```
 
+### 57.二叉树的下一个结点
+
+1. 二叉树为空，则返回空；
+2. 如果一个节点的右子树不为空，那么该节点的下一个节点是右子树的最左节点；
+3. 节点不是根节点。如果该节点是其父节点的左孩子，则返回父节点；否则（即该节点是其父节点的右孩子）继续向上遍历其父节点的父节点，重复之前的判断，返回结果。
+
+```java
+public class Solution {
+    public TreeLinkNode GetNext(TreeLinkNode pNode)
+    {
+        if(pNode == null)
+            return null;
+        if(pNode.right != null){
+            pNode = pNode.right;
+            while(pNode.left != null){
+                pNode = pNode.left;
+            }
+            return pNode;
+        }
+        while(pNode.next != null){
+            TreeLinkNode root = pNode.next;
+            if(root.left == pNode)
+                return root;
+            pNode = pNode.next;
+        }
+        return null;
+    }
+}
+```
+
 ### 17.树的子结构
 
 ```java
@@ -783,35 +813,7 @@ public class Solution {
 }
 ```
 
-### 57.二叉树的下一个结点
 
-1. 二叉树为空，则返回空；
-2. 节点右孩子存在，则设置一个指针从该节点的右孩子出发，一直沿着指向左子结点的指针找到的叶子节点即为下一个节点；
-3. 节点不是根节点。如果该节点是其父节点的左孩子，则返回父节点；否则继续向上遍历其父节点的父节点，重复之前的判断，返回结果。
-
-```java
-public class Solution {
-    public TreeLinkNode GetNext(TreeLinkNode pNode)
-    {
-        if(pNode == null)
-            return null;
-        if(pNode.right != null){
-            pNode = pNode.right;
-            while(pNode.left != null){
-                pNode = pNode.left;
-            }
-            return pNode;
-        }
-        while(pNode.next != null){
-            TreeLinkNode root = pNode.next;
-            if(root.left == pNode)
-                return root;
-            pNode = pNode.next;
-        }
-        return null;
-    }
-}
-```
 
 ### 58.对称的二叉树
 
