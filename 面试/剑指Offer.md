@@ -44,9 +44,9 @@
         - [34.第一个只出现一次的字符](#34第一个只出现一次的字符)
     - [斐波那契数列](#斐波那契数列)
         - [7.斐波那契数列](#7斐波那契数列)
+        - [10.矩形覆盖](#10矩形覆盖)
         - [8.跳格子](#8跳格子)
         - [9.变态跳台阶](#9变态跳台阶)
-        - [10.矩形覆盖](#10矩形覆盖)
     - [位运算](#位运算)
         - [11.二进制中1的个数](#11二进制中1的个数)
         - [12.数值的整数次方](#12数值的整数次方)
@@ -1231,6 +1231,47 @@ public class Solution {
 }
 ```
 
+### 10.矩形覆盖
+
+target <= 0 大矩形为<= 2*0,直接return 0；
+target = 1 大矩形为2*1，只有一种摆放方法，return1；
+target = 2 大矩形为2*2，有两种摆放方法，return2；
+target = n 分为两步考虑：
+* 第一次摆放一块 2*1 的小矩阵，则摆放方法总共为f(target - 1)
+* 第一次摆放一块 1*2 的小矩阵，则摆放方法总共为f(target-2)
+
+因为，摆放了一块1*2的小矩阵（用√√表示），对应下方的1*2（用××表示）摆放方法就确定了，所以为f(targte-2)
+
+```java
+public class Solution {
+    public int RectCover(int target) {
+        if(target < 1) return 0;
+        else if(target == 1) return 1;
+        else if(target == 2) return 2;
+        else return RectCover(target-1)+RectCover(target-2);
+    }
+}
+```
+
+如果不使用递归可以和斐波那契数列类似：
+
+```java
+public class Solution{
+    public int RectCover(int target){
+        if(target <= 2)
+            return n;
+        int prepre = 1, pre = 2;
+        int res = 0;
+        for(int i=3; i<=target; i++){
+            res = prepre + pre;
+            prepre = pre;
+            pre = res;
+        }
+        return res;
+    }
+}
+```
+
 ### 8.跳格子
 
 a.如果两种跳法，1阶或者2阶，那么假定第一次跳的是一阶，那么剩下的是n-1个台阶，跳法是f(n-1);
@@ -1306,26 +1347,7 @@ public class Solution {
 }
 ```
 
-### 10.矩形覆盖
 
-target <= 0 大矩形为<= 2*0,直接return 0；
-target = 1 大矩形为2*1，只有一种摆放方法，return1；
-target = 2 大矩形为2*2，有两种摆放方法，return2；
-target = n 分为两步考虑：
-* 第一次摆放一块 2*1 的小矩阵，则摆放方法总共为f(target - 1)
-* 第一次摆放一块1*2的小矩阵，则摆放方法总共为f(target-2)
-因为，摆放了一块1*2的小矩阵（用√√表示），对应下方的1*2（用××表示）摆放方法就确定了，所以为f(targte-2)
-
-```java
-public class Solution {
-    public int RectCover(int target) {
-        if(target < 1) return 0;
-        else if(target == 1) return 1;
-        else if(target == 2) return 2;
-        else return RectCover(target-1)+RectCover(target-2);
-    }
-}
-```
 
 ## 位运算
 
