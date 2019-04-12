@@ -19,6 +19,7 @@
         - [36.两个链表的第一个公共结点](#36两个链表的第一个公共结点)
         - [55.链表中环的入口节点](#55链表中环的入口节点)
         - [54.删除链表中重复的数](#54删除链表中重复的数)
+        - [在O(1)时间内删除链表节点](#在o1时间内删除链表节点)
     - [Tree](#tree)
         - [4.重建二叉树](#4重建二叉树)
         - [57.二叉树的下一个结点](#57二叉树的下一个结点)
@@ -460,9 +461,9 @@ public class Solution {
 
 ### 54.删除链表中重复的数
 
-非递归：1. 首先添加一个头节点，以方便碰到第一个，第二个节点就相同的情况
-
-2.设置 pre ，last 指针， pre指针指向当前确定不重复的那个节点，而last指针相当于工作指针，一直往后面搜索。
+非递归：
+1. 首先添加一个头节点，以方便碰到第一个，第二个节点就相同的情况
+2. 设置 pre ，last 指针， pre指针指向当前确定不重复的那个节点，而last指针相当于工作指针，一直往后面搜索。
 
 ```java
 public class Solution {
@@ -474,12 +475,12 @@ public class Solution {
         ListNode last = Head.next;
         while (last!=null){
             if(last.next!=null && last.val == last.next.val){
-            // 找到最后的一个相同节点
-            while (last.next!=null && last.val == last.next.val){
+                // 找到最后的一个相同节点
+                while (last.next!=null && last.val == last.next.val){
+                    last = last.next;
+                }
+                pre.next = last.next;//删除重复
                 last = last.next;
-            }
-            pre.next = last.next;//删除重复
-            last = last.next;
             }
             else{
                 pre = pre.next;
@@ -511,6 +512,32 @@ public class Solution {
             return pHead;
         }
     }
+}
+```
+
+### 在O(1)时间内删除链表节点
+
+如果要删除的不是尾节点，直接把下个节点的值赋给该节点，然后令该节点指向下下个节点，再删除下个节点。否则需要先遍历链表，找出节点前一个节点，让前一个节点指向null。
+
+```java
+public ListNode deleteNode(ListNode head, ListNode tobeDelete){
+    if(head == null || tobeDelete == null)
+        return null;
+    if(tobeDelete.next != null){
+        ListNode next = tobeDelete.next;
+        tobeDelete.val = next.val;
+        tobeDelete.next = next.next;
+    }else{
+        if(head == tobeDelete)
+            head = null;
+        else{
+            ListNode cur = head;
+            while(cur.next != tobeDelete)
+                cur = cur.next;
+            cur.next = null;
+        }
+    }   
+    return head; 
 }
 ```
 
