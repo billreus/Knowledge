@@ -893,7 +893,7 @@ boolean isSymmetricalDFS(TreeNode pRoot){
 }
 ```
 
-### 59.3按之字形顺序打印二叉树
+### 59.按之字形顺序打印二叉树
 
 ```java
 public ArrayList<ArrayList<Integer>> Print(TreeNode pRoot) {
@@ -1891,7 +1891,7 @@ public class Solution{
 }
 ```
 
-### 13.调整数组顺序死奇数位于偶数前面
+### 13.调整数组顺序使奇数位于偶数前面
 
 遇到奇数左移一位，类似快排
 
