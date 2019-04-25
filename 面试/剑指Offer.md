@@ -105,9 +105,9 @@
 ## String
 
 * charAt(num):第num个字符
-* object.toCharArray():转化成字符
+* object.toCharArray():转化成字符char
 * length()
-* Object.toString():Object转换为字符串，null会报出异常
+* Object.toString():Object转换为字符串string，null会报出异常
 * String.valueOf(Object)：Object转化成字符串，null也会被存
 * str.trim():去空格
 
