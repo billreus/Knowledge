@@ -548,21 +548,22 @@ public ListNode deleteNode(ListNode head, ListNode tobeDelete){
 前序遍历用于判断每个主节点，中序遍历用于判断左右个数
 
 ```java
-public class Solution {
-    public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
-        if(pre == null || in == null || pre.length != in.length) return null;
-        return construct(pre, 0, in, 0, in.length-1);
+class Solution {
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return constract(preorder, 0, inorder, 0, inorder.length-1);
     }
-    private TreeNode construct(int[] pre,int preStart,int preEnd, int[] in, int inStart, int inEnd){
-        if(inStart>inEnd || preStart>preEnd) return null;//空节点
-        TreeNode root = new TreeNode(pre[preStart]);
-        for(int i=inStart; i<=inEnd; i++){
-            if(pre[preStart] == in[i]){
-                root.left = construct(pre, preStart+1, preStart+i-inStart, in, inStart, i-1);
-                root.right = construct(pre, preStart+1+i-inStart, preEnd, in, i+1, inEnd);
+    public TreeNode constract(int[] preorder, int startPre, int[] inorder, int startIn, int endIn){
+        if(startPre > preorder.length-1 || startIn > endIn) return null;
+        TreeNode root = new TreeNode(preorder[startPre]);
+        int indexIn = 0;//中序数组中的位置
+        for(int i=startIn; i<=endIn; i++){
+            if(root.val == inorder[i]){
+                indexIn = i;
                 break;
             }
         }
+        root.left = constract(preorder, startPre+1, inorder, startIn, indexIn-1);
+        root.right = constract(preorder, startPre+1+index-startIn, inorder, indexIn+1, endIn);//index-startIn即左子树的长度
         return root;
     }
 }
@@ -1340,21 +1341,21 @@ public class Solution {
 2) n = 3时，会有三种跳得方式，1阶、2阶、3阶，
 
     那么就是第一次跳出1阶后面剩下：f(3-1);第一次跳出2阶，剩下f(3-2)；第一次3阶，那么剩下f(3-3)
-
+    
     因此结论是f(3) = f(3-1)+f(3-2)+f(3-3)
 
 3) n = n时，会有n中跳的方式，1阶、2阶...n阶，得出结论：
 
     f(n) = f(n-1)+f(n-2)+...+f(n-(n-1)) + f(n-n) => f(0) + f(1) + f(2) + f(3) + ... + f(n-1)
-    
+
 4) 由以上已经是一种结论，但是为了简单，我们可以继续简化：
 
     f(n-1) = f(0) + f(1)+f(2)+f(3) + ... + f((n-1)-1) = f(0) + f(1) + f(2) + f(3) + ... + f(n-2)
-
+    
     f(n) = f(0) + f(1) + f(2) + f(3) + ... + f(n-2) + f(n-1) = f(n-1) + f(n-1)
-
+    
     可以得出：
-
+    
     f(n) = 2*f(n-1)
 
 5) 得出最终结论,在n阶台阶，一次有1、2、...n阶的跳的方式时，总得跳法为：
