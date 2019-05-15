@@ -93,7 +93,7 @@
 
 ## StringBuffer
 
-* appen():连接，添加
+* append():连接，添加
 * insert():添加
 * reverse():反转
 * replace(start, end, words):替换
@@ -110,6 +110,7 @@
 * Object.toString():Object转换为字符串string，null会报出异常
 * String.valueOf(Object)：Object转化成字符串，null也会被存
 * str.trim():去空格
+* A.contains(B):判断A是否包含B
 
 # list
 
@@ -138,9 +139,17 @@
 
 ## Queue
 
-Queue queue = new LinkedList();
-offer():加入队列
-poll():弹出队列
+* Queue queue = new LinkedList()
+* offer():加入队列
+* poll():弹出队列
+
+# Map
+
+## HashMap
+
+* get()
+* put()
+* containskey()
 
 # 数据结构类
 
