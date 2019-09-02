@@ -232,4 +232,82 @@ public void pointCut(){}
 2. @After  在切点方法之后执行
 3. @AfterReturning 切点方法返回后执行
 4. @AfterThrowing 切点方法抛异常执行
-5.  @Around 属于环绕增强，能控制切点执行前，执行后，，用这个注解后，程序抛异常，会影响@AfterThrowing这个注解
+5.  @Around 属于环绕增强，能控制切点执行前，执行后，用这个注解后，程序抛异常，会影响@AfterThrowing这个注解
+
+# MQ
+
+作用：
+
+1. 异步处理提高系统性能（生产者只管把消息发出去，消费者什么时候消费，生产者不用管）。
+2. 降低系统耦合性。
+3. 流量削峰，高并发下，mq作为临时容器将消息存起来，消费者根据数据库的能力采取拉模式拉取所有消息然后分页执行。
+4. 消息分发，通过扇型交换机（Fanout exchange）或者多重绑定，可以将消息发给多个队列。
+5. 延时任务，比如超时未支付等通过延时交换机（Delayed message exchange）实现。
+
+缺点：
+
+1. 降低系统的可用性，mq挂了整个系统都挂了。
+2. 增加系统复杂度。
+3. 一致性问题，生产者消息发出去了就提示前端成功，消费者可能偏偏就失败了。
+4. 生成者可能发送失败，消费者可能消费失败，消息可能重复投递/消费。
+
+## RabbitMQ
+
+消息由生产者发送到Exchange中，然后Exchange和Message Queue之间通过Routing Key建立路由规则关联起来；消费者直接订阅Message Queue，只要Queue里面有消息，就会被消费者消费，实现生产者与消费者的低耦合。
+
+### Exchange
+
+Exchange有四种类型，分别是Direct, Topic, Fanout, Header。
+
+#### Direct
+
+所有发送到Direct Exchange的消息都会转发到RouteKey中的指定Queue。
+
+* Direct自带默认的key，可以不进行任何绑定(binding)
+
+#### Topic
+
+与Direct类似，不过routingkey可以有通配符，从而实现多个消息发到同一个队列中
+
+#### Fanout
+
+直接将消息路由绑定到所有队列中，无需进行匹配操作
+
+#### Header Exchange
+
+根据header来匹配
+
+### DLX(死信队列)
+
+当一个消息在队列中变成死信之后会重新publish到宁一个Exchange。
+
+消息变成死信的情况：
+
+1. 消息被拒绝，ack为false，并且requeue=false;
+2. 消息TTL过期
+3. 队列达到最大长度
+
+#### 插件
+
+延时队列一般使用`rabbitmq-delayed-message-exchange`插件，即在Exchange中根据各个message的`x-delay`头设置延迟时间，时间到达后才发送到对应的queue，进而被queue消费。
+
+正常我们申明一个Exchange只需要指定其类型（direct，fanout，topic等）即可，而声明延迟Exchange需要指定type为`x-delayed-message`，并通过参数`x-delay-type`指定其Exchange的类型（direct，fanout，topic等）。其实现如下：
+
+```
+  Map<String, Object> params = new HashMap<>();
+  params.put("x-delay-type", "direct");
+  channel.exchangeDeclare(exchangeName, "x-delayed-message", false, false, params);
+```
+
+- 声明好Exchange之后，绑定任意队列即可
+
+- 发送消息的时候需要额外添加header，`x-delay`，用于设置延迟时间，单位：ms。实现如下：
+
+```
+  int delayMs = 5000;
+  String msg1 = "delay message " + delayMs;
+  Map<String, Object> headers = new HashMap<>();
+  headers.put("x-delay", delayMs);
+  AMQP.BasicProperties props = new AMQP.BasicProperties.Builder().headers(headers).build();
+  channel.basicPublish(exchangeName, "", props, msg1.getBytes("utf-8"));
+```
