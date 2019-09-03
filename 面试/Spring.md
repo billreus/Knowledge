@@ -1,5 +1,39 @@
 # SpringBoot
 
+## 文件结构
+/src
+
+​	/main
+
+​		/java
+
+​			/model1
+
+​				/config
+
+​				/exception
+
+​				/pojo(DTO发给前端，PO数据库查询，VO前端发过来的数据)
+
+​				/enums
+
+​				/controller
+
+​				/service
+
+​				/dao --用于get，set
+
+​		/resources -- 资源
+
+​			/mappers --xml映射
+
+​			/static -- 静态资源
+
+​			/templates --动态资源
+
+​	/test -- 测试
+
+
 ## 注解
 
 ### 自定义注解
