@@ -21,7 +21,7 @@
 
 ​				/service
 
-​				/dao --用于get，set
+​				/dao --用于数据库
 
 ​		/resources -- 资源
 
