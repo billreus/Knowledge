@@ -1,40 +1,36 @@
 # SpringBoot
 
-## 文件结构
-/src
-
-​	/main
-
-​		/java
-
-​			/model1
-
-​				/config
-
-​				/exception
-
-​				/pojo(DTO发给前端，PO数据库查询，VO前端发过来的数据)
-
-​				/enums
-
-​				/controller
-
-​				/service
-
-​				/dao --用于数据库
-
-​		/resources -- 资源
-
-​			/mappers --xml映射
-
-​			/static -- 静态资源
-
-​			/templates --动态资源
-
-​	/test -- 测试
-
-
 ## 注解
+
+### 常用注解
+
+#### DAO和Mapper层
+
+@Mapper：Mybatis注解和Spring没关系
+
+@Repository：声明
+
+#### Controller层
+
+@Controller:处理http请求的对象
+
+@ResponseBody:默认返回JSON格式
+
+@RestController：Controller+ResponseBody
+
+@RequestMapping：配置url
+
+#### 其它
+
+@Configuration : 配置文件
+
+@Bean ：装配到IOC容器中
+
+@Component:标明哪个类被扫描进入Spring IOC容器。
+
+@ComponentScan:标明采用何种策略去扫描装配Bean，扫面指定包。
+
+拦截器：@Configuration + extends WebMvcConfiguerAdapter
 
 ### 自定义注解
 
