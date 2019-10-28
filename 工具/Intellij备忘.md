@@ -30,6 +30,14 @@ Ctrl+F
 
 Ctrl+N
 
+### 方法调用查询
+
+Ctrl+Alt+h
+
+### 全工程检索
+
+Ctrl+Alt+Shift+f
+
 ## 删除
 
 ### 删除行
@@ -53,3 +61,5 @@ Crtl+Alt+左
 ### 前进到上一个操作地方
 
 Crtl+Alt+右
+
+### 
